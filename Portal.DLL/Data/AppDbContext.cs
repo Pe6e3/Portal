@@ -44,8 +44,5 @@ public class AppDbContext : DbContext
                 Id = 2,
                 Name = "Меню в подвале"
             });
-
     }
-
-
 }
