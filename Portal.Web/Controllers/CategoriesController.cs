@@ -16,7 +16,6 @@ namespace Portal.Web.Controllers
         {
             _logger = logger;
             _uow = unitOfWork;
-
         }
         public async Task<IActionResult> Index()
         {

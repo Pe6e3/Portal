@@ -1,9 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.BLL;
 using Portal.DAL.Data;
+using Microsoft.Extensions.DependencyInjection;
+using Portal.Web.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<PortalWebContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PortalWebContext") ?? throw new InvalidOperationException("Connection string 'PortalWebContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
