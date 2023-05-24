@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
-using Portal.DAL.Data;
 using Portal.Web.Models;
 using System.Diagnostics;
 

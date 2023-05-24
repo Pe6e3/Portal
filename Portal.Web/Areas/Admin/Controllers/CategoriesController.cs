@@ -1,164 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Portal.BLL;
+using Portal.BLL.Repositories;
 using Portal.DAL.Entities;
-using Portal.Web.Data;
+using Portal.Web.Models;
+using System.Diagnostics;
 
-namespace Portal.Web.Areas.Admin.Controllers
+namespace Portal.Web.Areas.Admin.Controllers;
+
+[Area("Admin")]
+//public class CategoriesController : Controller
+//{
+//    private readonly ILogger<CategoriesController> _logger;
+//    private readonly UnitOfWork _uow;
+
+
+//    public CategoriesController(ILogger<CategoriesController> logger, UnitOfWork unitOfWork)
+//    {
+//        _logger = logger;
+//        _uow = unitOfWork;
+//    }
+//    public async Task<IActionResult> Index() => View(await _uow.CategoryRep.ListAllAsync());
+
+//    public async Task<IActionResult> Details(int id) => View(await _uow.CategoryRep.GetByIdAsync(id));
+//    public async Task<IActionResult> Create() => View();
+
+//    public async Task<IActionResult> Delete(int id)
+//    {
+//        Category category = await _uow.CategoryRep.GetByIdAsync(id);
+//        if (category != null)
+//            await _uow.CategoryRep.DeleteAsync(category);
+
+//        return RedirectToAction(nameof(Index));
+//    }
+
+
+//    [HttpPost]
+//    public async Task<IActionResult> Create(Category category)
+//    {
+//        if (ModelState.IsValid)
+//        {
+//            await _uow.CategoryRep.InsertAsync(category);
+//            return RedirectToAction(nameof(Index));
+//        }
+//        return View(category);
+//    }
+
+
+//    public async Task<IActionResult> Update(int id)
+//    => !(await _uow.CategoryRep.GetByIdAsync(id) is Category category)
+//    ? NotFound() : View(category);
+
+//    //public async Task<IActionResult> Update(int id)
+//    //{
+//    //    Category category = await _uow.CategoryRep.GetByIdAsync(id);
+//    //    if (category == null)
+//    //        return NotFound();
+//    //    return View(category);
+//    //}
+
+
+//    [HttpPost]
+//    public async Task<IActionResult> Update(Category category)
+//    {
+//        if (ModelState.IsValid)
+//        {
+//            await _uow.CategoryRep.UpdateAsync(category);
+//            return RedirectToAction(nameof(Index));
+
+//        }
+//        return View(category);
+//    }
+
+
+//    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+//    public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+
+public class CategoriesController : BaseController<Category, CategoryRepository>
 {
-    [Area("Admin")]
-    public class CategoriesController : Controller
+    public CategoriesController(ILogger<BaseController<Category, CategoryRepository>> logger, CategoryRepository repository)
+        : base(logger, repository)
     {
-        private readonly PortalWebContext _context;
-
-        public CategoriesController(PortalWebContext context)
-        {
-            _context = context;
-        }
-
-        // GET: Admin/Categories
-        public async Task<IActionResult> Index()
-        {
-              return _context.Category != null ? 
-                          View(await _context.Category.ToListAsync()) :
-                          Problem("Entity set 'PortalWebContext.Category'  is null.");
-        }
-
-        // GET: Admin/Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Category == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
-        }
-
-        // GET: Admin/Categories/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Admin/Categories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Slug,CategoryImage,Id")] Category category)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(category);
-        }
-
-        // GET: Admin/Categories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Category == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Category.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-            return View(category);
-        }
-
-        // POST: Admin/Categories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,Slug,CategoryImage,Id")] Category category)
-        {
-            if (id != category.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CategoryExists(category.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(category);
-        }
-
-        // GET: Admin/Categories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Category == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
-        }
-
-        // POST: Admin/Categories/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Category == null)
-            {
-                return Problem("Entity set 'PortalWebContext.Category'  is null.");
-            }
-            var category = await _context.Category.FindAsync(id);
-            if (category != null)
-            {
-                _context.Category.Remove(category);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool CategoryExists(int id)
-        {
-          return (_context.Category?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
     }
 }
