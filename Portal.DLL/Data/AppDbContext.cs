@@ -44,5 +44,23 @@ public class AppDbContext : DbContext
                 Id = 2,
                 Name = "Меню в подвале"
             });
+
+        modelBuilder.Entity<Category>()
+           .HasData(new Category
+           {
+               Id = 3,
+               Name = "Категория 1",
+               Description = "Описание Категории 1",
+               Slug = "category1",
+           });
+
+        modelBuilder.Entity<Category>()
+           .HasData(new Category
+           {
+               Id = 4,
+               Name = "Категория 2",
+               Description = "Описание Категории 2",
+               Slug = "category2",
+           });
     }
 }
