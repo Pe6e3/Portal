@@ -29,30 +29,30 @@ public class PostsController : BaseController<Post, IPostRepository>
         _uow = unitOfWork;
     }
 
-    //public override async Task<IActionResult> Index()
-    //{
-    //    List<Post> allPosts = (List<Post>)await _repository.ListAllAsync();
-    //    List<PostContent> allPostsContent = (List<PostContent>)await _repository.ListAllAsync();
+    public override async Task<IActionResult> Index()
+    {
+        List<Post> allPosts = (List<Post>)await _repository.ListAllAsync();
+        List<PostContent> allPostsContent = (List<PostContent>)await _uow.PostContentRep.ListAllAsync();
 
 
-    //    List<PostViewModel> post = new List<PostViewModel>();
-    //    foreach (var onePost in allPosts)
-    //    {
-    //        PostContent onePostsContent = allPostsContent.First(x => x.PostId == onePost.Id);
-    //        post.Add(new PostViewModel()
-    //        {
-    //            Id = onePost.Id,
-    //            Slug = onePost.Slug,
-    //            Title = onePostsContent.Title,
-    //            PostBody = onePostsContent.PostBody,
-    //            PostImage = onePostsContent.PostImage,
-    //            CommentsClosed = onePostsContent.CommentsClosed,
-    //        }
-    //        );
-    //    }
+        List<PostViewModel> post = new List<PostViewModel>();
+        foreach (var onePost in allPosts)
+        {
+            PostContent onePostsContent = allPostsContent.First(x => x.PostId == onePost.Id);
+            post.Add(new PostViewModel()
+            {
+                Id = onePost.Id,
+                Slug = onePost.Slug,
+                Title = onePostsContent.Title,
+                PostBody = onePostsContent.PostBody,
+                PostImage = onePostsContent.PostImage,
+                CommentsClosed = onePostsContent.CommentsClosed,
+            }
+            );
+        }
 
-    //    return View(post);
-    //}
+        return View(post);
+    }
 
 
 }
