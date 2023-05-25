@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace Portal.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+
     public abstract class BaseController<TEntity, TRepository> : Controller
         where TEntity : class
         where TRepository : IGenericRepositoryAsync<TEntity>
