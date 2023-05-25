@@ -2,12 +2,10 @@
 using Portal.BLL;
 using Portal.DAL.Data;
 using Microsoft.Extensions.DependencyInjection;
-using Portal.Web.Data;
-
+using Portal.DAL.Interfaces;
+using Portal.BLL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<PortalWebContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PortalWebContext") ?? throw new InvalidOperationException("Connection string 'PortalWebContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -15,7 +13,14 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext")));
 
-builder.Services.AddScoped<UnitOfWork>();
+//builder.Services.AddScoped<UnitOfWork>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

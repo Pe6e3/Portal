@@ -1,0 +1,143 @@
+
+.ispage {
+  .header {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+  }
+}
+.page-header {
+  &-content {
+    position: absolute;
+    width: 100%;
+    bottom: 15%;
+  }
+  &-meta {
+    > * {
+      display: inline-block;
+    }
+    .date {
+      color: #ffffff;
+      font-size: 1.5rem;
+    }
+    h1 {
+      font-size: 3.2rem;
+      line-height: 1.2;
+      margin: 1.5rem 0;
+      display: block;
+    }
+    .item-comments-count {
+      color: #ffffff;
+    }
+  }
+}
+.page-category-link {
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  color: #ffffff;
+  background-color: $accent;
+  padding: .1rem .6rem;
+  text-decoration: none;
+  font-weight: 800;
+  margin-right: .5rem;
+  &:hover,
+  &:focus {
+    color: #ffffff;
+    text-decoration: none;
+  }
+}
+
+.article-content {
+  padding: $gutter*1.8 0;
+  background-color: #fff;
+}
+.article-top-ad {
+  margin: $gutter 0;
+}
+
+.article-body {
+  p {
+    margin: 2.5rem 0;
+    line-height: 1.6;
+  }
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+  }
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.2;
+  }
+  blockquote {
+    padding: $gutter;
+    margin: calc($gutter*2) 0;
+    font-size: 2rem;
+    color: #000000;
+    border: {
+      top: $accent .2rem solid;
+      bottom: $accent .2rem solid;
+    }
+  }
+  ul,
+  ol {
+    padding-left: $gutter;
+    li {
+      margin: 1rem 0;
+    }
+  }
+  .video {
+    margin: $gutter 0;
+  }
+}
+.video {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 2.5rem;
+  height: 0;
+  iframe {
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.read-more {
+  margin-bottom: $gutter;
+  &-header {
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin: $gutter*1.5 0 calc($gutter / 2) 0;
+  }
+  ul,
+  li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  a {
+    line-height: 1.3;
+    display: inline-block;
+    color: #151515;
+    transition: color .25s ease;
+    margin: .8rem 0;
+    &:hover {
+      color: $accent;
+    }
+  }
+}
+.latest-comments {
+  font-size: 1.4rem;
+  text-align: left;
+  color: #333333;
+  padding: 1rem $gutter;
+  border: .1rem solid #eee;
+  line-height: 1.45;
+}

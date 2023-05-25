@@ -25,6 +25,8 @@ namespace Portal.Web.Areas.Admin.Controllers
 
         public virtual async Task<IActionResult> Details(int id) => View(await _repository.GetByIdAsync(id));
 
+        public virtual async Task<IActionResult> Create() =>View();
+
         [HttpPost]
         public virtual async Task<IActionResult> Create(TEntity entity)
         {

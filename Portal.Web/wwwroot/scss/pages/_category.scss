@@ -1,0 +1,120 @@
+
+.cat-header {
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  &::before {
+    content: '';
+    opacity: 0.25;
+    background-color: #000000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  &-block {
+    position: relative;
+    padding: 10rem 8rem 10rem;
+    color: #ffffff;
+    background-color: rgba($dark, .8);
+    &::before {
+      content: '';
+      opacity: 0.2;
+      transition: opacity .25s ease, top .25s ease, left .25s ease, bottom .25s ease, right .25s ease;
+      z-index: 1;
+      position: absolute;
+      border: .1rem solid #fff;
+      top: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      left: 1rem;
+    }
+    p,
+    h1,
+    h2 {
+      margin: 0;
+    }
+    h1,
+    h2 {
+      font-size: 3rem;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+  }
+  &.overlay {
+    &:hover {
+      &::before {
+        opacity: 0.25;
+      }
+    }
+  }
+}
+.cat-list-first {
+  padding-top: $gutter;
+  background-color: #f5f5f5;
+}
+.type-one-cat {
+  background-color: transparent;
+  padding: 0;
+}
+.cat-list {
+  padding-top: $gutter;
+  background-color: #fff;
+}
+a.cat-list-item {
+  color: $text-color;
+  display: block;
+  text-decoration: none;
+  margin: {
+    bottom: calc($gutter/1.5);
+    top: calc($gutter/1.5);
+  }
+  padding-bottom: .4rem;
+  border-bottom: .1rem solid #dfdfdf;
+  h2,
+  h3 {
+    transition: color .25s ease;
+    line-height: 1.2;
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin: 0;
+  }
+  img {
+    transition: opacity .25s ease;
+    margin-bottom: 1.2rem;
+  }
+  p {
+    font-size: 1.6rem;
+    margin-top: 1rem;
+  }
+  .date {
+    margin-top: .5rem;
+  }
+  &:hover {
+    .pattern {
+      &::before {
+        top: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        left: 1rem;
+        opacity: 0.2;
+        z-index: 10;
+      }
+      img {
+        opacity: 0.75;
+      }
+    }
+    h2,
+    h3 {
+      text-decoration: underline;
+      color: $accent;
+    }
+    p {
+      color: $text-color;
+    }
+  }
+  &:last-child {
+    border-bottom: none;
+  }
+}

@@ -1,0 +1,175 @@
+@import "../scss/base/vars";
+
+/*==========  Desktop First  ==========*/
+
+// ≥1200px
+@include media-breakpoint-down(lg){
+
+}
+
+// ≥992px
+@include media-breakpoint-down(md) {
+  .main-menu {
+    display: none;
+    padding: 2rem;
+  }
+  .mobile-menu-button {
+    display: block;
+  }
+  .item-title {
+    &-content {
+      padding: 4rem 3rem;
+    }
+  }
+  .second-section,
+  .third-section {
+    padding: calc($gutter/2) 0;
+  }
+  .third-section {
+    padding: $gutter 0 3rem;
+    > div > div > div:last-of-type {
+      .col-item {
+        border-bottom: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+  .ispage {
+    .top-menu {
+      top: 6.5rem;
+      position: relative;
+    }
+// ≥768px
+  }
+}
+@include media-breakpoint-down(sm) {
+  .first-section {
+    padding: {
+      top: calc($gutter/2);
+      bottom: calc($gutter/2);
+    };
+  }
+  .container-fluid {
+    padding: 0 calc($gutter/2);
+  }
+  .top-ad {
+    padding-bottom: calc($gutter/2);
+  }
+  .no-gutters {
+    .pattern {
+      margin-bottom: calc($gutter/2);
+    }
+  }
+  .item-news {
+    margin: calc($gutter/2) 0 0;
+  }
+  .col-item {
+    margin-bottom: calc($gutter/2);
+    padding-bottom: $gutter;
+    border-bottom: .1rem solid rgba(#fff, .05);
+    &-meta,
+    h4 {
+      padding: 0 $gutter;
+    }
+    a {
+      img {
+        margin-bottom: calc($gutter/2);
+      }
+    }
+    .col-item-meta {
+      margin-bottom: .5rem;
+    }
+  }
+  .type-one {
+    .pattern {
+      margin-bottom: calc($gutter/2);
+    }
+  }
+  .cat-header {
+    &-block {
+      padding: 5rem;
+      h1,
+      h2 {
+        font-size: 2.8rem;
+      }
+    }
+  }
+  .page-header {
+    &-meta {
+      h1 {
+        font-size: 2.4rem;
+        margin: 1rem 0 0;
+      }
+    }
+    &.overlay::before {
+      background-image: linear-gradient(rgba(#000, .3), rgba(#000, .75));
+    }
+    &-content {
+      bottom: 10%;
+    }
+  }
+  .article-body {
+    blockquote {
+      margin: 0;
+    }
+// ≥576px
+  }
+}
+@include media-breakpoint-down(xs) {
+  .logo {
+    font-size: 1.9rem;
+    padding-left: calc($gutter/2);
+  }
+  .search-wrap {
+    .search {
+      padding-right: calc($gutter/2);
+    }
+  }
+  .fourth-section {
+    padding: calc($gutter/1.5) 0;
+  }
+  
+  nav.soc {
+    padding: 1rem 0 0;
+    li {
+      a {
+        width: 4rem;
+        height: 4rem;
+        font-size: 1.8rem;
+        line-height: 3.8rem;
+      }
+    }
+  }
+  .cat-list {
+    padding-top: 0;
+  }
+  .cat-list-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .all-posts-header {
+    margin-top: calc($gutter/2);
+  }
+}/*==========  Mobile First  ==========*/
+
+// ≤576px
+@include media-breakpoint-up(sm){
+
+}
+
+// ≤768px
+@include media-breakpoint-up(md){
+
+}
+
+// ≤992px
+@include media-breakpoint-up(lg)
+{
+
+}
+
+// ≤1200px
+@include media-breakpoint-up(xl){
+
+}

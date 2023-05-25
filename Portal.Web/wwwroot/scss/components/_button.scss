@@ -1,0 +1,29 @@
+
+.button {
+  display: inline-block;
+  border: none;
+  color: #ffffff;
+  text-decoration: none;
+  background-color: $accent;
+  padding: 1.2rem 4rem;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 10em;
+  text-align: center;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  transition: background-color .1s ease;
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: #ffffff;
+  }
+  &:hover {
+    background-color: lighten($accent, 5%);
+  }
+  &:active {
+    background-color: darken($accent, 5%);
+  }
+}

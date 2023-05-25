@@ -1,0 +1,134 @@
+.header {
+  background-color: $dark;
+  position: relative;
+  height: 6.5rem;
+	&__menu{
+		display: flex;
+	}
+	.logo {
+		font-family: baron-g, sans-serif;
+		color: #ffffff;
+		font-size: 2.3rem;
+		line-height: 6.5rem;
+		text-decoration: none;
+		&:hover,
+		&:focus {
+			text-decoration: none;
+			color: #ffffff;
+		}
+		span {
+			color: $accent;
+		}
+	}
+	
+.main-menu {
+  ul,
+  li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    display: inline-block;
+    &.active {
+      a {
+        color: #ffffff;
+        background-color: lighten($dark, 5%);
+      }
+    }
+    &:hover {
+      a {
+        color: #ffffff;
+        background-color: lighten($dark, 8%);
+      }
+    }
+  }
+  a {
+    color: #d1d9e0;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    font-weight: bold;
+    padding: 0 1.5rem;
+    line-height: 6.5rem;
+    display: block;
+    transition: color .25s ease, background-color .25s ease;
+  }
+}
+}
+
+.search-wrap {
+  .search {
+    position: absolute;
+    padding: {
+      right: $gutter;
+      left: 1rem;
+    }
+    right: 0;
+    color: #454749;
+    cursor: pointer;
+    line-height: 6.5rem;
+    text-align: center;
+    transition: color .25s ease;
+    &:hover {
+      color: lighten(#454749, 10%);
+    }
+  }
+  .search-field {
+    position: absolute;
+    left: 0;
+    top: 6.5rem;
+    padding: 1.5rem;
+    background-color: lighten($dark, 3%);
+    width: 100%;
+    border-top: lighten($dark, 5%) .1rem solid;
+    z-index: 4;
+    display: none;
+    input[type=text] {
+      width: 100%;
+      padding: .8rem 1.5rem;
+      border: lighten($dark, 10%) .1rem solid;
+      background-color: lighten($dark, 7.5%);
+      font-size: 1.6rem;
+      color: #ffffff;
+      outline: none;
+      &:focus {
+        border-color: lighten($dark, 15%);
+      }
+      &::placeholder {
+        color: rgba(#fff, .2);
+        font-family: arial, sans-serif;
+        font-style: italic;
+      }
+    }
+  }
+}
+.mobile-menu-button {
+  color: #ffffff;
+  text-align: center;
+  cursor: pointer;
+  line-height: 6.5rem;
+  font-size: 1.7rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  white-space: nowrap;
+  display: none;
+  &:hover {
+    color: $accent;
+  }
+}
+.mobile-menu {
+  display: none;
+  background-color: lighten($dark, 3%);
+  border-top: lighten($dark, 5%) .1rem solid;
+  .top-menu {
+    display: block;
+  }
+  li {
+    display: block;
+    a {
+      padding: 0;
+      line-height: 4.5rem;
+    }
+  }
+}
