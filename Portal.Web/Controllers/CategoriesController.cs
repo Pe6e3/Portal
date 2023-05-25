@@ -10,8 +10,12 @@ namespace Portal.Web.Controllers
 {
     public class CategoriesController : BaseController<Category, ICategoryRepository>
     {
-        public CategoriesController(ILogger<BaseController<Category, ICategoryRepository>> logger, ICategoryRepository repository) : base(logger, repository)
+        private readonly UnitOfWork _uow;
+
+        public CategoriesController(UnitOfWork unitOfWork, ILogger<BaseController<Category, ICategoryRepository>> logger, ICategoryRepository repository) : base(unitOfWork, logger, repository)
         {
+            _uow = unitOfWork;
+
         }
     }
 

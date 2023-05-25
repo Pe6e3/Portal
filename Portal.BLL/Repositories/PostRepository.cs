@@ -1,4 +1,5 @@
-﻿using Portal.DAL.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Portal.DAL.Data;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
 
@@ -9,4 +10,5 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
     public PostRepository(AppDbContext db) : base(db)
     {
     }
+   
 }

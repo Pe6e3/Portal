@@ -11,7 +11,7 @@ namespace Portal.Web.Areas.Admin.Controllers;
 [Area("Admin")]
 public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
 {
-    public MenuItemsController(ILogger<BaseController<MenuItem, IMenuItemRepository>> logger, IMenuItemRepository repository) : base(logger, repository)
+    public MenuItemsController(UnitOfWork unitOfWork, ILogger<BaseController<MenuItem, IMenuItemRepository>> logger, IMenuItemRepository repository) : base(unitOfWork, logger, repository)
     {
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Portal.BLL;
 using Portal.BLL.Repositories;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
@@ -14,11 +15,14 @@ namespace Portal.Web.Areas.Admin.Controllers
     {
         protected readonly ILogger<BaseController<TEntity, TRepository>> _logger;
         protected readonly TRepository _repository;
+        private readonly UnitOfWork _uow;
 
-        protected BaseController(ILogger<BaseController<TEntity, TRepository>> logger, TRepository repository)
+
+        protected BaseController(UnitOfWork unitOfWork, ILogger<BaseController<TEntity, TRepository>> logger, TRepository repository)
         {
             _logger = logger;
             _repository = repository;
+            _uow = unitOfWork;
         }
 
         public virtual async Task<IActionResult> Index() => View(await _repository.ListAllAsync());

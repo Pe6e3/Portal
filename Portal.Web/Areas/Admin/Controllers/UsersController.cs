@@ -11,7 +11,7 @@ namespace Portal.Web.Areas.Admin.Controllers;
 [Area("Admin")]
 public class UsersController : BaseController<User, IUserRepository>
 {
-    public UsersController(ILogger<BaseController<User, IUserRepository>> logger, IUserRepository repository) : base(logger, repository)
+    public UsersController(UnitOfWork unitOfWork, ILogger<BaseController<User, IUserRepository>> logger, IUserRepository repository) : base(unitOfWork, logger, repository)
     {
     }
 }
