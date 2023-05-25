@@ -1,0 +1,59 @@
+﻿@model Portal.DAL.Entities.PostContent
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Post</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PostId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PostId)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PostBody)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PostBody)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PostImage)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PostImage)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CommentsNum)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CommentsNum)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PostVideo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PostVideo)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Update" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
