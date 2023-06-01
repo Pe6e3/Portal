@@ -54,9 +54,6 @@ public class PostsController : BaseController<Post, IPostRepository>
     }
 
 
-    public  async Task<IActionResult> Create() =>View();
-
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(PostViewModel postViewModel)
@@ -70,7 +67,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             await _uow.PostRep.InsertAsync(post);
 
             PostContent content = new PostContent();
-            content.PostId = post.Id; 
+            content.PostId = post.Id;
             content.Title = postViewModel.Title;
             content.PostBody = postViewModel.PostBody;
             content.PostImage = postViewModel.PostImage;
@@ -82,6 +79,7 @@ public class PostsController : BaseController<Post, IPostRepository>
 
         return RedirectToAction(nameof(Index));
     }
+
 
 
 }

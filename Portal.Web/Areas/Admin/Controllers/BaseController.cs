@@ -4,6 +4,7 @@ using Portal.BLL.Repositories;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
 using Portal.Web.Models;
+using Portal.Web.ViewModels;
 using System.Diagnostics;
 
 namespace Portal.Web.Areas.Admin.Controllers
@@ -29,18 +30,10 @@ namespace Portal.Web.Areas.Admin.Controllers
 
         public virtual async Task<IActionResult> Details(int id) => View(await _repository.GetByIdAsync(id));
 
-        //public virtual async Task<IActionResult> Create() =>View();
+        [HttpGet]
+        public virtual async Task<IActionResult> Create() => View();
 
-        //[HttpPost]
-        //public virtual async Task<IActionResult> Create(TEntity entity)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        await _repository.InsertAsync(entity);
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(entity);
-        //}
+
 
         public virtual async Task<IActionResult> Update(int id)
         {
@@ -69,6 +62,7 @@ namespace Portal.Web.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public virtual IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
