@@ -29,18 +29,18 @@ namespace Portal.Web.Areas.Admin.Controllers
 
         public virtual async Task<IActionResult> Details(int id) => View(await _repository.GetByIdAsync(id));
 
-        public virtual async Task<IActionResult> Create() =>View();
+        //public virtual async Task<IActionResult> Create() =>View();
 
-        [HttpPost]
-        public virtual async Task<IActionResult> Create(TEntity entity)
-        {
-            if (ModelState.IsValid)
-            {
-                await _repository.InsertAsync(entity);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(entity);
-        }
+        //[HttpPost]
+        //public virtual async Task<IActionResult> Create(TEntity entity)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        await _repository.InsertAsync(entity);
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(entity);
+        //}
 
         public virtual async Task<IActionResult> Update(int id)
         {

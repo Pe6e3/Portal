@@ -18,14 +18,14 @@ public class PostsController : BaseController<Post, IPostRepository>
 {
 
     protected readonly ILogger<BaseController<Post, IPostRepository>> _logger;
-    protected readonly IPostRepository _repository;
+    //protected readonly IPostRepository _repository;
     private readonly UnitOfWork _uow;
 
     public PostsController(UnitOfWork unitOfWork, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository)
         : base(unitOfWork, logger, repository)
     {
         _logger = logger;
-        _repository = repository;
+        //_repository = repository;
         _uow = unitOfWork;
     }
 
@@ -50,9 +50,37 @@ public class PostsController : BaseController<Post, IPostRepository>
                 CommentsClosed = content.CommentsClosed
             });
         }
-
-
         return View(posts);
+    }
+
+
+    public  async Task<IActionResult> Create() =>View();
+
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(PostViewModel postViewModel)
+    {
+        if (ModelState.IsValid)
+        {
+            Post post = new Post();
+            post.Slug = postViewModel.Slug;
+            post.CreatedAt = postViewModel.CreatedAt;
+
+            await _uow.PostRep.InsertAsync(post);
+
+            PostContent content = new PostContent();
+            content.PostId = post.Id; 
+            content.Title = postViewModel.Title;
+            content.PostBody = postViewModel.PostBody;
+            content.PostImage = postViewModel.PostImage;
+            content.CommentsClosed = postViewModel.CommentsClosed;
+            content.PostVideo = postViewModel.PostVideo;
+
+            await _uow.PostContentRep.InsertAsync(content);
+        }
+
+        return RedirectToAction(nameof(Index));
     }
 
 

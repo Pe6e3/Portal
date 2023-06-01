@@ -1,36 +1,84 @@
-﻿@model Portal.DAL.Entities.Post
+﻿@model PostViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Новый пост";
 }
 
-<h1>Create</h1>
+<h1>Новый пост</h1>
 
-<h4>Post</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
+
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Slug" class="control-label"></label>
                 <input asp-for="Slug" class="form-control" />
                 <span asp-validation-for="Slug" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
+                <input asp-for="CreatedAt" class="form-control" type="hidden" value="@DateTime.Now" />
                 <span asp-validation-for="CreatedAt" class="text-danger"></span>
             </div>
+
+@*            <div class="form-group">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+*@
+
+@*            <div class="form-group">
+                <label asp-for="PostId" class="control-label"></label>
+                <input asp-for="PostId" class="form-control" />
+                <span asp-validation-for="PostId" class="text-danger"></span>
+            </div>
+*@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostBody" class="control-label"></label>
+                <input asp-for="PostBody" class="form-control" />
+                <span asp-validation-for="PostBody" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostImage" class="control-label"></label>
+                <input asp-for="PostImage" class="form-control" />
+                <span asp-validation-for="PostImage" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="CommentsClosed" class="control-label"></label>
+                <input asp-for="CommentsClosed" class="form-control" />
+                <span asp-validation-for="CommentsClosed" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostVideo" class="control-label"></label>
+                <input asp-for="PostVideo" class="form-control" />
+                <span asp-validation-for="PostVideo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Добавить" class="btn btn-primary" />
             </div>
         </form>
+
     </div>
 </div>
 
+
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Вернуться к списку</a>
 </div>
 
 @section Scripts {
