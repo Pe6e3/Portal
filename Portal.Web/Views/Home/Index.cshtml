@@ -1,8 +1,44 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<PostViewModel>
+
+@{
+    ViewData["Title"] = "Новости";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Новости</h1>
+<table class="table">
+
+    <tbody>
+        <div class="container w-75">
+            @foreach (var item in Model)
+            {
+                <div class="raw mb-4" style="background-color:antiquewhite; border-radius:10px; padding: 30px;">
+
+
+                    <h1 class="text-center mb-3">
+                        @item.Title
+                    </h1>
+
+                    <div class="row">
+                        <div class="col-7">
+                            @item.PostBody
+                        </div>
+                        <div class="col-5">
+                            <a asp-action="Details" asp-route-id="@item.PostId">
+                                <img src="/img/postImages/@item.PostImage" style="width: -webkit-fill-available; border-radius:5px;" asp-action="Details" alt="" />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-end text-muted">
+                            @item.CreatedAt
+                            Комментарии (@item.CommentsNum)
+                        </div>
+                    </div>
+                </div>
+
+                @*@item.PostVideo*@
+
+            }
+        </div>
+    </tbody>
+</table>
