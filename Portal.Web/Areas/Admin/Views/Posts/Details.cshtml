@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Подробно";
 }
+<link rel="stylesheet" href="" />
+
 
 <h1>Подробно</h1>
 
@@ -18,10 +20,15 @@
         <dd class="col-sm-10">@Html.DisplayFor(model => model.Title)</dd>
         <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PostBody)</dt>
         <dd class="col-sm-10">@Html.DisplayFor(model => model.PostBody)</dd>
-        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PostImage)</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.PostImage)</dd>
         <dt class="col-sm-2">@Html.DisplayNameFor(model => model.CommentsClosed)</dt>
         <dd class="col-sm-10">@Html.DisplayFor(model => model.CommentsClosed)</dd>
+        
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PostImage)</dt>
+        <dd class="col-sm-10 text-center">
+            <img src="/img/postImages/@Model.PostImage" style="max-height:500px; width:auto; border-radius:5px;" alt="" />
+        </dd>
+
         <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PostVideo)</dt>
         <dd class="col-sm-10">@Html.DisplayFor(model => model.PostVideo)</dd>
     </dl>
