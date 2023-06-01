@@ -63,6 +63,20 @@ namespace Portal.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //[HttpPost]
+        //public virtual async Task<IActionResult> Create(object anyObject)
+        //{
+        //    if (anyObject is TEntity entity)
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            await _repository.InsertAsync(entity);
+        //            return RedirectToAction(nameof(Index));
+        //        }
+        //        return View(entity);
+        //    }
+        //    return View(anyObject);
+        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public virtual IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
