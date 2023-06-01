@@ -31,27 +31,28 @@ public class PostsController : BaseController<Post, IPostRepository>
 
     public override async Task<IActionResult> Index()
     {
-        List<Post> allPosts = (List<Post>)await _repository.ListAllAsync();
-        List<PostContent> allPostsContent = (List<PostContent>)await _uow.PostContentRep.ListAllAsync();
+        List<Post> allPosts = (List<Post>)await _uow.PostRep.ListAllAsync();
+        List<PostContent> allContent = (List<PostContent>)await _uow.PostContentRep.ListAllAsync();
+        List<PostViewModel> posts = new List<PostViewModel>();
 
-
-        List<PostViewModel> post = new List<PostViewModel>();
-        foreach (var onePost in allPosts)
+        foreach (Post post in allPosts)
         {
-            PostContent onePostsContent = allPostsContent.First(x => x.PostId == onePost.Id);
-            post.Add(new PostViewModel()
+            PostContent? content = allContent.FirstOrDefault(x => x.PostId == post.Id);
+            posts.Add(new PostViewModel()
             {
-                Id = onePost.Id,
-                Slug = onePost.Slug,
-                Title = onePostsContent.Title,
-                PostBody = onePostsContent.PostBody,
-                PostImage = onePostsContent.PostImage,
-                CommentsClosed = onePostsContent.CommentsClosed,
-            }
-            );
+                Slug = post.Slug,
+                CreatedAt = DateTime.Now,
+                PostId = post.Id,
+                Title = content.Title,
+                PostBody = content.PostBody,
+                PostImage = content.PostImage,
+                PostVideo = content.PostVideo,
+                CommentsClosed = content.CommentsClosed
+            });
         }
 
-        return View(post);
+
+        return View(posts);
     }
 
 
