@@ -1,30 +1,33 @@
-﻿@model Portal.DAL.Entities.Post
+﻿@model PostViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробно";
 }
 
-<h1>Details</h1>
+<h1>Подробно</h1>
 
 <div>
-    <h4>Post</h4>
+    <h4>Пост</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Slug)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Slug)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Slug)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Slug)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.CreatedAt)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Title)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Title)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PostBody)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.PostBody)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PostImage)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.PostImage)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.CommentsClosed)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.CommentsClosed)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PostVideo)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.PostVideo)</dd>
     </dl>
 </div>
+
 <div>
-    <a asp-action="Update" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Update" asp-route-id="@Model?.PostId">Изменить</a> |
+    <a asp-action="Index">Назад к списку</a>
 </div>

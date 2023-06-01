@@ -64,18 +64,14 @@ namespace Portal.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> Create(object anyObject)
+        public virtual async Task<IActionResult> Create(TEntity entity)
         {
-            if (anyObject is TEntity entity)
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    await _repository.InsertAsync(entity);
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(entity);
+                await _repository.InsertAsync(entity);
+                return RedirectToAction(nameof(Index));
             }
-            return View(anyObject);
+            return View(entity);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

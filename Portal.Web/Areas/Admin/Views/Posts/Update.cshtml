@@ -1,0 +1,70 @@
+﻿@model PostViewModel
+
+@{
+    ViewData["Title"] = "Редактировать";
+}
+
+<h1>Редактировать</h1>
+
+<h4>Пост</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdatePVM">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input asp-for="PostId" type="hidden" value="@Model.PostId" />
+            <input asp-for="CreatedAt" type="hidden" value="@Model.CreatedAt" />
+
+            <div class="form-group">
+                <label asp-for="Slug" class="control-label"></label>
+                <input asp-for="Slug" class="form-control" />
+                <span asp-validation-for="Slug" class="text-danger"></span>
+            </div>
+
+           
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostBody" class="control-label"></label>
+                <input asp-for="PostBody" class="form-control" />
+                <span asp-validation-for="PostBody" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostImage" class="control-label"></label>
+                <input asp-for="PostImage" class="form-control" />
+                <span asp-validation-for="PostImage" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="CommentsClosed" class="control-label"></label>
+                <input asp-for="CommentsClosed" class="form-control" />
+                <span asp-validation-for="CommentsClosed" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostVideo" class="control-label"></label>
+                <input asp-for="PostVideo" class="form-control" />
+                <span asp-validation-for="PostVideo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Изменить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Назад к списку</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

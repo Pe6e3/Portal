@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Portal.DAL.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
+using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
 using Portal.Web.ViewModels;
-using NuGet.Protocol.Core.Types;
 
 namespace Portal.Web.Areas.Admin.Controllers;
 
@@ -17,15 +10,13 @@ namespace Portal.Web.Areas.Admin.Controllers;
 public class PostsController : BaseController<Post, IPostRepository>
 {
 
-    protected readonly ILogger<BaseController<Post, IPostRepository>> _logger;
-    //protected readonly IPostRepository _repository;
+    protected new readonly ILogger<BaseController<Post, IPostRepository>> _logger;
     private readonly UnitOfWork _uow;
 
     public PostsController(UnitOfWork unitOfWork, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository)
         : base(unitOfWork, logger, repository)
     {
         _logger = logger;
-        //_repository = repository;
         _uow = unitOfWork;
     }
 
@@ -41,7 +32,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             posts.Add(new PostViewModel()
             {
                 Slug = post.Slug,
-                CreatedAt = DateTime.Now,
+                CreatedAt = post.CreatedAt,
                 PostId = post.Id,
                 Title = content.Title,
                 PostBody = content.PostBody,
@@ -80,14 +71,15 @@ public class PostsController : BaseController<Post, IPostRepository>
         return RedirectToAction(nameof(Index));
     }
 
-    public async Task<IActionResult> Edit(int id)
+    [Area("Admin")]
+    public override async Task<IActionResult> Update(int id)
     {
         Post post = await _uow.PostRep.GetByIdAsync(id);
         PostContent content = await _uow.PostContentRep.GetContentByPostIdAsync(id);
         PostViewModel editPost = new PostViewModel();
 
         editPost.Slug = post.Slug;
-        editPost.CreatedAt = DateTime.Now;
+        editPost.CreatedAt = post.CreatedAt;
         editPost.PostId = post.Id;
         editPost.Title = content.Title;
         editPost.PostBody = content.PostBody;
@@ -99,22 +91,56 @@ public class PostsController : BaseController<Post, IPostRepository>
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(PostViewModel postViewModel)
+    [ValidateAntiForgeryToken]
+    [Area("Admin")]
+    public async Task<IActionResult> UpdatePVM(PostViewModel postViewModel)
     {
-        Post post = new Post();
-        post.Slug = postViewModel.Slug;
-        await _uow.PostRep.InsertAsync(post);
+        if (ModelState.IsValid)
+        {
+            Post post = await _uow.PostRep.GetByIdAsync(postViewModel.PostId);
 
-        PostContent content = new PostContent();
-        content.Title = postViewModel.Title;
-        content.PostBody = postViewModel.PostBody;
-        content.PostImage = postViewModel.PostImage;
-        content.PostVideo = postViewModel.PostVideo;
-        content.CommentsClosed = postViewModel.CommentsClosed;
+            post.Slug = postViewModel.Slug;
 
-        await _uow.PostContentRep.InsertAsync(content);
+            await _uow.PostRep.UpdateAsync(post);
 
-        return RedirectToAction(nameof(Index));
+            // Получим Пост контент
+            PostContent postContent = await _uow.PostContentRep.GetContentByPostIdAsync(postViewModel.PostId);
+
+            // Заполняем Пост контент из формы
+            postContent.Title = postViewModel.Title;
+            postContent.PostBody = postViewModel.PostBody;
+            postContent.CommentsClosed = postViewModel.CommentsClosed;
+            postContent.PostImage = postViewModel.PostImage;
+            postContent.PostVideo = postViewModel.PostVideo;
+
+
+            await _uow.PostContentRep.UpdateAsync(postContent);
+
+            return RedirectToAction(nameof(Index));
+        }
+        return View(postViewModel);
+    }
+
+    public override async Task<IActionResult> Details(int id)
+    {
+        Post post = await _uow.PostRep.GetByIdAsync(id);
+        PostContent content = await _uow.PostContentRep.GetContentByPostIdAsync(id);
+        PostViewModel postViewModel = new PostViewModel();
+
+        postViewModel.Slug = post.Slug;
+        postViewModel.CreatedAt = post.CreatedAt;
+        postViewModel.PostId = post.Id;
+        postViewModel.Title = content.Title;
+        postViewModel.PostBody = content.PostBody;
+        postViewModel.PostImage = content.PostImage;
+        postViewModel.PostVideo = content.PostVideo;
+        postViewModel.CommentsClosed = content.CommentsClosed;
+
+        return View(postViewModel);
     }
 
 }
+
+
+
+

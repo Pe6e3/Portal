@@ -5,11 +5,11 @@ VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8BB93B65-BC65-4CDA-85BB-3DDB434E9308}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.DAL", "Portal.DLL\Portal.DAL.csproj", "{05AE80F5-D6A6-4698-8435-16E8806BA888}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal.DAL", "Portal.DLL\Portal.DAL.csproj", "{05AE80F5-D6A6-4698-8435-16E8806BA888}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.BLL", "Portal.BLL\Portal.BLL.csproj", "{8EA584CE-CBCC-414C-A37D-4BB0DAE75103}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal.BLL", "Portal.BLL\Portal.BLL.csproj", "{8EA584CE-CBCC-414C-A37D-4BB0DAE75103}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Web", "Portal.Web\Portal.Web.csproj", "{53233E58-71B6-40BD-BBD2-0B8675F02407}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal.Web", "Portal.Web\Portal.Web.csproj", "{53233E58-71B6-40BD-BBD2-0B8675F02407}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
