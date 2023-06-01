@@ -56,7 +56,7 @@ public class PostsController : BaseController<Post, IPostRepository>
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(PostViewModel postViewModel)
+    public async Task<IActionResult> CreatePost(PostViewModel postViewModel)
     {
         if (ModelState.IsValid)
         {
@@ -80,6 +80,41 @@ public class PostsController : BaseController<Post, IPostRepository>
         return RedirectToAction(nameof(Index));
     }
 
+    public async Task<IActionResult> Edit(int id)
+    {
+        Post post = await _uow.PostRep.GetByIdAsync(id);
+        PostContent content = await _uow.PostContentRep.GetContentByPostIdAsync(id);
+        PostViewModel editPost = new PostViewModel();
 
+        editPost.Slug = post.Slug;
+        editPost.CreatedAt = DateTime.Now;
+        editPost.PostId = post.Id;
+        editPost.Title = content.Title;
+        editPost.PostBody = content.PostBody;
+        editPost.PostImage = content.PostImage;
+        editPost.PostVideo = content.PostVideo;
+        editPost.CommentsClosed = content.CommentsClosed;
+
+        return View(editPost);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(PostViewModel postViewModel)
+    {
+        Post post = new Post();
+        post.Slug = postViewModel.Slug;
+        await _uow.PostRep.InsertAsync(post);
+
+        PostContent content = new PostContent();
+        content.Title = postViewModel.Title;
+        content.PostBody = postViewModel.PostBody;
+        content.PostImage = postViewModel.PostImage;
+        content.PostVideo = postViewModel.PostVideo;
+        content.CommentsClosed = postViewModel.CommentsClosed;
+
+        await _uow.PostContentRep.InsertAsync(content);
+
+        return RedirectToAction(nameof(Index));
+    }
 
 }

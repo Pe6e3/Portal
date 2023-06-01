@@ -11,6 +11,9 @@ public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : cl
         _db = db;
     }
     public async Task<T> GetByIdAsync(int id) => await _db.Set<T>().FindAsync(id);
+
+
+
     public async Task<T> InsertAsync(T entity)
     {
         await _db.Set<T>().AddAsync(entity);
