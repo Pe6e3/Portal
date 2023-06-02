@@ -45,9 +45,22 @@ namespace Portal.Web.Controllers
             return View(posts);
         }
 
-        public IActionResult Privacy()
+        public override async Task<IActionResult> Details(int id)
         {
-            return View();
+            Post post = await _uow.PostRep.GetByIdAsync(id);
+            PostContent content = await _uow.PostContentRep.GetContentByPostIdAsync(id);
+            PostViewModel postViewModel = new PostViewModel();
+
+            postViewModel.Slug = post.Slug;
+            postViewModel.CreatedAt = post.CreatedAt;
+            postViewModel.PostId = post.Id;
+            postViewModel.Title = content.Title;
+            postViewModel.PostBody = content.PostBody;
+            postViewModel.PostImage = content.PostImage;
+            postViewModel.PostVideo = content.PostVideo;
+            postViewModel.CommentsClosed = content.CommentsClosed;
+
+            return View(postViewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -55,5 +68,7 @@ namespace Portal.Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }
