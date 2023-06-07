@@ -63,7 +63,11 @@ public class PostsController : BaseController<Post, IPostRepository>
             content.PostBody = postViewModel.PostBody;
             content.PostImage = postViewModel.PostImage;
             content.CommentsClosed = postViewModel.CommentsClosed;
-            content.PostVideo = postViewModel.PostVideo;
+
+            // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
+            string postVideo = postViewModel.PostVideo ?? "";  // Исходная ссылка
+            int lastSlashIndex = postVideo.LastIndexOf("/");   // позиция последнего слеша
+            content.PostVideo = lastSlashIndex != -1 ? postVideo.Substring(lastSlashIndex + 1) : postVideo; //Удаляем все до последнего слеша
 
             await _uow.PostContentRep.InsertAsync(content);
         }
@@ -111,7 +115,11 @@ public class PostsController : BaseController<Post, IPostRepository>
             postContent.PostBody = postViewModel.PostBody;
             postContent.CommentsClosed = postViewModel.CommentsClosed;
             postContent.PostImage = postViewModel.PostImage;
-            postContent.PostVideo = postViewModel.PostVideo;
+
+              // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
+            string postVideo = postViewModel.PostVideo ?? "";  // Исходная ссылка
+            int lastSlashIndex = postVideo.LastIndexOf("/");   // позиция последнего слеша
+            postContent.PostVideo = lastSlashIndex != -1 ? postVideo.Substring(lastSlashIndex + 1) : postVideo; //Удаляем все до последнего слеша
 
 
             await _uow.PostContentRep.UpdateAsync(postContent);
