@@ -12,8 +12,8 @@ using Portal.DAL.Data;
 namespace Portal.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230602113115_CategoryId")]
-    partial class CategoryId
+    [Migration("20230609085047_12")]
+    partial class _12
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,17 +82,24 @@ namespace Portal.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 3,
-                            Description = "Описание Категории 1",
-                            Name = "Категория 1",
-                            Slug = "category1"
+                            Id = 1,
+                            Description = "Описание Категории Экономика",
+                            Name = "Экономика",
+                            Slug = "economics"
                         },
                         new
                         {
-                            Id = 4,
-                            Description = "Описание Категории 2",
-                            Name = "Категория 2",
-                            Slug = "category2"
+                            Id = 2,
+                            Description = "Описание Категории Технологии",
+                            Name = "Технологии",
+                            Slug = "technology"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Описание Категории Спорт",
+                            Name = "Спорт",
+                            Slug = "sport"
                         });
                 });
 
@@ -205,14 +212,19 @@ namespace Portal.DAL.Migrations
 
             modelBuilder.Entity("Portal.DAL.Entities.PostCategory", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
@@ -223,14 +235,19 @@ namespace Portal.DAL.Migrations
 
             modelBuilder.Entity("Portal.DAL.Entities.PostComment", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("CommentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
                     b.HasIndex("CommentId");
 
@@ -407,7 +424,9 @@ namespace Portal.DAL.Migrations
 
                     b.HasOne("Portal.DAL.Entities.Post", "Post")
                         .WithMany()
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
 
@@ -424,7 +443,9 @@ namespace Portal.DAL.Migrations
 
                     b.HasOne("Portal.DAL.Entities.Post", "Post")
                         .WithMany()
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Comment");
 

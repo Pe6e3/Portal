@@ -33,7 +33,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             {
                 Slug = post.Slug,
                 CreatedAt = post.CreatedAt,
-                PostId = post.Id,
+                Id = post.Id,
                 Title = content.Title,
                 PostBody = content.PostBody,
                 PostImage = content.PostImage,
@@ -44,6 +44,12 @@ public class PostsController : BaseController<Post, IPostRepository>
         return View(posts);
     }
 
+    [HttpGet]
+    public override async Task<IActionResult> Create()
+    {
+        ViewBag.AllCategories = await _uow.CategoryRep.ListAllAsync();
+        return View();
+    }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -70,13 +76,26 @@ public class PostsController : BaseController<Post, IPostRepository>
             content.PostVideo = lastSlashIndex != -1 ? postVideo.Substring(lastSlashIndex + 1) : postVideo; //Удаляем все до последнего слеша
 
             await _uow.PostContentRep.InsertAsync(content);
+
+            if (postViewModel.CategoriesId != null)
+                foreach (int catId in postViewModel.CategoriesId)
+                {
+                    PostCategory pc = new PostCategory()
+                    {
+                        PostId = post.Id,
+                        CategoryId = catId
+                    };
+                    await _uow.PostCategoryRep.InsertAsync(pc);
+                }
+
+
         }
 
         return RedirectToAction(nameof(Index));
     }
 
     [Area("Admin")]
-    public override async Task<IActionResult> Update(int id)
+    public override async Task<IActionResult> Update(int id) /*postId*/
     {
         Post post = await _uow.PostRep.GetByIdAsync(id);
         PostContent content = await _uow.PostContentRep.GetContentByPostIdAsync(id);
@@ -84,13 +103,14 @@ public class PostsController : BaseController<Post, IPostRepository>
 
         editPost.Slug = post.Slug;
         editPost.CreatedAt = post.CreatedAt;
-        editPost.PostId = post.Id;
+        editPost.Id = post.Id;
         editPost.Title = content.Title;
         editPost.PostBody = content.PostBody;
         editPost.PostImage = content.PostImage;
         editPost.PostVideo = content.PostVideo;
         editPost.CommentsClosed = content.CommentsClosed;
-
+        ViewBag.AllCategories = await _uow.CategoryRep.ListAllAsync();
+        ViewBag.PostCategories = await _uow.PostCategoryRep.GetCategoryPosts(id);/*postId*/
         return View(editPost);
     }
 
@@ -101,14 +121,14 @@ public class PostsController : BaseController<Post, IPostRepository>
     {
         if (ModelState.IsValid)
         {
-            Post post = await _uow.PostRep.GetByIdAsync(postViewModel.PostId);
+            Post post = await _uow.PostRep.GetByIdAsync(postViewModel.Id);
 
             post.Slug = postViewModel.Slug;
 
             await _uow.PostRep.UpdateAsync(post);
 
             // Получим Пост контент
-            PostContent postContent = await _uow.PostContentRep.GetContentByPostIdAsync(postViewModel.PostId);
+            PostContent postContent = await _uow.PostContentRep.GetContentByPostIdAsync(postViewModel.Id);
 
             // Заполняем Пост контент из формы
             postContent.Title = postViewModel.Title;
@@ -116,13 +136,25 @@ public class PostsController : BaseController<Post, IPostRepository>
             postContent.CommentsClosed = postViewModel.CommentsClosed;
             postContent.PostImage = postViewModel.PostImage;
 
-              // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
+            // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
             string postVideo = postViewModel.PostVideo ?? "";  // Исходная ссылка
             int lastSlashIndex = postVideo.LastIndexOf("/");   // позиция последнего слеша
             postContent.PostVideo = lastSlashIndex != -1 ? postVideo.Substring(lastSlashIndex + 1) : postVideo; //Удаляем все до последнего слеша
 
 
             await _uow.PostContentRep.UpdateAsync(postContent);
+
+            await _uow.PostCategoryRep.DeletePCbyPostIdAsync(post.Id);
+            if (postViewModel.CategoriesId != null)
+                foreach (int catId in postViewModel.CategoriesId)
+                {
+                    PostCategory pc = new PostCategory()
+                    {
+                        PostId = post.Id,
+                        CategoryId = catId
+                    };
+                    await _uow.PostCategoryRep.InsertAsync(pc);
+                }
 
             return RedirectToAction(nameof(Index));
         }
@@ -137,7 +169,7 @@ public class PostsController : BaseController<Post, IPostRepository>
 
         postViewModel.Slug = post.Slug;
         postViewModel.CreatedAt = post.CreatedAt;
-        postViewModel.PostId = post.Id;
+        postViewModel.Id = post.Id;
         postViewModel.Title = content.Title;
         postViewModel.PostBody = content.PostBody;
         postViewModel.PostImage = content.PostImage;

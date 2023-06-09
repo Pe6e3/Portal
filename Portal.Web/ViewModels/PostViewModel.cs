@@ -18,7 +18,7 @@ public class PostViewModel :BaseEntity
 
 
     [Display(Name = "ID поста")]
-    public int PostId { get; set; }
+    public int Id { get; set; }
 
     [Display(Name = "Название поста")]
     [StringLength(60, ErrorMessage = "Длина поста должна быть не более 60 символов")]
@@ -40,5 +40,7 @@ public class PostViewModel :BaseEntity
     [Display(Name = "Видео")]
     public string? PostVideo { get; set; }
 
+    [Display(Name = "Категории")]
+    public int[]? CategoriesId { get; set; }
 
 }

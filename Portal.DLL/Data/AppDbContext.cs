@@ -48,20 +48,29 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Category>()
            .HasData(new Category
            {
-               Id = 3,
-               Name = "Категория 1",
-               Description = "Описание Категории 1",
-               Slug = "category1",
+               Id = 1,
+               Name = "Экономика",
+               Description = "Описание Категории Экономика",
+               Slug = "economics",
            });
 
         modelBuilder.Entity<Category>()
            .HasData(new Category
            {
-               Id = 4,
-               Name = "Категория 2",
-               Description = "Описание Категории 2",
-               Slug = "category2",
+               Id = 2,
+               Name = "Технологии",
+               Description = "Описание Категории Технологии",
+               Slug = "technology",
            });
-    }
+
+        modelBuilder.Entity<Category>()
+           .HasData(new Category
+           {
+               Id = 3,
+               Name = "Спорт",
+               Description = "Описание Категории Спорт",
+               Slug = "sport",
+           });
+            }
 }
 

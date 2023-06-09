@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.BLL;
-using Portal.DAL.Data;
-using Microsoft.Extensions.DependencyInjection;
-using Portal.DAL.Interfaces;
 using Portal.BLL.Repositories;
+using Portal.DAL.Data;
+using Portal.DAL.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

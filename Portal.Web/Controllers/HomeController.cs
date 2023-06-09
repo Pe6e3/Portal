@@ -34,7 +34,7 @@ namespace Portal.Web.Controllers
                 {
                     Slug = post.Slug,
                     CreatedAt = post.CreatedAt,
-                    PostId = post.Id,
+                    Id = post.Id,
                     Title = content.Title,
                     PostBody = content.PostBody,
                     PostImage = content.PostImage,
@@ -53,7 +53,7 @@ namespace Portal.Web.Controllers
 
             postViewModel.Slug = post.Slug;
             postViewModel.CreatedAt = post.CreatedAt;
-            postViewModel.PostId = post.Id;
+            postViewModel.Id = post.Id;
             postViewModel.Title = content.Title;
             postViewModel.PostBody = content.PostBody;
             postViewModel.PostImage = content.PostImage;

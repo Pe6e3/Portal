@@ -12,7 +12,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.PostId)</th>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
             <th>@Html.DisplayNameFor(model => model.Slug)</th>
             <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
             <th>@Html.DisplayNameFor(model => model.Title)</th>
@@ -27,21 +27,21 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.PostId</td>
+                <td>@item.Id</td>
                 <td>@item.Slug</td>
                 <td>@item.CreatedAt</td>
                 <td>@item.Title</td>
                 <td>@item.PostBody</td>
                 <td>@item.CommentsNum</td>
                  <td>
-                 <a asp-action="Details" asp-route-id="@item.PostId">
+                 <a asp-action="Details" asp-route-id="@item.Id">
                 <img src="/img/postImages/@item.PostImage" style="max-height:150px; width:auto; border-radius:5px;" alt="" />
                    </a>
                  </td>
 
                 <td>@item.PostVideo</td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@item.PostId">
+                    <a asp-action="Delete" asp-route-id="@item.Id">
                         <i class="fa fa-remove" style="font-size:48px;color:red"></i>
                     </a>
                 </td>
