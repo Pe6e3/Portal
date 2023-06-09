@@ -27,4 +27,38 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
         return View("Create");
     }
 
+    [HttpPost]
+    public override async Task<IActionResult> Create(MenuItem menuItem)
+    {
+        //ViewBag.MenuID = menuItem.MenuId;
+        if (ModelState.IsValid)
+        {
+            await uow.MenuItemRep.InsertAsync(menuItem);
+            return RedirectToAction(nameof(IndexMenuItem), new { id = menuItem.MenuId });
+        }
+        return View(menuItem);
+    }
+
+    [HttpGet]
+    public override async Task<IActionResult> Edit(int Id) /*menuItemId*/
+    {
+        MenuItem menuItem = await uow.MenuItemRep.GetByIdAsync(Id);
+        if (menuItem == null)
+            return NotFound();
+        ViewBag.MenuID = menuItem.MenuId;
+        return View(menuItem);
+    }
+
+    [HttpPost]
+    public override async Task<IActionResult> Edit(MenuItem menuItem)
+    {
+        //ViewBag.MenuID = menuItem.MenuId;
+        if (ModelState.IsValid)
+        {
+            await uow.MenuItemRep.UpdateAsync(menuItem);
+            return RedirectToAction(nameof(IndexMenuItem), new { id = menuItem.MenuId });
+        }
+        return View(menuItem);
+    }
+
 }
