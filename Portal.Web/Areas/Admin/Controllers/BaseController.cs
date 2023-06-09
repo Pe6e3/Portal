@@ -19,11 +19,11 @@ namespace Portal.Web.Areas.Admin.Controllers
         private readonly UnitOfWork _uow;
 
 
-        protected BaseController(UnitOfWork unitOfWork, ILogger<BaseController<TEntity, TRepository>> logger, TRepository repository)
+        protected BaseController(UnitOfWork uow, ILogger<BaseController<TEntity, TRepository>> logger, TRepository repository)
         {
             _logger = logger;
             _repository = repository;
-            _uow = unitOfWork;
+            _uow = uow;
         }
 
         public virtual async Task<IActionResult> Index() => View(await _repository.ListAllAsync());

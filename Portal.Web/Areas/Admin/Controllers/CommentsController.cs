@@ -11,7 +11,7 @@ namespace Portal.Web.Areas.Admin.Controllers;
 [Area("Admin")]
 public class CommentsController : BaseController<Comment, ICommentRepository>
 {
-    public CommentsController(UnitOfWork unitOfWork, ILogger<BaseController<Comment, ICommentRepository>> logger, ICommentRepository repository) : base(unitOfWork, logger, repository)
+    public CommentsController(UnitOfWork uow, ILogger<BaseController<Comment, ICommentRepository>> logger, ICommentRepository repository) : base(uow, logger, repository)
     {
     }
 }

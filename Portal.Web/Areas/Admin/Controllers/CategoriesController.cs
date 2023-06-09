@@ -11,7 +11,7 @@ namespace Portal.Web.Areas.Admin.Controllers;
 [Area("Admin")]
 public class CategoriesController : BaseController<Category, ICategoryRepository>
 {
-    public CategoriesController(UnitOfWork unitOfWork, ILogger<BaseController<Category, ICategoryRepository>> logger, ICategoryRepository repository): base(unitOfWork, logger, repository)
+    public CategoriesController(UnitOfWork uow, ILogger<BaseController<Category, ICategoryRepository>> logger, ICategoryRepository repository): base(uow, logger, repository)
     {
     }
 }

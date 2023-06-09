@@ -14,11 +14,11 @@ namespace Portal.Web.Controllers
         protected new readonly ILogger<BaseController<Post, IPostRepository>> _logger;
         private readonly UnitOfWork _uow;
 
-        public HomeController(UnitOfWork unitOfWork, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository)
-            : base(unitOfWork, logger, repository)
+        public HomeController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository)
+            : base(uow, logger, repository)
         {
             _logger = logger;
-            _uow = unitOfWork;
+            _uow = uow;
         }
 
         public override async Task<IActionResult> Index()

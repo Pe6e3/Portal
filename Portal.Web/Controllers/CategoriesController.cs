@@ -12,9 +12,9 @@ namespace Portal.Web.Controllers
     {
         private readonly UnitOfWork _uow;
 
-        public CategoriesController(UnitOfWork unitOfWork, ILogger<BaseController<Category, ICategoryRepository>> logger, ICategoryRepository repository) : base(unitOfWork, logger, repository)
+        public CategoriesController(UnitOfWork uow, ILogger<BaseController<Category, ICategoryRepository>> logger, ICategoryRepository repository) : base(uow, logger, repository)
         {
-            _uow = unitOfWork;
+            _uow = uow;
 
         }
     }

@@ -11,7 +11,7 @@ namespace Portal.Web.Areas.Admin.Controllers;
 [Area("Admin")]
 public class PostContentsController : BaseController<PostContent, IPostContentRepository>
 {
-    public PostContentsController(UnitOfWork unitOfWork, ILogger<BaseController<PostContent, IPostContentRepository>> logger, IPostContentRepository repository) : base(unitOfWork,logger, repository)
+    public PostContentsController(UnitOfWork uow, ILogger<BaseController<PostContent, IPostContentRepository>> logger, IPostContentRepository repository) : base(uow,logger, repository)
     {
     }
 }

@@ -11,7 +11,7 @@ namespace Portal.Web.Areas.Admin.Controllers;
 [Area("Admin")]
 public class RolesController : BaseController<Role, IRoleRepository>
 {
-    public RolesController(UnitOfWork unitOfWork, ILogger<BaseController<Role, IRoleRepository>> logger, IRoleRepository repository) : base(unitOfWork,logger, repository)
+    public RolesController(UnitOfWork uow, ILogger<BaseController<Role, IRoleRepository>> logger, IRoleRepository repository) : base(uow,logger, repository)
     {
     }
 }
