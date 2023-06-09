@@ -95,7 +95,7 @@ public class PostsController : BaseController<Post, IPostRepository>
     }
 
     [Area("Admin")]
-    public override async Task<IActionResult> Update(int id) /*postId*/
+    public async Task<IActionResult> UpdateGet(int id) /*postId*/
     {
         Post post = await _uow.PostRep.GetByIdAsync(id);
         PostContent content = await _uow.PostContentRep.GetContentByPostIdAsync(id);
@@ -111,7 +111,7 @@ public class PostsController : BaseController<Post, IPostRepository>
         editPost.CommentsClosed = content.CommentsClosed;
         ViewBag.AllCategories = await _uow.CategoryRep.ListAllAsync();
         ViewBag.PostCategories = await _uow.PostCategoryRep.GetCategoryPosts(id);/*postId*/
-        return View(editPost);
+        return View("Update", editPost);
     }
 
     [HttpPost]

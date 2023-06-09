@@ -35,7 +35,7 @@ namespace Portal.Web.Areas.Admin.Controllers
 
 
 
-        public virtual async Task<IActionResult> Update(int id)
+        public virtual async Task<IActionResult> Edit(int id)
         {
             TEntity entity = await _repository.GetByIdAsync(id);
             if (entity == null)
@@ -44,7 +44,7 @@ namespace Portal.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> Update(TEntity entity)
+        public virtual async Task<IActionResult> Edit(TEntity entity)
         {
             if (ModelState.IsValid)
             {

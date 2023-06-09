@@ -16,7 +16,15 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
 
     public async Task<IActionResult> IndexMenuItem(int id)
     {
+        ViewBag.MenuID = id;
         return View("Index", await uow.MenuItemRep.GetByMenuIdAsync(id));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> CreateItemInMenuId(int id)
+    {
+        ViewBag.MenuID = id;
+        return View("Create");
     }
 
 }
