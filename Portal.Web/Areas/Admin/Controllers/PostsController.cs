@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
 using Portal.DAL.Entities;
+using Portal.DAL.Enum;
 using Portal.DAL.Interfaces;
 using Portal.Web.ViewModels;
 
@@ -12,12 +13,14 @@ public class PostsController : BaseController<Post, IPostRepository>
 
     protected new readonly ILogger<BaseController<Post, IPostRepository>> _logger;
     private readonly UnitOfWork _uow;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public PostsController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository)
+    public PostsController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository, IWebHostEnvironment webHostEnvironment)
         : base(uow, logger, repository)
     {
         _logger = logger;
         _uow = uow;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     public override async Task<IActionResult> Index()
@@ -67,7 +70,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             content.PostId = post.Id;
             content.Title = postViewModel.Title;
             content.PostBody = postViewModel.PostBody;
-            content.PostImage = postViewModel.PostImage;
+            content.PostImage = await ProcessUploadImage(postViewModel);
             content.CommentsClosed = postViewModel.CommentsClosed;
 
             // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
@@ -94,6 +97,25 @@ public class PostsController : BaseController<Post, IPostRepository>
         return RedirectToAction(nameof(Index));
     }
 
+    private async Task<string?> ProcessUploadImage(PostViewModel postViewModel)
+    {
+        string uniqueImageName = "";
+
+        if (postViewModel.ImageFile != null)
+        {
+            string wwwRootPath = _webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
+            string fileName = Path.GetFileNameWithoutExtension(postViewModel.ImageFile.FileName); //  Имя файла без расширения
+            string fileExtansion = Path.GetExtension(postViewModel.ImageFile.FileName);// Расширение с точкой (.jpg)
+            uniqueImageName = fileName + ". " + DateTime.Now.ToString("dd.MM.yyyy HH-mm-ss.ff") + fileExtansion;// задаем уникальное имя чтобы случайно не совпало с чьим-то другим            
+            string path = Path.Combine(wwwRootPath, "img/uploads", uniqueImageName); // задаем путь к файлу
+            using (var fileStream = new FileStream(path, FileMode.Create)) // создаем файл по указанному пути
+            {
+                await postViewModel.ImageFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы
+            }
+        }
+        return uniqueImageName;
+    }
+
     [Area("Admin")]
     public async Task<IActionResult> UpdateGet(int id) /*postId*/
     {
@@ -115,7 +137,7 @@ public class PostsController : BaseController<Post, IPostRepository>
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+    //[ValidateAntiForgeryToken]
     [Area("Admin")]
     public async Task<IActionResult> UpdatePVM(PostViewModel postViewModel)
     {
@@ -134,14 +156,19 @@ public class PostsController : BaseController<Post, IPostRepository>
             postContent.Title = postViewModel.Title;
             postContent.PostBody = postViewModel.PostBody;
             postContent.CommentsClosed = postViewModel.CommentsClosed;
-            postContent.PostImage = postViewModel.PostImage;
 
             // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
             string postVideo = postViewModel.PostVideo ?? "";  // Исходная ссылка
             int lastSlashIndex = postVideo.LastIndexOf("/");   // позиция последнего слеша
             postContent.PostVideo = lastSlashIndex != -1 ? postVideo.Substring(lastSlashIndex + 1) : postVideo; //Удаляем все до последнего слеша
 
+            if (postViewModel.ImageFile != null)
+            {
+                string? newImage = await ProcessUploadImage(postViewModel);
+                postContent.PostImage = newImage;
 
+                // TODO: удалить старую картинку
+            }
             await _uow.PostContentRep.UpdateAsync(postContent);
 
             await _uow.PostCategoryRep.DeletePCbyPostIdAsync(post.Id);

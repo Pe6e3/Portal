@@ -1,5 +1,6 @@
 ﻿using Portal.DAL.Entities;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Portal.Web.ViewModels;
 
@@ -42,5 +43,10 @@ public class PostViewModel :BaseEntity
 
     [Display(Name = "Категории")]
     public int[]? CategoriesId { get; set; }
+
+
+    [NotMapped]
+    [Display(Name = "Изображение")]
+    public IFormFile? ImageFile { get; set; }
 
 }

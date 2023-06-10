@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="UpdatePVM">
+        <form asp-action="UpdatePVM" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input asp-for="Id" type="hidden" value="@Model.Id" />
@@ -35,10 +35,12 @@
                 <span asp-validation-for="PostBody" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="PostImage" class="control-label"></label>
-                <input asp-for="PostImage" class="form-control" />
-                <span asp-validation-for="PostImage" class="text-danger"></span>
+            <div class="col-4">
+                <div class="form-group">
+                    <label asp-for="PostImage" class="control-label"></label>
+                    <input asp-for="ImageFile" type="file" accept="image/*" class="form-control" />
+                    <span asp-validation-for="PostImage" class="text-danger"></span>
+                </div>
             </div>
 
 
