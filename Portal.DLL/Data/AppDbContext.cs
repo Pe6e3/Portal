@@ -27,10 +27,13 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Post>()
             .HasMany(e => e.Categories)
             .WithMany(e => e.Posts);
+        //.UsingEntity<PostCategory>();
+
 
         modelBuilder.Entity<Post>()
             .HasMany(e => e.Comments)
             .WithMany(e => e.Posts);
+        //.UsingEntity<PostComment>();
 
         modelBuilder.Entity<Menu>()
             .HasData(new Menu
@@ -71,6 +74,6 @@ public class AppDbContext : DbContext
                Description = "Описание Категории Спорт",
                Slug = "sport",
            });
-            }
+    }
 }
 

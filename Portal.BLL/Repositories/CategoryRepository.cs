@@ -15,9 +15,17 @@ public class CategoryRepository : GenericRepositoryAsync<Category>, ICategoryRep
     }
 
 
-    public async Task<Category> GetPostsByCatSlugAsync(string categorySlug) => await
-        db.Categories
-        .Include(x => x.Posts)
-        //.ThenInclude(i => i.Contents)
-        .Where(cat => cat.Slug == categorySlug).FirstOrDefaultAsync();
+    // этот метод перебирает все категории и находит ту, у которой тот слаг, по которому мы ее ищем. Затем создает список из таблицы ПостКатегория, где ИД категории
+    // такой же, как в найденной нами категории. К каждой сущности подгружается таблица Постов, затем таблица Категорий. Минус в том, что здесь 2 запроса в одном методе
+    public async Task<List<PostCategory>> GetPostsByCatSlugAsync(string categorySlug)
+    {
+        Category? cat = await db.Categories.Where(c => c.Slug == categorySlug).FirstOrDefaultAsync();
+        List<PostCategory> pc = await db.PostCategories.Where(x => x.CategoryId == cat.Id)
+            .Include(db => db.Category)
+            .Include(db => db.Post)
+            .ThenInclude(db => db.Content)
+            .ToListAsync();
+
+        return pc;
+    }
 }

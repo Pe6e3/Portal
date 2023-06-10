@@ -21,7 +21,6 @@ namespace Portal.Web.Controllers
         [HttpGet("[Controller]/{categorySlug}")]
         public async Task<IActionResult> CategoryListIndex(string categorySlug) => View("Index", await _uow.CategoryRep.GetPostsByCatSlugAsync(categorySlug));
 
-
     }
 
 }

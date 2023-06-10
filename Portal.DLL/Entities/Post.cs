@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Portal.DAL.Entities;
+﻿namespace Portal.DAL.Entities;
 
 public class Post : BaseEntity
 {
@@ -11,5 +9,5 @@ public class Post : BaseEntity
 
     public List<Category>? Categories { get; set; }
     public List<Comment>? Comments { get; set; }
-    public List<PostContent>? Contents { get; set; }
+    public PostContent? Content { get; set; }
 }

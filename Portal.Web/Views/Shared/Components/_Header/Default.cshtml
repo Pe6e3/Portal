@@ -17,10 +17,10 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Категории</a>
                     </li>
-                    
-                    @foreach(MenuItem item in Model)
+
+                    @foreach (MenuItem item in Model)
                     {
-                        <a href="@item.Slug" class="nav-link text-dark">@item.Name</a>
+                        <a href="/categories/@item.Slug" class="nav-link text-dark">@item.Name</a>
                     }
 
                 </ul>
