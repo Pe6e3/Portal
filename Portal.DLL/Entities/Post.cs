@@ -11,4 +11,5 @@ public class Post : BaseEntity
 
     public List<Category>? Categories { get; set; }
     public List<Comment>? Comments { get; set; }
+    public List<PostContent>? Contents { get; set; }
 }

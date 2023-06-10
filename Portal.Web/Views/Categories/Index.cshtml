@@ -1,53 +1,86 @@
-﻿@model IEnumerable<Portal.DAL.Entities.Category>
+﻿@model Portal.DAL.Entities.Category
 
-@{
-    ViewData["Title"] = "Index";
-}
 
-<h1>Index</h1>
+<div class="pattern pattern-cat-header">
+    <div class="cat-header overlay" style="background-image: url('/uploads/@Model.CategoryImage')">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="cat-header-block">
+                        <h1>@Model.Name</h1>
+                        <p>@Model.Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Slug)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryImage)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Slug)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryImage)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="cat-list-first">
+    <div class="container">
+
+        <div class="ad top-ad">
+            <img src="img/ad-horizontal.jpg" alt="alt" class="img-responsive">
+        </div>
+        !!!!!!!!!!!!!!
+        <section class="type-one type-one-cat">
+            <div class="row">
+
+                <div class="col-md-7">
+                    @foreach (Portal.DAL.Entities.Post post in Model.Posts)
+                    {
+                        <div class="type-one-first">
+                            <a href="#" title="Как создать красивое освещение в виде шариков в своём доме">
+                                <img src="img/blog/diy/1.jpg" alt="alt" class="img-responsive img-width">
+                            </a>
+                            <div class="item-social">
+                                <div class="item-comments" title="Количество комментариев">
+                                    <i class="fa fa-comment"></i><a class="item-comments-count" href="#disqus_thread">26</a>
+                                    <span class="date">06/12/2023</span>
+                                </div>
+                            </div>
+                            <h3><a href="#">@post.Contents.Where(pc=>pc.Id==post.Id).FirstOrDefault().Title</a></h3>
+                        </div>
+                        @*break;*@
+                    }
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<div class="cat-list">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-8">
+
+                <div class="cat-list-wrap">
+
+                    <div class="cat-list-wrap">
+                        @foreach (Portal.DAL.Entities.Post post in Model.Posts)
+                        {
+                            <a href="#" class="cat-list-item">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="pattern">
+                                            <img src="img/blog/news/6.jpg" alt="Alt" class="img-responsive overlay">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h3>@post.Contents.Where(pc=>pc.Id==post.Id).FirstOrDefault().Title</h3>
+                                        <div class="date">21/06/2023</div>
+                                        <p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

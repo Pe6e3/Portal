@@ -1,4 +1,5 @@
-﻿@model List<Portal.DAL.Entities.MenuItem>
+﻿@using Portal.DAL.Entities;
+@model List<Portal.DAL.Entities.MenuItem>
 
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -16,6 +17,12 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Категории</a>
                     </li>
+                    
+                    @foreach(MenuItem item in Model)
+                    {
+                        <a href="@item.Slug" class="nav-link text-dark">@item.Name</a>
+                    }
+
                 </ul>
             </div>
         </div>
