@@ -97,24 +97,7 @@ public class PostsController : BaseController<Post, IPostRepository>
         return RedirectToAction(nameof(Index));
     }
 
-    private async Task<string?> ProcessUploadImage(PostViewModel postViewModel)
-    {
-        string uniqueImageName = "";
 
-        if (postViewModel.ImageFile != null)
-        {
-            string wwwRootPath = _webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
-            string fileName = Path.GetFileNameWithoutExtension(postViewModel.ImageFile.FileName); //  Имя файла без расширения
-            string fileExtansion = Path.GetExtension(postViewModel.ImageFile.FileName);// Расширение с точкой (.jpg)
-            uniqueImageName = fileName + ". " + DateTime.Now.ToString("dd.MM.yyyy HH-mm-ss.ff") + fileExtansion;// задаем уникальное имя чтобы случайно не совпало с чьим-то другим            
-            string path = Path.Combine(wwwRootPath, "img/uploads", uniqueImageName); // задаем путь к файлу
-            using (var fileStream = new FileStream(path, FileMode.Create)) // создаем файл по указанному пути
-            {
-                await postViewModel.ImageFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы
-            }
-        }
-        return uniqueImageName;
-    }
 
     [Area("Admin")]
     public async Task<IActionResult> UpdateGet(int id) /*postId*/
@@ -131,15 +114,17 @@ public class PostsController : BaseController<Post, IPostRepository>
         editPost.PostImage = content.PostImage;
         editPost.PostVideo = content.PostVideo;
         editPost.CommentsClosed = content.CommentsClosed;
+        /*if(content.PostImage!=null) */
+        ViewBag.oldImage = content.PostImage;
         ViewBag.AllCategories = await _uow.CategoryRep.ListAllAsync();
         ViewBag.PostCategories = await _uow.PostCategoryRep.GetCategoryPosts(id);/*postId*/
         return View("Update", editPost);
     }
 
     [HttpPost]
-    //[ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     [Area("Admin")]
-    public async Task<IActionResult> UpdatePVM(PostViewModel postViewModel)
+    public async Task<IActionResult> UpdatePVM(PostViewModel postViewModel, string? oldImage)
     {
         if (ModelState.IsValid)
         {
@@ -167,7 +152,7 @@ public class PostsController : BaseController<Post, IPostRepository>
                 string? newImage = await ProcessUploadImage(postViewModel);
                 postContent.PostImage = newImage;
 
-                // TODO: удалить старую картинку
+                if (oldImage != null) ProcessDeleteImage(oldImage, "\\img\\uploads\\");
             }
             await _uow.PostContentRep.UpdateAsync(postContent);
 
@@ -188,6 +173,8 @@ public class PostsController : BaseController<Post, IPostRepository>
         return View(postViewModel);
     }
 
+
+
     public override async Task<IActionResult> Details(int id)
     {
         Post post = await _uow.PostRep.GetByIdAsync(id);
@@ -205,6 +192,35 @@ public class PostsController : BaseController<Post, IPostRepository>
 
         return View(postViewModel);
     }
+
+    private async Task<string?> ProcessUploadImage(PostViewModel postViewModel)
+    {
+        string uniqueImageName = "";
+
+        if (postViewModel.ImageFile != null)
+        {
+            string wwwRootPath = _webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
+            string fileName = Path.GetFileNameWithoutExtension(postViewModel.ImageFile.FileName); //  Имя файла без расширения
+            string fileExtansion = Path.GetExtension(postViewModel.ImageFile.FileName);// Расширение с точкой (.jpg)
+            uniqueImageName = fileName + ". " + DateTime.Now.ToString("dd.MM.yyyy HH-mm-ss.ff") + fileExtansion;// задаем уникальное имя чтобы случайно не совпало с чьим-то другим            
+            string path = Path.Combine(wwwRootPath, "img/uploads", uniqueImageName); // задаем путь к файлу
+            using (var fileStream = new FileStream(path, FileMode.Create)) // создаем файл по указанному пути
+            {
+                await postViewModel.ImageFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы
+            }
+        }
+        return uniqueImageName;
+    }
+
+    private void ProcessDeleteImage(string oldImage, string folder)
+    {
+        string wwwRootPath = _webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
+        string path = Path.Combine(wwwRootPath+ folder+ oldImage);
+        if (System.IO.File.Exists(path))
+            System.IO.File.Delete(path);
+    }
+
+
 
 }
 
