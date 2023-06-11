@@ -70,7 +70,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             content.PostId = post.Id;
             content.Title = postViewModel.Title;
             content.PostBody = postViewModel.PostBody;
-            content.PostImage = await ProcessUploadImage(postViewModel);
+            content.PostImage = await ProcessUploadImage(postViewModel, "img/uploads/Posts");
             content.CommentsClosed = postViewModel.CommentsClosed;
 
             // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
@@ -149,10 +149,10 @@ public class PostsController : BaseController<Post, IPostRepository>
 
             if (postViewModel.ImageFile != null)
             {
-                string? newImage = await ProcessUploadImage(postViewModel);
+                string? newImage = await ProcessUploadImage(postViewModel, "img/uploads/Posts");
                 postContent.PostImage = newImage;
 
-                if (oldImage != null) ProcessDeleteImage(oldImage, "\\img\\uploads\\");
+                if (oldImage != null) ProcessDeleteImage(oldImage, "\\img\\uploads\\Posts");
             }
             await _uow.PostContentRep.UpdateAsync(postContent);
 
@@ -193,7 +193,7 @@ public class PostsController : BaseController<Post, IPostRepository>
         return View(postViewModel);
     }
 
-    private async Task<string?> ProcessUploadImage(PostViewModel postViewModel)
+    private async Task<string?> ProcessUploadImage(PostViewModel postViewModel, string folder)
     {
         string uniqueImageName = "";
 
@@ -203,7 +203,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             string fileName = Path.GetFileNameWithoutExtension(postViewModel.ImageFile.FileName); //  Имя файла без расширения
             string fileExtansion = Path.GetExtension(postViewModel.ImageFile.FileName);// Расширение с точкой (.jpg)
             uniqueImageName = fileName + ". " + DateTime.Now.ToString("dd.MM.yyyy HH-mm-ss.ff") + fileExtansion;// задаем уникальное имя чтобы случайно не совпало с чьим-то другим            
-            string path = Path.Combine(wwwRootPath, "img/uploads", uniqueImageName); // задаем путь к файлу
+            string path = Path.Combine(wwwRootPath, folder, uniqueImageName); // задаем путь к файлу
             using (var fileStream = new FileStream(path, FileMode.Create)) // создаем файл по указанному пути
             {
                 await postViewModel.ImageFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы

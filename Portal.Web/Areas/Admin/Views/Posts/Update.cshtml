@@ -38,6 +38,8 @@
             <div class="col-4">
                 <div class="form-group">
                     <label asp-for="ImageFile" class="control-label"></label>
+                    <img src="/img/uploads/Posts/@ViewBag.oldImage" style="width:300px;" />
+                    <b>Текущее изображение</b>
                     <input asp-for="ImageFile" type="file" accept="image/*" class="form-control" />
                     <span asp-validation-for="ImageFile" class="text-danger"></span>
                 </div>
