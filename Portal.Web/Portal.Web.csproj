@@ -69,8 +69,4 @@
     <ProjectReference Include="..\Portal.DLL\Portal.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\img\blog\diy\" />
-  </ItemGroup>
-
 </Project>

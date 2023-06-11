@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
 
-namespace Portal.Web.Views.Shared.Components._Header
+namespace Portal.Web.Views.Shared.Components._TopMenu
 {
-    [ViewComponent(Name = "_Header")]
+    [ViewComponent(Name = "_TopMenu")]
     public class HeaderViewComponent : ViewComponent
     {
         private readonly UnitOfWork _uow;
