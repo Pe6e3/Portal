@@ -20,7 +20,8 @@ public class CategoryRepository : GenericRepositoryAsync<Category>, ICategoryRep
     public async Task<List<PostCategory>> GetPostsByCatSlugAsync(string categorySlug)
     {
         Category? cat = await db.Categories.Where(c => c.Slug == categorySlug).FirstOrDefaultAsync();
-        List<PostCategory> pc = await db.PostCategories.Where(x => x.CategoryId == cat.Id)
+        if (cat == null) return null;
+        List<PostCategory>? pc = await db.PostCategories.Where(x => x.CategoryId == cat.Id)
             .Include(db => db.Category)
             .Include(db => db.Post)
             .ThenInclude(db => db.Content)
