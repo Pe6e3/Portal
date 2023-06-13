@@ -2,6 +2,7 @@
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
+using Portal.Web.ViewModels;
 
 namespace Portal.Web.Areas.Admin.Controllers;
 
@@ -23,8 +24,13 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
     [HttpGet]
     public async Task<IActionResult> CreateItemInMenuId(int id)
     {
+        MenuCatPostViewModel mcpwm = new MenuCatPostViewModel();
+        mcpwm.Posts = await uow.PostRep.ListAllPostsWithContentsAsync();
+        mcpwm.Categories = await uow.CategoryRep.ListAllAsync();
+
+
         ViewBag.MenuID = id;
-        return View("Create");
+        return View("Create", mcpwm);
     }
 
     [HttpPost]

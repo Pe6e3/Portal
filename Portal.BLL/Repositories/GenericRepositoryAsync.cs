@@ -40,5 +40,6 @@ public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : cl
                         .ToListAsync();
 
     public async Task<IReadOnlyList<T>> ListAllAsync() => await _db.Set<T>().ToListAsync();
+    public async Task<IReadOnlyList<T>> ListAllWithIncludeAsync() => await _db.Set<T>().ToListAsync();
 
 }
