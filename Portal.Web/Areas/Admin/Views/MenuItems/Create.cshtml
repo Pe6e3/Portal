@@ -10,11 +10,11 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreatePost">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <input type="hidden" asp-for="@Model.menuItem.MenuId" class="form-control" value="@ViewBag.MenuID" />
+                <input type="hidden" asp-for="MenuId" class="form-control" value="@Model.MenuId" />
             </div>
 
             <div class="form-group">
@@ -39,9 +39,9 @@
 
             <hr />
 
-            @Html.DropDownListFor(model => model.Categories, new SelectList(Model.Categories, "Id", "Name"), "Выберите категорию", new { @class = "form-control dropdown-content", id = "categoriesDropdown" })
+            @Html.DropDownListFor(model => model.Categories, new SelectList(Model.Categories, "Slug", "Name"), "Выберите категорию", new { @class = "form-control dropdown-content", id = "categoriesDropdown" })
 
-            @Html.DropDownListFor(model => model.Posts, new SelectList(Model.Posts, "Id", "Content.Title"), "Выберите пост", new { @class = "form-control dropdown-content", id = "postsDropdown" })
+            @Html.DropDownListFor(model => model.Posts, new SelectList(Model.Posts, "Slug", "Content.Title"), "Выберите пост", new { @class = "form-control dropdown-content", id = "postsDropdown" })
 
             <div class="form-group" id="urlBlock">
                 <label asp-for="Url" class="control-label">Url</label>

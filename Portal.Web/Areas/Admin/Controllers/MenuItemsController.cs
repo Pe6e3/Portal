@@ -27,22 +27,26 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
         MenuCatPostViewModel mcpwm = new MenuCatPostViewModel();
         mcpwm.Posts = await uow.PostRep.ListAllPostsWithContentsAsync();
         mcpwm.Categories = await uow.CategoryRep.ListAllAsync();
+        mcpwm.MenuId = id;
 
-
-        ViewBag.MenuID = id;
         return View("Create", mcpwm);
     }
 
     [HttpPost]
-    public override async Task<IActionResult> Create(MenuItem menuItem)
+    public async Task<IActionResult> CreatePost(MenuCatPostViewModel mcpwv)
     {
-        //ViewBag.MenuID = menuItem.MenuId;
         if (ModelState.IsValid)
         {
+            MenuItem menuItem = new MenuItem();
+            menuItem.MenuId = mcpwv.MenuId;
+            menuItem.Name = mcpwv.Name;
+            menuItem.Position = mcpwv.Position;
+            menuItem.Slug = mcpwv.Url;
+
             await uow.MenuItemRep.InsertAsync(menuItem);
             return RedirectToAction(nameof(IndexMenuItem), new { id = menuItem.MenuId });
         }
-        return View(menuItem);
+        return View("Create", mcpwv);
     }
 
     [HttpGet]
