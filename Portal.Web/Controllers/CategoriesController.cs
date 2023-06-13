@@ -23,21 +23,18 @@ namespace Portal.Web.Controllers
         public async Task<IActionResult> CategoryListIndex(string categorySlug)
         {
             List<PostCategory> postCats = await _uow.CategoryRep.GetPostsByCatSlugAsync(categorySlug);
-            if (postCats == null || postCats.Count == 0)
-            {
-                var urlHelper = new UrlHelper(ControllerContext);
-                var redirectUrl = urlHelper.Action("Index", new { categorySlug = categorySlug });
-                return Redirect(redirectUrl);
-            }
 
             ViewBag.CatSlug = categorySlug;
             return View("Index", postCats);
         }
 
- 
 
-
-
+        [HttpGet("/posts/{*postSlug}")]
+        public async Task<IActionResult> PostListIndex(string postSlug)
+        {
+            int postId = await _uow.PostRep.GetPostIdBySlugAsync(postSlug);
+            return RedirectToAction("Details", "Home", new { id = postId });
+        }
 
 
     }

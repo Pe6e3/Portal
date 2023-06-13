@@ -39,59 +39,65 @@
 
             <hr />
 
-            @Html.DropDownListFor(model => model.Categories, new SelectList(Model.Categories, "Slug", "Name"), "Выберите категорию", new { @class = "form-control dropdown-content", id = "categoriesDropdown" })
+            <div id="postBlock" style="display: none;">
+                @Html.DropDownListFor(model => model.Posts, new SelectList(Model.Posts, "Slug", "Content.Title"), "Выберите пост", new { @class = "form-control dropdown-content", id = "postsDropdown" })
+            </div>
 
-            @Html.DropDownListFor(model => model.Posts, new SelectList(Model.Posts, "Slug", "Content.Title"), "Выберите пост", new { @class = "form-control dropdown-content", id = "postsDropdown" })
+            <div id="categoryBlock" style="display: none;">
+                @Html.DropDownListFor(model => model.Categories, new SelectList(Model.Categories, "Slug", "Name"), "Выберите категорию", new { @class = "form-control dropdown-content", id = "categoriesDropdown" })
+            </div>
 
-            <div class="form-group" id="urlBlock">
+            <div class="form-group">
                 <label asp-for="Url" class="control-label">Url</label>
-                <input asp-for="Url" class="form-control" />
+                <input asp-for="Url" class="form-control" readonly id="urlInput" />
                 <span asp-validation-for="Url" class="text-danger"></span>
             </div>
 
-            <hr />
-
             <script>
-                // Получаем ссылки на выпадающие списки и блок URL
                 var selectedOptionDropdown = document.getElementById("selectedOptionDropdown");
+                var postBlock = document.getElementById("postBlock");
+                var categoryBlock = document.getElementById("categoryBlock");
+                var urlInput = document.getElementById("urlInput");
                 var categoriesDropdown = document.getElementById("categoriesDropdown");
                 var postsDropdown = document.getElementById("postsDropdown");
-                var urlBlock = document.getElementById("urlBlock");
 
-                // Скрываем все выпадающие списки и блок URL
-                categoriesDropdown.style.display = "none";
-                postsDropdown.style.display = "none";
-                urlBlock.style.display = "none";
-
-                // Отслеживаем изменение значения в выбранном пункте выпадающего списка
                 selectedOptionDropdown.addEventListener("change", function () {
-                    var selectedOption = this.value;
+                    var selectedOption = selectedOptionDropdown.value;
 
-                    // Показываем/скрываем соответствующий выпадающий список или блок URL в зависимости от выбранного значения
-                    if (selectedOption === "Category") {
-                        categoriesDropdown.style.display = "block";
-                        postsDropdown.style.display = "none";
-                        urlBlock.style.display = "none";
-                    } else if (selectedOption === "Post") {
-                        categoriesDropdown.style.display = "none";
-                        postsDropdown.style.display = "block";
-                        urlBlock.style.display = "none";
+                    if (selectedOption === "Post") {
+                        postBlock.style.display = "block";
+                        categoryBlock.style.display = "none";
+                        urlInput.readOnly = true;
+                    } else if (selectedOption === "Category") {
+                        postBlock.style.display = "none";
+                        categoryBlock.style.display = "block";
+                        urlInput.readOnly = true;
                     } else if (selectedOption === "CustomUrl") {
-                        categoriesDropdown.style.display = "none";
-                        postsDropdown.style.display = "none";
-                        urlBlock.style.display = "block";
+                        postBlock.style.display = "none";
+                        categoryBlock.style.display = "none";
+                        urlInput.readOnly = false;
                     } else {
-                        categoriesDropdown.style.display = "none";
-                        postsDropdown.style.display = "none";
-                        urlBlock.style.display = "none";
+                        postBlock.style.display = "none";
+                        categoryBlock.style.display = "none";
+                        urlInput.readOnly = true;
                     }
+                });
+
+                categoriesDropdown.addEventListener("change", function () {
+                    var selectedCategory = categoriesDropdown.value;
+                    urlInput.value = "category/" + selectedCategory;
+                });
+
+                postsDropdown.addEventListener("change", function () {
+                    var selectedPost = postsDropdown.value;
+                    urlInput.value = "posts/" + selectedPost;
                 });
             </script>
 
 
+            <hr />
 
-
-
+            
 
 
 
@@ -104,7 +110,8 @@
 
 
 <div>
-    <a asp-action="IndexMenuItem" asp-route-id="@ViewBag.MenuID">Back to List</a>
+    <a asp-action="IndexMenuItem" asp-route-id="@Model.MenuId">Вернуться к списку пунктов меню</a>
+
 </div>
 
 @section Scripts {

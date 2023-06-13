@@ -56,19 +56,38 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
         if (menuItem == null)
             return NotFound();
         ViewBag.MenuID = menuItem.MenuId;
-        return View(menuItem);
+
+
+        MenuCatPostViewModel mcpwm = new MenuCatPostViewModel();
+        mcpwm.Posts = await uow.PostRep.ListAllPostsWithContentsAsync();
+        mcpwm.Categories = await uow.CategoryRep.ListAllAsync();
+        mcpwm.MenuId = menuItem.MenuId;
+        mcpwm.Position = menuItem.Position;
+        mcpwm.Name = menuItem.Name;
+        mcpwm.Url = menuItem.Slug;
+        mcpwm.Id = menuItem.Id;
+
+        return View(mcpwm);
     }
 
     [HttpPost]
-    public override async Task<IActionResult> Edit(MenuItem menuItem)
+    public async Task<IActionResult> EditPost(MenuCatPostViewModel mcpwm)
     {
         //ViewBag.MenuID = menuItem.MenuId;
         if (ModelState.IsValid)
         {
+            MenuItem menuItem = new MenuItem();
+            menuItem.MenuId = mcpwm.MenuId;
+            menuItem.Name = mcpwm.Name;
+            menuItem.Position = mcpwm.Position;
+            menuItem.Slug = mcpwm.Url;
+            menuItem.Id = mcpwm.Id;
+
             await uow.MenuItemRep.UpdateAsync(menuItem);
             return RedirectToAction(nameof(IndexMenuItem), new { id = menuItem.MenuId });
         }
-        return View(menuItem);
+
+        return View(mcpwm);
     }
 
 }
