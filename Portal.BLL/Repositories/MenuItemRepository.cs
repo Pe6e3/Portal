@@ -16,6 +16,6 @@ public class MenuItemRepository : GenericRepositoryAsync<MenuItem>, IMenuItemRep
 
     public async Task<List<MenuItem>> GetByMenuIdAsync(int menuId)
     {
-        return await db.MenuItems.Where(x => x.MenuId == menuId).ToListAsync();
+        return await db.MenuItems.Where(x => x.MenuId == menuId).OrderBy(item => item.Position).ToListAsync();
     }
 }

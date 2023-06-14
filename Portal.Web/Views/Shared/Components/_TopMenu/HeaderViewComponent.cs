@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
+using Portal.DAL.Entities;
 
 namespace Portal.Web.Views.Shared.Components._TopMenu
 {
@@ -13,10 +14,10 @@ namespace Portal.Web.Views.Shared.Components._TopMenu
             _uow = uow;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync() /*передает список пунктов меню в представление Defauly/_TopMenu*/
         {
-            var entity = await _uow.MenuItemRep.GetByMenuIdAsync(1);
-            return View(entity);
+            List<MenuItem> menuItem = await _uow.MenuItemRep.GetByMenuIdAsync(1);
+            return View(menuItem);
         }
 
     }
