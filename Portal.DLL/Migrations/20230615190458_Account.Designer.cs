@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portal.DAL.Data;
 
@@ -11,9 +12,11 @@ using Portal.DAL.Data;
 namespace Portal.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230615190458_Account")]
+    partial class Account
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -304,28 +307,6 @@ namespace Portal.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            RoleName = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            RoleName = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            RoleName = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            RoleName = 4
-                        });
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.User", b =>

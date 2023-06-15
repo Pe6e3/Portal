@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
 using Portal.DAL.Entities;
-using Portal.DAL.Enum;
 using Portal.DAL.Interfaces;
 using Portal.Web.ViewModels;
 

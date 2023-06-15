@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.DAL.Entities;
+using Portal.DAL.Enum;
 
 namespace Portal.DAL.Data;
 
@@ -74,6 +75,25 @@ public class AppDbContext : DbContext
                Description = "Описание Категории Спорт",
                Slug = "sport",
            });
+
+        modelBuilder.Entity<Role>().HasData(new Role
+        {
+            Id = 1,
+            RoleName = RoleName.Admin,
+        }, new Role
+        {
+            Id = 2,
+            RoleName = RoleName.Moderator,
+        }, new Role
+        {
+            Id = 3,
+            RoleName = RoleName.User,
+        }, new Role
+        {
+            Id = 4,
+            RoleName = RoleName.PremiumUser,
+        }
+        );
     }
 }
 

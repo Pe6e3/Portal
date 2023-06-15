@@ -14,17 +14,32 @@ public class LoginViewModel
 	[DataType(DataType.EmailAddress)]
 	public string? Email { get; set; }
 
-	[Required(ErrorMessage = "Не указан пароль")]
-	[DataType(DataType.Password)]
+    [Required(ErrorMessage = "Не указан пароль")]
+    [DataType(DataType.Password)]
+    public string? Password { get; set; }
+
+
+    [Required(ErrorMessage = "Повторите пароль")]
+    [DataType(DataType.Password)]
+    public string? PasswordConfirm { get; set; }
+
+	public DateTime? RegistrationDate { get; set; }
 
 
 
 
-// UserProfile 
-	public string? Password { get; set; }
+	// UserProfile 
 	[Display(Name = "Имя")]
 	public string? Firstname { get; set; }
 	[Display(Name = "Фамилия")]
 	public string? Lastname { get; set; }
+
+	public string? AvatarImg { get; set; }
+
+	[Display(Name = "Ваш аватар")]
+	public IFormFile? AvatarFile { get; set; }
+
+	[Display(Name = "День рождения")]
+	public DateTime? Birthday { get; set; }
 
 }
