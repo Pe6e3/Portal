@@ -25,6 +25,7 @@ namespace Portal.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginViewModel lvm)
         {
             if (ModelState.IsValid)
@@ -36,7 +37,7 @@ namespace Portal.Web.Controllers
                         User user = new User();
                         user.Login = lvm.Login;
                         user.Email = lvm.Email;
-                        user.Password = lvm.Password;
+                        user.Password = uow.UserRep.HashPass(lvm.Password);
                         user.RoleId = (int)RoleName.User;
                         await uow.UserRep.InsertAsync(user);
 
@@ -65,8 +66,20 @@ namespace Portal.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel lvm)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(User loginUser)
         {
+            if (ModelState.IsValid)
+            {
+                User user = await uow.UserRep.ValidateUser(loginUser.Login, loginUser.Password);
+                if (user == null) ModelState.AddModelError("", "Нет такого пользователя");
+                else if (user.Password == "") ModelState.AddModelError("", "Неверный пароль");
+                else
+                {
+                    //await Authenticate(user);
+                    return RedirectToAction("Index", "Home");
+                }
+            }
             return View();
         }
 
