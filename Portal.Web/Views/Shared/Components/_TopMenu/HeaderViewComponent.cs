@@ -14,7 +14,7 @@ namespace Portal.Web.Views.Shared.Components._TopMenu
             _uow = uow;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync() /*передает список пунктов меню в представление Defauly/_TopMenu*/
+        public async Task<IViewComponentResult> InvokeAsync() /*передает список пунктов меню в представление Default/_TopMenu*/
         {
             List<MenuItem> menuItem = await _uow.MenuItemRep.GetByMenuIdAsync(1);
             return View(menuItem);

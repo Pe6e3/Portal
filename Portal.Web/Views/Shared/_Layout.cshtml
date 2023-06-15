@@ -1,23 +1,16 @@
 ﻿<!DOCTYPE html>
 <html lang="ru">
-
 @await Html.PartialAsync("_Head")
-
 <body>
+
     @await Component.InvokeAsync("_TopMenu")
 
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main"> @RenderBody() </main>
+
 
     @await Html.PartialAsync("_Footer")
-
-
     @await Html.PartialAsync("_Scripts")
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
