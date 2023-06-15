@@ -2,6 +2,7 @@
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
+using Portal.Web.ViewModels;
 
 namespace Portal.Web.Areas.Admin.Controllers;
 
@@ -23,20 +24,29 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
     [HttpGet]
     public async Task<IActionResult> CreateItemInMenuId(int id)
     {
-        ViewBag.MenuID = id;
-        return View("Create");
+        MenuCatPostViewModel mcpwm = new MenuCatPostViewModel();
+        mcpwm.Posts = await uow.PostRep.ListAllPostsWithContentsAsync();
+        mcpwm.Categories = await uow.CategoryRep.ListAllAsync();
+        mcpwm.MenuId = id;
+
+        return View("Create", mcpwm);
     }
 
     [HttpPost]
-    public override async Task<IActionResult> Create(MenuItem menuItem)
+    public async Task<IActionResult> CreatePost(MenuCatPostViewModel mcpwv)
     {
-        //ViewBag.MenuID = menuItem.MenuId;
         if (ModelState.IsValid)
         {
+            MenuItem menuItem = new MenuItem();
+            menuItem.MenuId = mcpwv.MenuId;
+            menuItem.Name = mcpwv.Name;
+            menuItem.Position = mcpwv.Position;
+            menuItem.Slug = mcpwv.Url;
+
             await uow.MenuItemRep.InsertAsync(menuItem);
             return RedirectToAction(nameof(IndexMenuItem), new { id = menuItem.MenuId });
         }
-        return View(menuItem);
+        return View("Create", mcpwv);
     }
 
     [HttpGet]
@@ -46,19 +56,38 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
         if (menuItem == null)
             return NotFound();
         ViewBag.MenuID = menuItem.MenuId;
-        return View(menuItem);
+
+
+        MenuCatPostViewModel mcpwm = new MenuCatPostViewModel();
+        mcpwm.Posts = await uow.PostRep.ListAllPostsWithContentsAsync();
+        mcpwm.Categories = await uow.CategoryRep.ListAllAsync();
+        mcpwm.MenuId = menuItem.MenuId;
+        mcpwm.Position = menuItem.Position;
+        mcpwm.Name = menuItem.Name;
+        mcpwm.Url = menuItem.Slug;
+        mcpwm.Id = menuItem.Id;
+
+        return View(mcpwm);
     }
 
     [HttpPost]
-    public override async Task<IActionResult> Edit(MenuItem menuItem)
+    public async Task<IActionResult> EditPost(MenuCatPostViewModel mcpwm)
     {
         //ViewBag.MenuID = menuItem.MenuId;
         if (ModelState.IsValid)
         {
+            MenuItem menuItem = new MenuItem();
+            menuItem.MenuId = mcpwm.MenuId;
+            menuItem.Name = mcpwm.Name;
+            menuItem.Position = mcpwm.Position;
+            menuItem.Slug = mcpwm.Url;
+            menuItem.Id = mcpwm.Id;
+
             await uow.MenuItemRep.UpdateAsync(menuItem);
             return RedirectToAction(nameof(IndexMenuItem), new { id = menuItem.MenuId });
         }
-        return View(menuItem);
+
+        return View(mcpwm);
     }
 
 }

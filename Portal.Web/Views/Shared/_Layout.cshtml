@@ -1,45 +1,16 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Portal.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Portal.Web.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/fontAwesome/css/font-awesome.min.css" />
-
-    <base href="/" />
-
-    <meta name="description" content="Описание сайта" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-    <!-- Изображение, которое будет отображаться когда делятся ссылкой на сайт -->
-    <meta property="og:image" content="img/MainImage.jpg" />
-    <link rel="icon" href="img/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon-180x180.png" />
-
-    <meta name="theme-color" content="#202222" />
-
-</head>
+<html lang="ru">
+@await Html.PartialAsync("_Head")
 <body>
-   @await Component.InvokeAsync("_TopMenu")
+
+    @await Component.InvokeAsync("_TopMenu")
 
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main"> @RenderBody() </main>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - Portal.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await Html.PartialAsync("_Footer")
+    @await Html.PartialAsync("_Scripts")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

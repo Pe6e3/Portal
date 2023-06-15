@@ -1,4 +1,4 @@
-﻿@model Portal.DAL.Entities.MenuItem
+﻿@model MenuCatPostViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -10,26 +10,97 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreatePost">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
-                <input type="hidden" asp-for="MenuId" class="form-control" value="@ViewBag.MenuID" />
+                <input type="hidden" asp-for="MenuId" class="form-control" value="@Model.MenuId" />
             </div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Slug" class="control-label"></label>
-                <input asp-for="Slug" class="form-control" />
-                <span asp-validation-for="Slug" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Position" class="control-label"></label>
                 <input asp-for="Position" class="form-control" />
                 <span asp-validation-for="Position" class="text-danger"></span>
             </div>
+
+
+            @Html.DropDownList("SelectedOption", new List<SelectListItem>
+            {
+            new SelectListItem { Text = "На пост", Value = "Post" },
+            new SelectListItem { Text = "На Категорию", Value = "Category" },
+            new SelectListItem { Text = "Задать свой путь", Value = "CustomUrl" }
+            }, "Выберите на что будет ссылаться пункт меню", new { @class = "form-control", id = "selectedOptionDropdown" })
+
+            <hr />
+
+            <div id="postBlock" style="display: none;">
+                @Html.DropDownListFor(model => model.Posts, new SelectList(Model.Posts, "Slug", "Content.Title"), "Выберите пост", new { @class = "form-control dropdown-content", id = "postsDropdown" })
+            </div>
+
+            <div id="categoryBlock" style="display: none;">
+                @Html.DropDownListFor(model => model.Categories, new SelectList(Model.Categories, "Slug", "Name"), "Выберите категорию", new { @class = "form-control dropdown-content", id = "categoriesDropdown" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Url" class="control-label">Url</label>
+                <input asp-for="Url" class="form-control" readonly id="urlInput" />
+                <span asp-validation-for="Url" class="text-danger"></span>
+            </div>
+
+            <script>
+                var selectedOptionDropdown = document.getElementById("selectedOptionDropdown");
+                var postBlock = document.getElementById("postBlock");
+                var categoryBlock = document.getElementById("categoryBlock");
+                var urlInput = document.getElementById("urlInput");
+                var categoriesDropdown = document.getElementById("categoriesDropdown");
+                var postsDropdown = document.getElementById("postsDropdown");
+
+                selectedOptionDropdown.addEventListener("change", function () {
+                    var selectedOption = selectedOptionDropdown.value;
+
+                    if (selectedOption === "Post") {
+                        postBlock.style.display = "block";
+                        categoryBlock.style.display = "none";
+                        urlInput.readOnly = true;
+                    } else if (selectedOption === "Category") {
+                        postBlock.style.display = "none";
+                        categoryBlock.style.display = "block";
+                        urlInput.readOnly = true;
+                    } else if (selectedOption === "CustomUrl") {
+                        postBlock.style.display = "none";
+                        categoryBlock.style.display = "none";
+                        urlInput.readOnly = false;
+                    } else {
+                        postBlock.style.display = "none";
+                        categoryBlock.style.display = "none";
+                        urlInput.readOnly = true;
+                    }
+                });
+
+                categoriesDropdown.addEventListener("change", function () {
+                    var selectedCategory = categoriesDropdown.value;
+                    urlInput.value = "category/" + selectedCategory;
+                });
+
+                postsDropdown.addEventListener("change", function () {
+                    var selectedPost = postsDropdown.value;
+                    urlInput.value = "posts/" + selectedPost;
+                });
+            </script>
+
+
+            <hr />
+
+            
+
+
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -37,10 +108,14 @@
     </div>
 </div>
 
+
 <div>
-    <a asp-action="IndexMenuItem" asp-route-id="@ViewBag.MenuID">Back to List</a>
+    <a asp-action="IndexMenuItem" asp-route-id="@Model.MenuId">Вернуться к списку пунктов меню</a>
+
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
