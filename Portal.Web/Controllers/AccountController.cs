@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Enum;
 using Portal.Web.ViewModels;
-using static NuGet.Packaging.PackagingConstants;
+using System.Security.Claims;
 
 namespace Portal.Web.Controllers
 {
@@ -19,10 +20,7 @@ namespace Portal.Web.Controllers
             this.webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() =>View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -76,7 +74,7 @@ namespace Portal.Web.Controllers
                 else if (user.Password == "") ModelState.AddModelError("", "Неверный пароль");
                 else
                 {
-                    //await Authenticate(user);
+                    await Authenticate(user);
                     return RedirectToAction("Index", "Home");
                 }
             }
@@ -84,16 +82,33 @@ namespace Portal.Web.Controllers
         }
 
 
-        public async Task<IActionResult> Authenticate(User user)
+        public async Task Authenticate(User user)
         {
-
-            return View();
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.RoleId.ToString())
+            };
+            ClaimsIdentity id = new ClaimsIdentity(
+                claims,
+                "ApplicationCookie",
+                ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(id),
+                new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(60)
+                });
         }
 
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
 
 

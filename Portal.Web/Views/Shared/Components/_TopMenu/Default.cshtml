@@ -37,8 +37,14 @@
                             <input type="text" name="q" placeholder="Поиск по сайту" />
                         </form>
                     </div>
-
-
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="header__user">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @User.Identity.Name
+                    }
                 </div>
             </div>
         </div>
