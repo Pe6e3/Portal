@@ -8486,6 +8486,14 @@ body {
     display: none;
 }
 
+.header__user {
+    display: contents;
+    color: antiquewhite;
+    cursor: pointer;
+    line-height: 65px;
+    text-align: center;
+}
+
 .pattern {
     background-color: #202222;
     position: relative;

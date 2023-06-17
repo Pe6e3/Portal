@@ -20,7 +20,7 @@ namespace Portal.Web.Controllers
             this.webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Register() =>View();
+        public IActionResult Register() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -80,6 +80,16 @@ namespace Portal.Web.Controllers
             }
             return View();
         }
+
+        //public async Task<User?> GetUser()
+        //{
+        //    if (User.Identity.IsAuthenticated)
+        //    {
+        //        string login = User.Identity.Name;
+        //        return await uow.UserRep.GetUserByLogin(login);
+        //    }
+        //    return null;
+        //}
 
 
         public async Task Authenticate(User user)

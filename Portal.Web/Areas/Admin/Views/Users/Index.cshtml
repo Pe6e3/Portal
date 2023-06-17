@@ -36,7 +36,7 @@
                 <td>@Html.DisplayFor(modelItem => item.Profile.Lastname)</td>
                 <td>@Html.DisplayFor(modelItem => item.Profile.Birthday)</td>
                 <td>@Html.DisplayFor(modelItem => item.Profile.RegistrationDate)</td>
-                <td><img src="~/img/uploads/Profiles/@item.Profile.AvatarImg" style="height:150px;" /></td>
+                <td><img src="~/img/uploads/Profiles/@item.Profile.AvatarImg" style="max-height:150px; max-width:200px;" /></td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

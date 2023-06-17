@@ -16,6 +16,10 @@ public class UserRepository : GenericRepositoryAsync<User>, IUserRepository
 
     public async Task<List<User>> GetAllUsers() => await db.Users.Include(x => x.Profile).ToListAsync();
 
+    public async Task<User> GetDefaultUser() => await db.Users.Include(u => u.Profile).FirstOrDefaultAsync(u => u.Login == "Default");
+
+    public async Task<User> GetUserByLogin(string login) => await db.Users.Include(u => u.Profile).FirstOrDefaultAsync(u => u.Login == login);
+
     public string? HashPass(string? password) => BCrypt.Net.BCrypt.HashPassword(password);
 
     public async Task<bool> UserCheck(string login, string? email) => await db.Users.AnyAsync(u => u.Email == email || u.Login == login);
