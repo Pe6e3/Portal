@@ -8,9 +8,10 @@
     <div class="container" style="max-width:200px;">
         <div class="row">
             <div class="col d-flex align-items-center">
-                <img src="/img/uploads/Profiles/@Model?.Profile?.AvatarImg" alt="@Model?.Profile?.Firstname @Model?.Profile?.Lastname" style="height:55px; border-radius:5px;" />
-                <p class="m-0 ml-2">@Model.Profile.Firstname</p>
-                <p class="m-0 mx-2">@Model.Profile.Lastname</p>
+                <img src="/img/uploads/Profiles/@Model?.Profile?.AvatarImg" alt="@Model?.Profile?.Firstname @Model?.Profile?.Lastname" class="d-none d-sm-block" style="height:55px; border-radius:5px;" />
+                <img src="/img/uploads/Profiles/@Model?.Profile?.AvatarImg" alt="@Model?.Profile?.Firstname @Model?.Profile?.Lastname" class="d-sm-none d-m-block" style="height:45px; border-radius:5px;" />
+                <p class="m-0 ml-2 d-none d-sm-block">@Model.Profile.Firstname</p>
+                <p class="m-0 mx-2 d-none d-sm-block">@Model.Profile.Lastname</p>
                 <a asp-action="Logout" asp-controller="Account" class="btn btn-outline-secondary ml-auto">Выйти</a>
             </div>
         </div>
