@@ -34,7 +34,6 @@ namespace Portal.Web.Controllers
                     {
                         User user = new User();
                         user.Login = lvm.Login;
-                        user.Email = lvm.Email;
                         user.Password = uow.UserRep.HashPass(lvm.Password);
                         user.RoleId = (int)RoleName.User;
                         await uow.UserRep.InsertAsync(user);
@@ -43,13 +42,14 @@ namespace Portal.Web.Controllers
                         profile.Firstname = lvm.Firstname;
                         profile.Lastname = lvm.Lastname;
                         profile.Birthday = lvm.Birthday;
+                        profile.Email = lvm.Email;
                         string? newImage = await ProcessUploadAvatar(lvm, "img/uploads/Profiles/");
                         profile.AvatarImg = newImage;
                         profile.UserId = user.Id;
                         profile.RegistrationDate = lvm.RegistrationDate;
                         await uow.UserProfileRep.InsertAsync(profile);
 
-
+                        await Authenticate(user);
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -80,16 +80,6 @@ namespace Portal.Web.Controllers
             }
             return View();
         }
-
-        //public async Task<User?> GetUser()
-        //{
-        //    if (User.Identity.IsAuthenticated)
-        //    {
-        //        string login = User.Identity.Name;
-        //        return await uow.UserRep.GetUserByLogin(login);
-        //    }
-        //    return null;
-        //}
 
 
         public async Task Authenticate(User user)
@@ -149,6 +139,17 @@ namespace Portal.Web.Controllers
                 System.IO.File.Delete(path);
         }
 
+
+        public async Task<IActionResult> Profile(string login)
+        {
+            User user = await uow.UserRep.GetUserByLogin(login);
+            ProfileViewModel profileVM = new ProfileViewModel();
+            profileVM.Firstname = user.Profile.Firstname;
+            profileVM.Lastname = user.Profile.Lastname;
+            profileVM.Email = user.Profile.Email;
+
+            return View(profileVM);
+        }
 
     }
 }

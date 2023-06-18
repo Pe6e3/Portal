@@ -5,14 +5,43 @@
 @if (@User.Identity.IsAuthenticated)
 {
 
-    <div class="container" style="max-width:200px;">
+    <div class="container" style="max-width: 250px;">
         <div class="row">
             <div class="col d-flex align-items-center">
-                <img src="/img/uploads/Profiles/@Model?.Profile?.AvatarImg" alt="@Model?.Profile?.Firstname @Model?.Profile?.Lastname" class="d-none d-sm-block" style="height:55px; border-radius:5px;" />
-                <img src="/img/uploads/Profiles/@Model?.Profile?.AvatarImg" alt="@Model?.Profile?.Firstname @Model?.Profile?.Lastname" class="d-sm-none d-m-block" style="height:45px; border-radius:5px;" />
-                <p class="m-0 ml-2 d-none d-sm-block">@Model.Profile.Firstname</p>
-                <p class="m-0 mx-2 d-none d-sm-block">@Model.Profile.Lastname</p>
-                <a asp-action="Logout" asp-controller="Account" class="btn btn-outline-secondary ml-auto">Выйти</a>
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="height:65px; border-radius:5px;">
+                    <div class="container-fluid">
+
+                        <button class="navbar-toggler"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#navbarNavDarkDropdown"
+                                aria-controls="navbarNavDarkDropdown"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+
+                                    <a class="nav-link" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="d-flex align-items-center">
+                                            <img src="/img/uploads/Profiles/@Model?.Profile?.AvatarImg" alt="@Model?.Profile?.Firstname @Model?.Profile?.Lastname" style="height: 55px; border-radius: 5px;" />
+                                            <span class="navbar-toggler-icon"></span>
+                                        </div>
+                                    </a>
+
+                                    <ul class="dropdown-menu dropdown-menu-dark text-center" aria-labelledby="navbarDarkDropdownMenuLink" style="border-radius: 4px;">
+                                        <li><p class="m-0 ml-2">@Model.Profile.Firstname @Model.Profile.Lastname</p></li>
+                                        <li><a asp-action="Profile" asp-controller="Account" class="btn btn-outline-primary">Перейти в профиль</a></li>
+                                        <li><a asp-action="Logout" asp-controller="Account" class="btn btn-outline-secondary">Выйти</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
             </div>
         </div>
     </div>

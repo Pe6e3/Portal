@@ -13,8 +13,7 @@
     <thead>
         <tr>
             <th>@Html.DisplayNameFor(model => model.Login)</th>
-            <th>@Html.DisplayNameFor(model => model.Email)</th>
-            <th>@Html.DisplayNameFor(model => model.Password)</th>
+            <th>@Html.DisplayNameFor(model => model.Profile.Email)</th>
             <th>@Html.DisplayNameFor(model => model.Role)</th>
             <th>@Html.DisplayNameFor(model => model.Profile.Firstname)</th>
             <th>@Html.DisplayNameFor(model => model.Profile.Lastname)</th>
@@ -29,8 +28,7 @@
         {
             <tr class="centered">
                 <td>@Html.DisplayFor(modelItem => item.Login)</td>
-                <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                <td>@Html.DisplayFor(modelItem => item.Password)</td>
+                <td>@Html.DisplayFor(modelItem => item.Profile.Email)</td>
                 <td>@Html.DisplayFor(modelItem => item.RoleId)</td>
                 <td>@Html.DisplayFor(modelItem => item.Profile.Firstname)</td>
                 <td>@Html.DisplayFor(modelItem => item.Profile.Lastname)</td>
