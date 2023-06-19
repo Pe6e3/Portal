@@ -12,4 +12,5 @@ public class ProfileViewModel
     [Display(Name = "Логин")] public string Login { get; set; } = null!;
     [Display(Name = "Пароль")][DataType(DataType.Password)] public string? Password { get; set; } = null!;
     [Display(Name = "Эл. почта")] public string? Email { get; set; }
+    [Display(Name = "Аватар")] public IFormFile? AvatarFile { get; set; }
 }

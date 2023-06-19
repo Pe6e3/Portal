@@ -43,7 +43,7 @@ namespace Portal.Web.Controllers
                         profile.Lastname = lvm.Lastname;
                         profile.Birthday = lvm.Birthday;
                         profile.Email = lvm.Email;
-                        string? newImage = await ProcessUploadAvatar(lvm, "img/uploads/Profiles/");
+                        string? newImage = await ProcessUploadAvatar(lvm.AvatarFile, "img/uploads/Profiles/");
                         profile.AvatarImg = newImage;
                         profile.UserId = user.Id;
                         profile.RegistrationDate = lvm.RegistrationDate;
@@ -69,6 +69,7 @@ namespace Portal.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                // TODO: Посмотреть здесь как делается передача ошибки
                 User user = await uow.UserRep.ValidateUser(loginUser.Login, loginUser.Password);
                 if (user == null) ModelState.AddModelError("", "Нет такого пользователя");
                 else if (user.Password == "") ModelState.AddModelError("", "Неверный пароль");
@@ -112,20 +113,20 @@ namespace Portal.Web.Controllers
         }
 
 
-        public async Task<string?> ProcessUploadAvatar(LoginViewModel profile, string folder = "img/uploads/Profiles/")
+        public async Task<string?> ProcessUploadAvatar(IFormFile imageFile, string folder = "img/uploads/Profiles/")
         {
             string uniqueAvatarName = "";
 
-            if (profile.AvatarFile != null)
+            if (imageFile != null)
             {
                 string wwwRootPath = webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
-                string fileName = Path.GetFileNameWithoutExtension(profile.AvatarFile.FileName); //  Имя файла без расширения
-                string fileExtansion = Path.GetExtension(profile.AvatarFile.FileName);// Расширение с точкой (.jpg)
+                string fileName = Path.GetFileNameWithoutExtension(imageFile.FileName); //  Имя файла без расширения
+                string fileExtansion = Path.GetExtension(imageFile.FileName);// Расширение с точкой (.jpg)
                 uniqueAvatarName = fileName + ". " + DateTime.Now.ToString("dd.MM.yyyy HH-mm-ss.ff") + fileExtansion;// задаем уникальное имя чтобы случайно не совпало с чьим-то другим            
                 string path = Path.Combine(wwwRootPath, folder, uniqueAvatarName); // задаем путь к файлу
                 using (var fileStream = new FileStream(path, FileMode.Create)) // создаем файл по указанному пути
                 {
-                    await profile.AvatarFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы
+                    await imageFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы
                 }
             }
             return uniqueAvatarName;
@@ -142,14 +143,34 @@ namespace Portal.Web.Controllers
 
         public async Task<IActionResult> Profile(string login)
         {
+            login = string.IsNullOrEmpty(login) ? User.Identity.Name : login;
             User user = await uow.UserRep.GetUserByLogin(login);
             ProfileViewModel profileVM = new ProfileViewModel();
             profileVM.Firstname = user.Profile.Firstname;
             profileVM.Lastname = user.Profile.Lastname;
             profileVM.Email = user.Profile.Email;
+            profileVM.Birthday = user.Profile.Birthday;
+            profileVM.Login = login;
+            profileVM.RegistrationDate = user.Profile.RegistrationDate;
+            profileVM.AvatarImg = user.Profile.AvatarImg;
 
             return View(profileVM);
         }
+
+        public async Task<IActionResult> SaveProfile(ProfileViewModel profileVM)
+        {
+            User user = await uow.UserRep.GetUserByLogin(profileVM.Login);
+            UserProfile profile = await uow.UserProfileRep.GetByIdAsync(user.Profile.Id);
+
+            if (profileVM.AvatarFile != null) profile.AvatarImg = await ProcessUploadAvatar(profileVM.AvatarFile);
+            if (profile.Firstname != profileVM.Firstname) profile.Firstname = profileVM.Firstname;
+            if (profile.Lastname != profileVM.Lastname) profile.Lastname = profileVM.Lastname;
+            if (profile.Birthday != profileVM.Birthday) profile.Birthday = profileVM.Birthday;
+            if (profile.Email != profileVM.Email) profile.Email = profileVM.Email;
+            await uow.UserProfileRep.UpdateAsync(profile);
+            return RedirectToAction("Profile", "Account", new { login = user.Login });
+        }
+
 
     }
 }
