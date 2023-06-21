@@ -1,18 +1,19 @@
-﻿@model List<Portal.DAL.Entities.PostCategory>
+﻿@using Portal.DAL.Entities;
+@model List<Portal.DAL.Entities.PostCategory>
 @{
-    ViewBag.Title = Model.FirstOrDefault().Category.Name;
+    ViewBag.Title = Model?.FirstOrDefault()?.Category?.Name;
 }
 
 
 <div class="pattern pattern-cat-header">
-    <div class="cat-header overlay" style="background-image: url('/img/uploads/Categories/@Model.FirstOrDefault().Category.CategoryImage')">
+    <div class="cat-header " style="background-image: url('/img/uploads/Categories/@Model?.FirstOrDefault()?.Category?.CategoryImage')">
 
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
-                    <div class="cat-header-block">
-                        <h1>@Model.FirstOrDefault().Category.Name </h1>
-                        <p>@Model.FirstOrDefault().Category.Description</p>
+                    <div class="cat-header-block" style="height:320px">
+                        <h1>@Model.FirstOrDefault()?.Category?.Name </h1>
+                        <p>@Model.FirstOrDefault()?.Category?.Description</p>
                     </div>
                 </div>
             </div>
@@ -20,8 +21,97 @@
     </div>
 </div>
 
-@*
+<div class="cat-list-first">
+    <div class="container">
+        <section class="type-one type-one-cat">
+            <div class="row">
+                <div class="col-md-7">
+                    @{
+                        // 1. Пост посередине
+                        Post? firstPost = Model?.FirstOrDefault()?.Post;
+                        <div class="type-one-first">
+                            <a href="/posts/@firstPost?.Slug" title="@firstPost?.Content?.Title">
+                                <img src="/img/uploads/Posts/@firstPost?.Content?.PostImage" alt="alt" class="img-responsive img-width">
+                            </a>
 
+                            <div class="item-social">
+                                <div class="item-comments" title="Количество комментариев">
+                                    <i class="fa fa-comment"></i><a class="item-comments-count" href="#">@firstPost?.Content?.CommentsNum</a>
+                                    <span class="date">@firstPost?.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                </div>
+                            </div>
+                            <h3><a href="#">@firstPost?.Content.Title</a></h3>
+                        </div>
+                    }
+                </div>
+
+
+                <div class="col-md-5 item-title-white">
+                    @{
+                        // 2. 2 поста справа
+                        IEnumerable<PostCategory> postCats = Model.Take(3).Skip(1);
+
+                        @foreach (PostCategory postCat in postCats)
+                        {
+                            <div class="pattern">
+                                <div class="overlay item-title" style="background-image: url('/uploads/Posts/@postCat.Post.Content.PostImage')">
+                                    <div class="item-title-content">
+                                        <h3><a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@postCat.Category.CategoryImage" asp-route-postSlug="@postCat.Post.Slug">@postCat.Post.Content.Title</a></h3>
+                                        <div class="item-social">
+                                            <div class="item-comments" title="Количество комментариев">
+                                                <i class="fa fa-comment"></i><a class="item-comments-count" href="#">@postCat.Post.Content.CommentsNum</a>
+                                                <span class="date">@postCat.Post.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
 <div class="cat-list-first">
     <div class="container">
 
@@ -55,9 +145,7 @@
 
     </div>
 </div>
-*@
-<hr />
-@*
+
 <div class="cat-list">
     <div class="container">
         <div class="row">
@@ -89,35 +177,158 @@
             </div>
         </div>
     </div>
-</div>*@
+</div>
 <body>
 
-<section class="hero">
-    <div class="container">
-        <div class="row no-gutters">
-            <div class="col-6">
+    <section class="hero">
+        <div class="container">
+            <div class="row no-gutters">
+                <div class="col-6">
 
-                <div class="pattern">
-                    <div class="overlay" style="background-image: url('/img/blog/electronics/1.jpg')">
-                        <div class="item-title-content">
-                            <h3>
-                                <a href="#">Новые смартфоны покорили поклонников мобильной индустрии</a>
-                            </h3>
+                    <div class="pattern">
+                        <div class="overlay" style="background-image: url('/img/blog/electronics/1.jpg')">
+                            <div class="item-title-content">
+                                <h3>
+                                    <a href="#">Новые смартфоны покорили поклонников мобильной индустрии</a>
+                                </h3>
 
-                            <div class="item-social">
+                                <div class="item-social">
 
-                                <div class="item-comments">
-                                    <i class="fa fa-comments"></i>
-                                    <a href="#" class="item-comments-count">26</a>
+                                    <div class="item-comments">
+                                        <i class="fa fa-comments"></i>
+                                        <a href="#" class="item-comments-count">26</a>
+                                    </div>
+
+                                    <div class="likely likely-custom">
+
+                                        <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
+                                        <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
+                                        <div class="facebook" title="Поделиться в Facebook">Facebook</div>
+                                        <div class="twitter" title="Поделиться в Twitter">Twitter</div>
+
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                <div class="likely likely-custom">
+                </div>
+                <div class="col-6">
+                    <div class="pattern">
+                        <div class="overlay" style="background-image: url('/img/blog/electronics/2.jpg')">
+                            <div class="item-title-content">
+                                <h3>
+                                    <a href="#">MacBook Федя занял своё почётное место на бабушкином столе из 60-х</a>
+                                </h3>
 
-                                    <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
+                                <div class="item-social">
 
+                                    <div class="item-comments">
+                                        <i class="fa fa-comments"></i>
+                                        <a href="#" class="item-comments-count">26</a>
+                                    </div>
+
+                                    <div class="likely likely-custom">
+
+                                        <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
+                                        <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
+                                        <div class="facebook" title="Поделиться в Facebook">Facebook</div>
+                                        <div class="twitter" title="Поделиться в Twitter">Twitter</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="pattern">
+                        <div class="overlay" style="background-image: url('/img/blog/electronics/3.jpg')">
+                            <div class="item-title-content">
+                                <h3>
+                                    <a href="#">На стол знаменитой Московской студии поставили 2 новых девайса</a>
+                                </h3>
+
+                                <div class="item-social">
+
+                                    <div class="item-comments">
+                                        <i class="fa fa-comments"></i>
+                                        <a href="#" class="item-comments-count">26</a>
+                                    </div>
+
+                                    <div class="likely likely-custom">
+
+                                        <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
+                                        <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
+                                        <div class="facebook" title="Поделиться в Facebook">Facebook</div>
+                                        <div class="twitter" title="Поделиться в Twitter">Twitter</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="pattern">
+                        <div class="overlay" style="background-image: url('/img/blog/electronics/4.jpg')">
+                            <div class="item-title-content">
+                                <h3>
+                                    <a href="#">
+                                        Новенькие наушники, стилизованные под объективы камер положили на
+                                        грязный поддон
+                                    </a>
+                                </h3>
+
+                                <div class="item-social">
+
+                                    <div class="item-comments">
+                                        <i class="fa fa-comments"></i>
+                                        <a href="#" class="item-comments-count">26</a>
+                                    </div>
+
+                                    <div class="likely likely-custom">
+
+                                        <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
+                                        <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
+                                        <div class="facebook" title="Поделиться в Facebook">Facebook</div>
+                                        <div class="twitter" title="Поделиться в Twitter">Twitter</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="pattern">
+                        <div class="overlay" style="background-image: url('/img/blog/electronics/5.jpg')">
+                            <div class="item-title-content">
+                                <h3>
+                                    <a href="#">
+                                        MacBook Гриша нашел свой дом на нижней полке самодельного короба для
+                                        обуви
+                                    </a>
+                                </h3>
+
+                                <div class="item-social">
+
+                                    <div class="item-comments">
+                                        <i class="fa fa-comments"></i>
+                                        <a href="#" class="item-comments-count">26</a>
+                                    </div>
+
+                                    <div class="likely likely-custom">
+
+                                        <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
+                                        <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
+                                        <div class="facebook" title="Поделиться в Facebook">Facebook</div>
+                                        <div class="twitter" title="Поделиться в Twitter">Twitter</div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -125,130 +336,8 @@
                 </div>
 
             </div>
-            <div class="col-6">
-                <div class="pattern">
-                    <div class="overlay" style="background-image: url('/img/blog/electronics/2.jpg')">
-                        <div class="item-title-content">
-                            <h3>
-                                <a href="#">MacBook Федя занял своё почётное место на бабушкином столе из 60-х</a>
-                            </h3>
-
-                            <div class="item-social">
-
-                                <div class="item-comments">
-                                    <i class="fa fa-comments"></i>
-                                    <a href="#" class="item-comments-count">26</a>
-                                </div>
-
-                                <div class="likely likely-custom">
-
-                                    <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-4">
-                <div class="pattern">
-                    <div class="overlay" style="background-image: url('/img/blog/electronics/3.jpg')">
-                        <div class="item-title-content">
-                            <h3>
-                                <a href="#">На стол знаменитой Московской студии поставили 2 новых девайса</a>
-                            </h3>
-
-                            <div class="item-social">
-
-                                <div class="item-comments">
-                                    <i class="fa fa-comments"></i>
-                                    <a href="#" class="item-comments-count">26</a>
-                                </div>
-
-                                <div class="likely likely-custom">
-
-                                    <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-4">
-                <div class="pattern">
-                    <div class="overlay" style="background-image: url('/img/blog/electronics/4.jpg')">
-                        <div class="item-title-content">
-                            <h3>
-                                <a href="#">
-                                    Новенькие наушники, стилизованные под объективы камер положили на
-                                    грязный поддон
-                                </a>
-                            </h3>
-
-                            <div class="item-social">
-
-                                <div class="item-comments">
-                                    <i class="fa fa-comments"></i>
-                                    <a href="#" class="item-comments-count">26</a>
-                                </div>
-
-                                <div class="likely likely-custom">
-
-                                    <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-4">
-                <div class="pattern">
-                    <div class="overlay" style="background-image: url('/img/blog/electronics/5.jpg')">
-                        <div class="item-title-content">
-                            <h3>
-                                <a href="#">
-                                    MacBook Гриша нашел свой дом на нижней полке самодельного короба для
-                                    обуви
-                                </a>
-                            </h3>
-
-                            <div class="item-social">
-
-                                <div class="item-comments">
-                                    <i class="fa fa-comments"></i>
-                                    <a href="#" class="item-comments-count">26</a>
-                                </div>
-
-                                <div class="likely likely-custom">
-
-                                    <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
-    </div>
-</section>
+    </section>
 </body>
 
+*@
