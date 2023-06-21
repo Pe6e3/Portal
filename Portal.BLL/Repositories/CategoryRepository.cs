@@ -29,4 +29,9 @@ public class CategoryRepository : GenericRepositoryAsync<Category>, ICategoryRep
 
         return pc;
     }
+    public async Task<Category> RandomCatId()
+    {
+        Category? category = await db.Categories.OrderBy(x => Guid.NewGuid()).FirstOrDefaultAsync();
+        return category;
+    }
 }

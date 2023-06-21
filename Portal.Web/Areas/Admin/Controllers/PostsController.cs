@@ -3,6 +3,7 @@ using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
 using Portal.Web.ViewModels;
+using System.Text.Json;
 
 namespace Portal.Web.Areas.Admin.Controllers;
 
@@ -214,13 +215,61 @@ public class PostsController : BaseController<Post, IPostRepository>
     private void ProcessDeleteImage(string oldImage, string folder)
     {
         string wwwRootPath = _webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
-        string path = Path.Combine(wwwRootPath+ folder+ oldImage);
+        string path = Path.Combine(wwwRootPath + folder + oldImage);
         if (System.IO.File.Exists(path))
             System.IO.File.Delete(path);
     }
 
+    public async Task<IActionResult> GenerateRandomPosts(int count = 1)
+    {
+        for (int i = 0; i < count; i++)
+        {
 
+            Post post = new Post();
+            PostContent content = new PostContent();
+            PostCategory postCat = new PostCategory();
+            Random random = new Random();
 
+            post.Slug = await GetRandomWords(1);
+            post.CreatedAt = DateTime.Now;
+            post.CreatedBy = await _uow.UserRep.GetUserByLogin(User.Identity.Name);
+            await _uow.PostRep.InsertAsync(post);
+
+            Category randomCat = await _uow.CategoryRep.RandomCatId();
+            postCat.PostId = post.Id;
+            postCat.CategoryId = randomCat.Id;
+
+            content.Title = post.Id + ". (" + randomCat.Name + ") " + await GetRandomWords(3);
+            content.PostBody = await GetRandomWords(50);
+            content.PostImage = random.Next(1, 32).ToString() + ".jpg"; // надо добавить в папку uploads изображения с названием 1.jpg, 2.jpg  и так далее попорядку. Количество поставить в random.Next (у меня 32)
+            content.PostId = post.Id;
+
+            await _uow.PostCategoryRep.InsertAsync(postCat);
+            await _uow.PostContentRep.InsertAsync(content);
+
+        }
+        return RedirectToAction("Index");
+    }
+
+    static async Task<string> GetRandomWords(int count)
+    {
+        string[] words = new string[count];
+        string space = count > 1 ? " " : "";
+        using (HttpClient client = new HttpClient())
+        {
+            string apiUrl = $"https://random-word-api.herokuapp.com/word?number={count}";
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                words = JsonSerializer.Deserialize<string[]>(jsonResponse);
+            }
+            else
+                throw new Exception("Failed to retrieve random words.");
+        }
+        return string.Join(space, words);
+
+    }
 }
 
 

@@ -6,9 +6,16 @@
 }
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Создать новый</a>
-</p>
+@if (User.Identity.IsAuthenticated)
+{
+
+    <div class="col-2 text-left mb-2">
+        <a asp-action="Create" class="btn btn-success mb-2">Новый пост</a>
+        <a asp-area="Admin" asp-controller="Posts" asp-action="GenerateRandomPosts" asp-route-count="5" class="btn btn-danger mt-2">+5 случайных постов</a>
+        <a asp-area="Admin" asp-controller="Posts" asp-action="GenerateRandomPosts" asp-route-count="20" class="btn btn-danger mt-2">+20 случайных постов</a>
+    </div>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -34,11 +41,11 @@
                 <td>@item.Title</td>
                 <td>@item.PostBody</td>
                 <td>@item.CommentsNum</td>
-                 <td>
-                 <a asp-action="Details" asp-route-id="@item.Id">
-                <img src="/img/uploads/Posts/@item.PostImage" style="max-height:150px; width:auto; border-radius:5px;" alt="" />
-                   </a>
-                 </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <img src="/img/uploads/Posts/@item.PostImage" style="max-height:150px; width:auto; border-radius:5px;" alt="" />
+                    </a>
+                </td>
 
                 <td>
                     <div style="position: relative; padding-bottom: 56.25%; height: 0;">
