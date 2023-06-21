@@ -14,6 +14,8 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
         this.db = db;
     }
 
+    public async Task<Post> GetPostByIdAsync(int id) => await db.Posts.Include(p => p.Content).Include(p => p.CreatedBy).FirstOrDefaultAsync(x => x.Id == id);
+
     public async Task<int> GetPostIdBySlugAsync(string postSlug)
     {
         var post = await db.Posts.FirstOrDefaultAsync(post => post.Slug == postSlug);

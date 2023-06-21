@@ -177,18 +177,18 @@ public class PostsController : BaseController<Post, IPostRepository>
 
     public override async Task<IActionResult> Details(int id)
     {
-        Post post = await _uow.PostRep.GetByIdAsync(id);
-        PostContent content = await _uow.PostContentRep.GetContentByPostIdAsync(id);
+        Post post = await _uow.PostRep.GetPostByIdAsync(id);
         PostViewModel postViewModel = new PostViewModel();
 
         postViewModel.Slug = post.Slug;
         postViewModel.CreatedAt = post.CreatedAt;
         postViewModel.Id = post.Id;
-        postViewModel.Title = content.Title;
-        postViewModel.PostBody = content.PostBody;
-        postViewModel.PostImage = content.PostImage;
-        postViewModel.PostVideo = content.PostVideo;
-        postViewModel.CommentsClosed = content.CommentsClosed;
+        postViewModel.Title = post.Content.Title;
+        postViewModel.PostBody = post.Content.PostBody;
+        postViewModel.PostImage = post.Content.PostImage;
+        postViewModel.PostVideo = post.Content.PostVideo;
+        postViewModel.CommentsClosed = post.Content.CommentsClosed;
+        postViewModel.CreatedBy = await _uow.UserRep.GetUserByLogin(post.CreatedBy.Login);
 
         return View(postViewModel);
     }
