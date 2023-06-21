@@ -1,0 +1,142 @@
+﻿@model ProfileViewModel
+
+<form method="post" asp-action="SaveProfile" asp-controller="Account" enctype="multipart/form-data">
+    <div class="card text-left my-5">
+        <label for="file-upload" class="img_profile">
+            <img src="/img/uploads/Profiles/@Model?.AvatarImg" alt="@Model.Firstname @Model.Lastname" class="card_image" />
+        </label>
+        <input id="file-upload" asp-for="AvatarFile" type="file" accept="image/*" style="display: none;" />
+
+
+
+        <div class="card-body">
+
+            <div class="form-group text-center">
+                <input type="text" class="my_field prof_name" name="Firstname" value="@Model.Firstname">
+            </div>
+
+            <div class="form-group text-center">
+                <input type="text" class="my_field prof_name" name="Lastname" value="@Model.Lastname">
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-6 text-end"><strong>Логин <i class="fa fa-user" aria-hidden="true"></i>:</strong></div>
+                <div class="col-6 text-left d-flex align-items-center">
+                    @Model.Login
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-6 text-end"><strong>Email <i class="fas fa-envelope"></i>: </strong></div>
+                <div class="col-6 text-left d-flex align-items-center">  <input type="text" name="Email" class="my_field" value="@Model.Email" style="font-size:16px;"> </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-6 text-end"><strong>День рождения: <i class="fas fa-birthday-cake"></i>: </strong></div>
+                <div class="col-5">  <input type="date" name="Birthday" value="@Model.Birthday?.ToString("yyyy-MM-dd")" style="font-size:16px;" class=" my_field"> </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-6 text-end"><strong>Зарегистрирован <i class="fa fa-file-text-o" aria-hidden="true"></i></i>: </strong></div>
+                <div class="col-6 text-left d-flex align-items-center"> <p style="font-size:16px;"> @Model.RegistrationDate  </div>
+            </div>
+
+        </div>
+        <input type="hidden" name="Login" value="@Model.Login" />
+        <button class="btn btn-outline-success btn-lg mb-2" type="submit">Сохранить</button>
+    </div>
+</form>
+
+
+
+
+<style>
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        margin: auto;
+        font-family: arial;
+        border-radius: 6px;
+    }
+
+    .my_field {
+        font-size: 18px;
+        border: 0;
+        border-radius: 4px;
+        transition: .3s;
+        padding: 6px;
+        margin: 2px;
+    }
+
+        .my_field:hover {
+            box-shadow: 0px 0px 8px -2px rgba(125,225,225,0.8);
+            background-color: rgba(255,225,225,0.4);
+            transform: scale(1.04);
+            transition: .3s;
+        }
+
+        .my_field:focus {
+            transform: scale(1.06);
+            transition: .3s;
+            box-shadow: 0px 0px 8px -1px #B763C6;
+            background-color: rgba(255,225,225,0.6)
+        }
+
+    .prof_name {
+        font-size: 24px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .card_image {
+        width: 100%;
+        border-radius: 6px 6px 0px 0px;
+    }
+
+    .img_profile {
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .img_profile:hover {
+            transition: .2s;
+            transform: scale(1.05);
+            position: relative;
+        }
+
+            .img_profile:hover::after {
+                content: "Изменить фото";
+                position: absolute;
+                top: calc(100% + 5px); /* Расстояние от надписи до изображения */
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: bisque;
+                color: rgb(10,20,155);
+                padding: 5px;
+                width: 80%;
+                text-align: center;
+                border-radius: 4px;
+                font-size: 22px;
+                font-weight: bold;
+            }
+
+</style>
+
+
+<script>
+    const fileUpload = document.getElementById('file-upload');
+    const imagePreview = document.querySelector('.card_image');
+
+    fileUpload.addEventListener('change', function() {
+      const file = this.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result;
+      }
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    });
+</script>

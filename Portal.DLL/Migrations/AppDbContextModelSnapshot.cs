@@ -339,14 +339,12 @@ namespace Portal.DAL.Migrations
                     b.Property<int?>("CommentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoleId")
@@ -374,6 +372,9 @@ namespace Portal.DAL.Migrations
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Firstname")
                         .HasColumnType("nvarchar(max)");

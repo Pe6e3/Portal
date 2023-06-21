@@ -1,6 +1,69 @@
-﻿@model LoginViewModel
+﻿@model  LoginViewModel
 
 @{
-    ViewData["Title"] = "Авторизация";
+    ViewBag.Title = "Вход";
 }
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="wrapper-login">
+    <div class="container">
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+                <h2>Авторизация</h2>
 
+
+                <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
+                    <div class="validation" asp-validation-summary="ModelOnly" />
+                    <div>
+                        <div class="form-group">
+                            <label class="label" asp-for="Login"></label>
+                            <input class="input" type="text" asp-for="Login" />
+                            <span asp-validation-for="Login"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="label" asp-for="Password"></label>
+                            <input class="input" asp-for="Password" />
+                            <span asp-validation-for="Password"></span>
+                        </div>
+                        <div class="form-group">
+                            <button class="button" type="submit">Войти</button>
+                        </div>
+                        <br />
+                        Нет аккаунта?
+                        <a class="btn btn-success" asp-action="Registration" asp-controller="Account">Зарегистрируйтесь</a>
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .wrapper-login {
+        min-height: 30vh;
+        padding-top: 10%;
+        padding-bottom: 10%;
+    }
+
+    .input {
+        display: block;
+        width: 100%;
+        padding: 10px 20px;
+        border-radius: 3px;
+        background: #fff;
+    }
+
+    .label {
+        font-size: .9em;
+        color: #747474;
+    }
+
+    .button {
+        margin-top: 25px;
+        width: 100%;
+    }
+
+</style>
