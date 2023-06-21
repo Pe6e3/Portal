@@ -39,7 +39,7 @@
                 <td>@item.Slug</td>
                 <td>@item.CreatedAt</td>
                 <td>@item.Title</td>
-                <td>@item.PostBody</td>
+                <td class="limited-lines">@item.PostBody</td>
                 <td>@item.CommentsNum</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">
@@ -61,4 +61,15 @@
     </tbody>
 </table>
 
+<style>
 
+    .limited-lines {
+        display: -webkit-box;
+        -webkit-line-clamp: 5; /* Количество строк, которые будут видны */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        position: relative;
+        /* Применяем маску для текста с помощью изображения */
+        -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 1)), color-stop(65%, rgba(0, 0, 0, 0.9)), color-stop(100%, rgba(0, 0, 0, 0.1)));
+    }
+</style>
