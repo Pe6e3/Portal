@@ -12,15 +12,18 @@ public class LoginViewModel
 
 	[Required(ErrorMessage = "Не указан Email")]
 	[DataType(DataType.EmailAddress)]
+	[Display(Name = "Эл. почта")]
 	public string? Email { get; set; }
 
     [Required(ErrorMessage = "Не указан пароль")]
     [DataType(DataType.Password)]
+	[Display(Name = "Пароль")]
     public string? Password { get; set; }
 
 
     [Required(ErrorMessage = "Повторите пароль")]
     [DataType(DataType.Password)]
+	[Display(Name = "Подтверждение пароля")]
     public string? PasswordConfirm { get; set; }
 
 	public DateTime? RegistrationDate { get; set; }

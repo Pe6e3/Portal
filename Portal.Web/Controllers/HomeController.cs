@@ -11,20 +11,20 @@ namespace Portal.Web.Controllers
 {
     public class HomeController : BaseController<Post, IPostRepository>
     {
-        protected new readonly ILogger<BaseController<Post, IPostRepository>> _logger;
-        private readonly UnitOfWork _uow;
+        protected new readonly ILogger<BaseController<Post, IPostRepository>> logger;
+        private readonly UnitOfWork uow;
 
         public HomeController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository)
             : base(uow, logger, repository)
         {
-            _logger = logger;
-            _uow = uow;
+            this.logger = logger;
+            this.uow = uow;
         }
 
         public override async Task<IActionResult> Index()
         {
-            List<Post> allPosts = (List<Post>)await _uow.PostRep.ListAllAsync();
-            List<PostContent> allContent = (List<PostContent>)await _uow.PostContentRep.ListAllAsync();
+            List<Post> allPosts = (List<Post>)await uow.PostRep.ListAllAsync();
+            List<PostContent> allContent = (List<PostContent>)await uow.PostContentRep.ListAllAsync();
             List<PostViewModel> posts = new List<PostViewModel>();
 
             foreach (Post post in allPosts)
@@ -47,8 +47,8 @@ namespace Portal.Web.Controllers
 
         public override async Task<IActionResult> Details(int id)
         {
-            Post post = await _uow.PostRep.GetByIdAsync(id);
-            PostContent content = await _uow.PostContentRep.GetContentByPostIdAsync(id);
+            Post post = await uow.PostRep.GetByIdAsync(id);
+            PostContent content = await uow.PostContentRep.GetContentByPostIdAsync(id);
             PostViewModel postViewModel = new PostViewModel();
 
             postViewModel.Slug = post.Slug;
@@ -64,10 +64,7 @@ namespace Portal.Web.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 
 
     }

@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Enum;
 using Portal.Web.ViewModels;
-using static NuGet.Packaging.PackagingConstants;
+using System.Security.Claims;
 
 namespace Portal.Web.Controllers
 {
@@ -19,12 +20,10 @@ namespace Portal.Web.Controllers
             this.webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginViewModel lvm)
         {
             if (ModelState.IsValid)
@@ -35,8 +34,7 @@ namespace Portal.Web.Controllers
                     {
                         User user = new User();
                         user.Login = lvm.Login;
-                        user.Email = lvm.Email;
-                        user.Password = lvm.Password;
+                        user.Password = uow.UserRep.HashPass(lvm.Password);
                         user.RoleId = (int)RoleName.User;
                         await uow.UserRep.InsertAsync(user);
 
@@ -44,13 +42,14 @@ namespace Portal.Web.Controllers
                         profile.Firstname = lvm.Firstname;
                         profile.Lastname = lvm.Lastname;
                         profile.Birthday = lvm.Birthday;
-                        string? newImage = await ProcessUploadAvatar(lvm, "img/uploads/Profiles/");
+                        profile.Email = lvm.Email;
+                        string? newImage = await ProcessUploadAvatar(lvm.AvatarFile, "img/uploads/Profiles/");
                         profile.AvatarImg = newImage;
                         profile.UserId = user.Id;
                         profile.RegistrationDate = lvm.RegistrationDate;
                         await uow.UserProfileRep.InsertAsync(profile);
 
-
+                        await Authenticate(user);
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -65,39 +64,69 @@ namespace Portal.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel lvm)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(User loginUser)
         {
+            if (ModelState.IsValid)
+            {
+                // TODO: Посмотреть здесь как делается передача ошибки
+                User user = await uow.UserRep.ValidateUser(loginUser.Login, loginUser.Password);
+                if (user == null) ModelState.AddModelError("", "Нет такого пользователя");
+                else if (user.Password == "") ModelState.AddModelError("", "Неверный пароль");
+                else
+                {
+                    await Authenticate(user);
+                    return RedirectToAction("Index", "Home");
+                }
+            }
             return View();
         }
 
 
-        public async Task<IActionResult> Authenticate(User user)
+        public async Task Authenticate(User user)
         {
-
-            return View();
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.RoleId.ToString())
+            };
+            ClaimsIdentity id = new ClaimsIdentity(
+                claims,
+                "ApplicationCookie",
+                ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(id),
+                new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(60)
+                });
         }
 
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
 
 
-        public async Task<string?> ProcessUploadAvatar(LoginViewModel profile, string folder = "img/uploads/Profiles/")
+        public async Task<string?> ProcessUploadAvatar(IFormFile imageFile, string folder = "img/uploads/Profiles/")
         {
             string uniqueAvatarName = "";
 
-            if (profile.AvatarFile != null)
+            if (imageFile != null)
             {
                 string wwwRootPath = webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
-                string fileName = Path.GetFileNameWithoutExtension(profile.AvatarFile.FileName); //  Имя файла без расширения
-                string fileExtansion = Path.GetExtension(profile.AvatarFile.FileName);// Расширение с точкой (.jpg)
+                string fileName = Path.GetFileNameWithoutExtension(imageFile.FileName); //  Имя файла без расширения
+                string fileExtansion = Path.GetExtension(imageFile.FileName);// Расширение с точкой (.jpg)
                 uniqueAvatarName = fileName + ". " + DateTime.Now.ToString("dd.MM.yyyy HH-mm-ss.ff") + fileExtansion;// задаем уникальное имя чтобы случайно не совпало с чьим-то другим            
                 string path = Path.Combine(wwwRootPath, folder, uniqueAvatarName); // задаем путь к файлу
                 using (var fileStream = new FileStream(path, FileMode.Create)) // создаем файл по указанному пути
                 {
-                    await profile.AvatarFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы
+                    await imageFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы
                 }
             }
             return uniqueAvatarName;
@@ -109,6 +138,37 @@ namespace Portal.Web.Controllers
             string path = Path.Combine(wwwRootPath + folder + oldImage);
             if (System.IO.File.Exists(path))
                 System.IO.File.Delete(path);
+        }
+
+
+        public async Task<IActionResult> Profile(string login)
+        {
+            login = string.IsNullOrEmpty(login) ? User.Identity.Name : login;
+            User user = await uow.UserRep.GetUserByLogin(login);
+            ProfileViewModel profileVM = new ProfileViewModel();
+            profileVM.Firstname = user.Profile.Firstname;
+            profileVM.Lastname = user.Profile.Lastname;
+            profileVM.Email = user.Profile.Email;
+            profileVM.Birthday = user.Profile.Birthday;
+            profileVM.Login = login;
+            profileVM.RegistrationDate = user.Profile.RegistrationDate;
+            profileVM.AvatarImg = user.Profile.AvatarImg;
+
+            return View(profileVM);
+        }
+
+        public async Task<IActionResult> SaveProfile(ProfileViewModel profileVM)
+        {
+            User user = await uow.UserRep.GetUserByLogin(profileVM.Login);
+            UserProfile profile = await uow.UserProfileRep.GetByIdAsync(user.Profile.Id);
+
+            if (profileVM.AvatarFile != null) profile.AvatarImg = await ProcessUploadAvatar(profileVM.AvatarFile);
+            if (profile.Firstname != profileVM.Firstname) profile.Firstname = profileVM.Firstname;
+            if (profile.Lastname != profileVM.Lastname) profile.Lastname = profileVM.Lastname;
+            if (profile.Birthday != profileVM.Birthday) profile.Birthday = profileVM.Birthday;
+            if (profile.Email != profileVM.Email) profile.Email = profileVM.Email;
+            await uow.UserProfileRep.UpdateAsync(profile);
+            return RedirectToAction("Profile", "Account", new { login = user.Login });
         }
 
 
