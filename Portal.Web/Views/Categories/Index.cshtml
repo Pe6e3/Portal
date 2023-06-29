@@ -54,9 +54,9 @@
                         @foreach (PostCategory postCat in postCats)
                         {
                             <div class="pattern">
-                                <div class="overlay item-title" style="background-image: url('/uploads/Posts/@postCat.Post.Content.PostImage')">
+                                <div class="overlay item-title" style="background-image: url('/img/uploads/Posts/@postCat.Post.Content.PostImage')">
                                     <div class="item-title-content">
-                                        <h3><a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@postCat.Category.CategoryImage" asp-route-postSlug="@postCat.Post.Slug">@postCat.Post.Content.Title</a></h3>
+                                        <h3><a href="/posts/@postCat.Post.Slug">@postCat.Post.Content.Title</a></h3>
                                         <div class="item-social">
                                             <div class="item-comments" title="Количество комментариев">
                                                 <i class="fa fa-comment"></i><a class="item-comments-count" href="#">@postCat.Post.Content.CommentsNum</a>
