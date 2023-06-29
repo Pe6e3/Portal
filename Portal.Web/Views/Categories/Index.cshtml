@@ -122,13 +122,11 @@
             <div class="row no-gutters">
 
                 @{
-                    int count = 0;
+                    int count = 1;
                     @foreach (Post lastPost in ViewBag.LastPosts)
                     {
-                        count++;
-                        if (count == 1)
                         {
-                            <div class="col-6">
+                            <div class="@(count++ < 3 ? "col-6" : "col-4")">
                                 <div class="pattern">
                                     <div class="overlay" style="background-image: url('/img/uploads/Posts/@lastPost.Content.PostImage')">
                                         <div class="item-title-content">
@@ -156,126 +154,6 @@
                             </div>
 
                         }
-
-                        if (count == 2)
-                        {
-                            <div class="col-6">
-                                <div class="pattern">
-                                    <div class="overlay" style="background-image: url('/img/uploads/Posts/@lastPost.Content.PostImage')">
-                                        <div class="item-title-content">
-                                            <h3><a href="/posts/@lastPost.Slug">@lastPost.Content.Title</a></h3>
-                                            <div class="item-social">
-
-                                                <div class="item-comments">
-                                                    <i class="fa fa-comments"></i>
-                                                    <a href="#" class="item-comments-count">26</a>
-                                                </div>
-
-                                                <div class="likely likely-custom">
-
-                                                    <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-                        if (count == 3)
-                        {
-                            <div class="col-4">
-                                <div class="pattern">
-                                    <div class="overlay" style="background-image: url('/img/uploads/Posts/@lastPost.Content.PostImage')">
-                                        <div class="item-title-content">
-                                            <h3><a href="/posts/@lastPost.Slug">@lastPost.Content.Title</a></h3>
-                                            <div class="item-social">
-
-                                                <div class="item-comments">
-                                                    <i class="fa fa-comments"></i>
-                                                    <a href="#" class="item-comments-count">26</a>
-                                                </div>
-
-                                                <div class="likely likely-custom">
-
-                                                    <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-                        if (count == 4)
-                        {
-                            <div class="col-4">
-                                <div class="pattern">
-                                    <div class="overlay" style="background-image: url('/img/uploads/Posts/@lastPost.Content.PostImage')">
-                                        <div class="item-title-content">
-                                            <h3><a href="/posts/@lastPost.Slug">@lastPost.Content.Title</a></h3>
-
-                                            <div class="item-social">
-
-                                                <div class="item-comments">
-                                                    <i class="fa fa-comments"></i>
-                                                    <a href="#" class="item-comments-count">26</a>
-                                                </div>
-
-                                                <div class="likely likely-custom">
-
-                                                    <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-                        if (count == 5)
-                        {
-
-                            <div class="col-4">
-                                <div class="pattern">
-                                    <div class="overlay" style="background-image: url('/img/uploads/Posts/@lastPost.Content.PostImage')">
-                                        <div class="item-title-content">
-                                            <h3><a href="/posts/@lastPost.Slug">@lastPost.Content.Title</a></h3>
-
-                                            <div class="item-social">
-
-                                                <div class="item-comments">
-                                                    <i class="fa fa-comments"></i>
-                                                    <a href="#" class="item-comments-count">26</a>
-                                                </div>
-
-                                                <div class="likely likely-custom">
-
-                                                    <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
 
                     }
                 }
