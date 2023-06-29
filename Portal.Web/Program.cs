@@ -4,6 +4,7 @@ using Portal.BLL;
 using Portal.BLL.Repositories;
 using Portal.DAL.Data;
 using Portal.DAL.Interfaces;
+using Portal.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => { options.LoginPath = new PathString("/Account/Login"); });
 
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

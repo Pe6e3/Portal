@@ -6,11 +6,9 @@ namespace Portal.Web.ViewModels;
 
 public class PostViewModel : BaseEntity
 {
-    [Display(Name = "Короткая ссылка")]
     [StringLength(30, ErrorMessage = "Короткая ссылка должна быть не более 30 символов")]
     [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Короткая ссылка должна содержать только латинские буквы и цифры.")]
-    public string? Slug { get; set; }
-
+    [Display(Name = "Короткая ссылка")] public string? Slug { get; set; }
     [Display(Name = "Дата создания")] public DateTime CreatedAt { get; set; }
     [Display(Name = "Кем создано")] public User? CreatedBy { get; set; } = default(User?);
     [Display(Name = "ID поста")] public int Id { get; set; }

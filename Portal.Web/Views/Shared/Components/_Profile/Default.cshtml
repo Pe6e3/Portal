@@ -34,8 +34,8 @@
 
                                     <ul class="dropdown-menu dropdown-menu-dark text-center" aria-labelledby="navbarDarkDropdownMenuLink" style="border-radius: 4px;">
                                         <li><p class="m-0 ml-2">@Model.Profile.Firstname @Model.Profile.Lastname</p></li>
-                                        <li><a asp-action="Profile" asp-controller="Account" class="btn btn-outline-primary">Перейти в профиль</a></li>
-                                        <li><a asp-action="Logout" asp-controller="Account" class="btn btn-outline-secondary">Выйти</a></li>
+                                        <li><a asp-area="" asp-action="Profile" asp-controller="Account" class="btn btn-outline-primary">Перейти в профиль</a></li>
+                                        <li><a asp-area="" asp-action="Logout" asp-controller="Account" class="btn btn-outline-secondary">Выйти</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -51,7 +51,7 @@
 }
 else
 {
-    <a asp-action="Login" asp-controller="Account" class="btn btn-outline-warning m-2">Войти</a>
-    <a asp-action="Register" asp-controller="Account" class="btn btn-outline-success m-2">Зарегистрироваться</a>
+    <a asp-area=""  asp-action="Login" asp-controller="Account" class="btn btn-outline-warning m-2">Войти</a>
+    <a asp-area="" asp-action="Register" asp-controller="Account" class="btn btn-outline-success m-2">Зарегистрироваться</a>
 }
 
