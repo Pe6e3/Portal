@@ -114,6 +114,9 @@ namespace Portal.DAL.Migrations
                     b.Property<int>("LikeCount")
                         .HasColumnType("int");
 
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
                     b.Property<string>("TextComment")
                         .HasColumnType("nvarchar(max)");
 
@@ -121,6 +124,8 @@ namespace Portal.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -336,9 +341,6 @@ namespace Portal.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CommentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -351,8 +353,6 @@ namespace Portal.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CommentId");
 
                     b.HasIndex("RoleId");
 
@@ -426,6 +426,17 @@ namespace Portal.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Portal.DAL.Entities.Comment", b =>
+                {
+                    b.HasOne("Portal.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Portal.DAL.Entities.MenuItem", b =>
                 {
                     b.HasOne("Portal.DAL.Entities.Menu", "Menu")
@@ -497,10 +508,6 @@ namespace Portal.DAL.Migrations
 
             modelBuilder.Entity("Portal.DAL.Entities.User", b =>
                 {
-                    b.HasOne("Portal.DAL.Entities.Comment", null)
-                        .WithMany("Users")
-                        .HasForeignKey("CommentId");
-
                     b.HasOne("Portal.DAL.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
@@ -519,11 +526,6 @@ namespace Portal.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Portal.DAL.Entities.Comment", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Post", b =>

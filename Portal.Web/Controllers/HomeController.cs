@@ -45,23 +45,7 @@ namespace Portal.Web.Controllers
             return View(posts);
         }
 
-        public override async Task<IActionResult> Details(int id)
-        {
-            Post post = await uow.PostRep.GetByIdAsync(id);
-            PostContent content = await uow.PostContentRep.GetContentByPostIdAsync(id);
-            PostViewModel postViewModel = new PostViewModel();
-
-            postViewModel.Slug = post.Slug;
-            postViewModel.CreatedAt = post.CreatedAt;
-            postViewModel.Id = post.Id;
-            postViewModel.Title = content.Title;
-            postViewModel.PostBody = content.PostBody;
-            postViewModel.PostImage = content.PostImage;
-            postViewModel.PostVideo = content.PostVideo;
-            postViewModel.CommentsClosed = content.CommentsClosed;
-
-            return View(postViewModel);
-        }
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

@@ -6,9 +6,16 @@
 }
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Создать новый</a>
-</p>
+@if (User.Identity.IsAuthenticated)
+{
+
+    <div class="col-2 text-left mb-2">
+        <a asp-action="Create" class="btn btn-success mb-2">Новый пост</a>
+        <a asp-area="Admin" asp-controller="Posts" asp-action="GenerateRandomPosts" asp-route-count="5" class="btn btn-danger mt-2">+5 случайных постов</a>
+        <a asp-area="Admin" asp-controller="Posts" asp-action="GenerateRandomPosts" asp-route-count="20" class="btn btn-danger mt-2">+20 случайных постов</a>
+    </div>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -32,13 +39,13 @@
                 <td>@item.Slug</td>
                 <td>@item.CreatedAt</td>
                 <td>@item.Title</td>
-                <td>@item.PostBody</td>
+                <td class="limited-lines">@item.PostBody</td>
                 <td>@item.CommentsNum</td>
-                 <td>
-                 <a asp-action="Details" asp-route-id="@item.Id">
-                <img src="/img/uploads/Posts/@item.PostImage" style="max-height:150px; width:auto; border-radius:5px;" alt="" />
-                   </a>
-                 </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <img src="/img/uploads/Posts/@item.PostImage" style="max-height:150px; width:auto; border-radius:5px;" alt="" />
+                    </a>
+                </td>
 
                 <td>
                     <div style="position: relative; padding-bottom: 56.25%; height: 0;">
@@ -46,12 +53,23 @@
                     </div>
                 </td>
 
-                <td><a asp-action="UpdateGet" asp-route-id="@item.Id"><i class="fa-solid fa-pencil fa-fade" style="font-size:48px; color: #917cf8;"></i></a></td>
-                <td><a asp-action="Delete" asp-route-id="@item.Id"> <i class="fa fa-remove" style="font-size:48px;color:red"></i></a></td>
+                <td><a asp-action="UpdateGet" asp-route-id="@item.Id">изм<i class="fa-solid fa-pencil fa-fade" style="font-size:48px; color: #917cf8;"></i></a></td>
+                <td><a asp-action="Delete" asp-route-id="@item.Id">удал <i class="fa fa-remove" style="font-size:48px;color:red"></i></a></td>
 
             </tr>
         }
     </tbody>
 </table>
 
+<style>
 
+    .limited-lines {
+        display: -webkit-box;
+        -webkit-line-clamp: 5; /* Количество строк, которые будут видны */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        position: relative;
+        /* Применяем маску для текста с помощью изображения */
+        -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 1)), color-stop(65%, rgba(0, 0, 0, 0.9)), color-stop(100%, rgba(0, 0, 0, 0.1)));
+    }
+</style>

@@ -54,9 +54,9 @@
                         @foreach (PostCategory postCat in postCats)
                         {
                             <div class="pattern">
-                                <div class="overlay item-title" style="background-image: url('/uploads/Posts/@postCat.Post.Content.PostImage')">
+                                <div class="overlay item-title" style="background-image: url('/img/uploads/Posts/@postCat.Post.Content.PostImage')">
                                     <div class="item-title-content">
-                                        <h3><a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@postCat.Category.CategoryImage" asp-route-postSlug="@postCat.Post.Slug">@postCat.Post.Content.Title</a></h3>
+                                        <h3><a href="/posts/@postCat.Post.Slug">@postCat.Post.Content.Title</a></h3>
                                         <div class="item-social">
                                             <div class="item-comments" title="Количество комментариев">
                                                 <i class="fa fa-comment"></i><a class="item-comments-count" href="#">@postCat.Post.Content.CommentsNum</a>
@@ -79,95 +79,30 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*
-<div class="cat-list-first">
-    <div class="container">
-
-        <div class="ad top-ad">
-            <img src="img/uploads/Categories/@Model.FirstOrDefault().Category.CategoryImage" alt="alt" class="img-responsive">
-        </div>
-        <section class="type-one type-one-cat">
-            <div class="row">
-
-                <div class="col-md-7">
-                    @foreach (Portal.DAL.Entities.PostCategory pc in Model)
-                    {
-                        <div class="type-one-first">
-                            <a href="#" title="@pc.Post.Content.Title">
-                                <img src="/img/uploads/Posts/@pc.Post.Content.PostImage" alt="alt" class="img-responsive img-width">
-                            </a>
-                            <div class="item-social">
-                                <div class="item-comments" title="Количество комментариев">
-                                    <i class="fa fa-comment"></i><a class="item-comments-count" href="#disqus_thread">@pc.Post.Content.CommentsNum</a>
-                                    <span class="date">@pc.Post.CreatedAt</span>
-                                </div>
-                            </div>
-                            <h3><a href="#">@pc.Post.Content.Title</a></h3>
-                        </div>
-                        break;
-                    }
-
-                </div>
-            </div>
-        </section>
-
-    </div>
-</div>
-
+@*7 постов из этой категории*@
 <div class="cat-list">
     <div class="container">
         <div class="row">
 
-            <div class="col-md-8">
+            <div class="col-md-10">
 
                 <div class="cat-list-wrap">
 
                     <div class="cat-list-wrap">
-                        @foreach (Portal.DAL.Entities.PostCategory pc in Model)
+                        @foreach (Portal.DAL.Entities.PostCategory pc in Model.Skip(3).Take(7))
                         {
-                            <a href="#" class="cat-list-item">
+                            <a href="/posts/@pc.Post.Slug" class="cat-list-item">
                                 <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="pattern">
-                                            <img src="/img/uploads/Posts/@pc.Post.Content.PostImage" alt="Alt" class="img-responsive overlay">
+                                    <div class="col-sm-3">
+                                        <div class="pattern" style="width:100%; height: 100%;">
+                                            <img src="/img/uploads/Posts/@pc.Post?.Content?.PostImage" alt="Alt" style="width: 100%;height: 100%;object-fit: cover;">
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <h3>@pc.Post.Content.Title</h3>
+
+                                    <div class="col-sm-9">
+                                        <h3>@pc.Post?.Content?.Title</h3>
                                         <div class="date">@pc.Post.CreatedAt</div>
-                                        <p>@pc.Post.Content.PostBody </p>
+                                        <p>@pc.Post?.Content?.PostBody </p>
                                     </div>
                                 </div>
                             </a>
@@ -178,166 +113,56 @@
         </div>
     </div>
 </div>
+
+
+
+@*5 последних постов внизу*@
 <body>
 
     <section class="hero">
         <div class="container">
             <div class="row no-gutters">
-                <div class="col-6">
 
-                    <div class="pattern">
-                        <div class="overlay" style="background-image: url('/img/blog/electronics/1.jpg')">
-                            <div class="item-title-content">
-                                <h3>
-                                    <a href="#">Новые смартфоны покорили поклонников мобильной индустрии</a>
-                                </h3>
+                @{
+                    int count = 1;
+                    @foreach (Post lastPost in ViewBag.LastPosts)
+                    {
+                        {
+                            <div class="@(count++ < 3 ? "col-6" : "col-4")">
+                                <div class="pattern">
+                                    <div class="overlay" style="background-image: url('/img/uploads/Posts/@lastPost.Content.PostImage')">
+                                        <div class="item-title-content">
+                                            <h3><a href="/posts/@lastPost.Slug">@lastPost.Content.Title</a></h3>
 
-                                <div class="item-social">
+                                            <div class="item-social">
 
-                                    <div class="item-comments">
-                                        <i class="fa fa-comments"></i>
-                                        <a href="#" class="item-comments-count">26</a>
-                                    </div>
+                                                <div class="item-comments">
+                                                    <i class="fa fa-comments"></i>
+                                                    <a href="#" class="item-comments-count">26</a>
+                                                </div>
 
-                                    <div class="likely likely-custom">
+                                                <div class="likely likely-custom">
 
-                                        <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                        <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                        <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                        <div class="twitter" title="Поделиться в Twitter">Twitter</div>
+                                                    <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
+                                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
+                                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
+                                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-6">
-                    <div class="pattern">
-                        <div class="overlay" style="background-image: url('/img/blog/electronics/2.jpg')">
-                            <div class="item-title-content">
-                                <h3>
-                                    <a href="#">MacBook Федя занял своё почётное место на бабушкином столе из 60-х</a>
-                                </h3>
-
-                                <div class="item-social">
-
-                                    <div class="item-comments">
-                                        <i class="fa fa-comments"></i>
-                                        <a href="#" class="item-comments-count">26</a>
-                                    </div>
-
-                                    <div class="likely likely-custom">
-
-                                        <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                        <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                        <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                        <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-4">
-                    <div class="pattern">
-                        <div class="overlay" style="background-image: url('/img/blog/electronics/3.jpg')">
-                            <div class="item-title-content">
-                                <h3>
-                                    <a href="#">На стол знаменитой Московской студии поставили 2 новых девайса</a>
-                                </h3>
+                        }
 
-                                <div class="item-social">
-
-                                    <div class="item-comments">
-                                        <i class="fa fa-comments"></i>
-                                        <a href="#" class="item-comments-count">26</a>
-                                    </div>
-
-                                    <div class="likely likely-custom">
-
-                                        <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                        <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                        <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                        <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-4">
-                    <div class="pattern">
-                        <div class="overlay" style="background-image: url('/img/blog/electronics/4.jpg')">
-                            <div class="item-title-content">
-                                <h3>
-                                    <a href="#">
-                                        Новенькие наушники, стилизованные под объективы камер положили на
-                                        грязный поддон
-                                    </a>
-                                </h3>
-
-                                <div class="item-social">
-
-                                    <div class="item-comments">
-                                        <i class="fa fa-comments"></i>
-                                        <a href="#" class="item-comments-count">26</a>
-                                    </div>
-
-                                    <div class="likely likely-custom">
-
-                                        <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                        <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                        <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                        <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-4">
-                    <div class="pattern">
-                        <div class="overlay" style="background-image: url('/img/blog/electronics/5.jpg')">
-                            <div class="item-title-content">
-                                <h3>
-                                    <a href="#">
-                                        MacBook Гриша нашел свой дом на нижней полке самодельного короба для
-                                        обуви
-                                    </a>
-                                </h3>
-
-                                <div class="item-social">
-
-                                    <div class="item-comments">
-                                        <i class="fa fa-comments"></i>
-                                        <a href="#" class="item-comments-count">26</a>
-                                    </div>
-
-                                    <div class="likely likely-custom">
-
-                                        <div class="fa fa-share-alt" title="Поделиться в соц. сетях"></div>
-                                        <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
-                                        <div class="facebook" title="Поделиться в Facebook">Facebook</div>
-                                        <div class="twitter" title="Поделиться в Twitter">Twitter</div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    }
+                }
 
             </div>
         </div>
     </section>
 </body>
 
-*@
+                                                    
