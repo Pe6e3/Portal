@@ -22,7 +22,7 @@ public class CategoriesController : BaseController<Category, ICategoryRepository
     {
         List<PostCategory> postCats = await uow.CategoryRep.GetPostsByCatSlugAsync(categorySlug);
 
-        ViewBag.CatSlug = categorySlug;
+        ViewBag.LastPosts = await uow.PostRep.ListAllAsync(5, "Content");
         return View("Index", postCats);
     }
 
