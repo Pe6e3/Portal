@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
@@ -13,11 +14,13 @@ namespace Portal.Web.Controllers
     {
         protected new readonly ILogger<BaseController<Post, IPostRepository>> logger;
         private readonly UnitOfWork uow;
+        private readonly IMapper mapper;
 
-        public HomeController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository)
+        public HomeController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository, IMapper mapper)
             : base(uow, logger, repository)
         {
             this.logger = logger;
+            this.mapper = mapper;
             this.uow = uow;
         }
 
@@ -27,21 +30,9 @@ namespace Portal.Web.Controllers
             List<PostContent> allContent = (List<PostContent>)await uow.PostContentRep.ListAllAsync();
             List<PostViewModel> posts = new List<PostViewModel>();
 
-            foreach (Post post in allPosts)
-            {
-                PostContent? content = allContent.FirstOrDefault(x => x.PostId == post.Id);
-                posts.Add(new PostViewModel()
-                {
-                    Slug = post.Slug,
-                    CreatedAt = post.CreatedAt,
-                    Id = post.Id,
-                    Title = content.Title,
-                    PostBody = content.PostBody,
-                    PostImage = content.PostImage,
-                    PostVideo = content.PostVideo,
-                    CommentsClosed = content.CommentsClosed
-                });
-            }
+            mapper.Map(allPosts, posts);
+            mapper.Map(allContent, posts);
+            
             return View(posts);
         }
 

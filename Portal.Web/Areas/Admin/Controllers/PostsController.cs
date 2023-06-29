@@ -32,21 +32,9 @@ public class PostsController : BaseController<Post, IPostRepository>
         List<PostContent> allContent = (List<PostContent>)await uow.PostContentRep.ListAllAsync();
         List<PostViewModel> posts = new List<PostViewModel>();
 
-        foreach (Post post in allPosts)
-        {
-            PostContent? content = allContent.FirstOrDefault(x => x.PostId == post.Id);
-            posts.Add(new PostViewModel()
-            {
-                Slug = post.Slug,
-                CreatedAt = post.CreatedAt,
-                Id = post.Id,
-                Title = content.Title,
-                PostBody = content.PostBody,
-                PostImage = content.PostImage,
-                PostVideo = content.PostVideo,
-                CommentsClosed = content.CommentsClosed
-            });
-        }
+        mapper.Map(allPosts, posts);
+        mapper.Map(allContent, posts);
+
         return View(posts);
     }
 
@@ -64,17 +52,15 @@ public class PostsController : BaseController<Post, IPostRepository>
         if (ModelState.IsValid)
         {
             Post post = new Post();
-            post.Slug = postViewModel.Slug;
-            post.CreatedAt = postViewModel.CreatedAt;
+            mapper.Map(postViewModel, post);
+            post.CreatedBy = await uow.UserRep.GetUserByLogin(User.Identity.Name);
 
             await uow.PostRep.InsertAsync(post);
 
             PostContent content = new PostContent();
             content.PostId = post.Id;
-            content.Title = postViewModel.Title;
-            content.PostBody = postViewModel.PostBody;
+            mapper.Map(postViewModel, content);
             content.PostImage = await ProcessUploadImage(postViewModel, "img/uploads/Posts");
-            content.CommentsClosed = postViewModel.CommentsClosed;
 
             // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
             string postVideo = postViewModel.PostVideo ?? "";  // Исходная ссылка
@@ -82,6 +68,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             content.PostVideo = lastSlashIndex != -1 ? postVideo.Substring(lastSlashIndex + 1) : postVideo; //Удаляем все до последнего слеша
 
             await uow.PostContentRep.InsertAsync(content);
+
 
             if (postViewModel.CategoriesId != null)
                 foreach (int catId in postViewModel.CategoriesId)
@@ -180,8 +167,8 @@ public class PostsController : BaseController<Post, IPostRepository>
 
     public override async Task<IActionResult> Details(int id)
     {
-        Post post = await uow.PostRep.GetByIdAsync(id, "Content", "CreatedBy");
-        PostContent postContent = post.Content;
+        Post? post = await uow.PostRep.GetByIdAsync(id, "Content", "CreatedBy");
+        PostContent? postContent = post.Content;
         PostViewModel postVM = new PostViewModel();
 
         mapper.Map(post, postVM);        // Добавление в PostViewModel данных из класса Post 
