@@ -55,19 +55,12 @@
                     <nav class="breadcrumbs">
                         <ul>
                             <li><a href="/">Главная</a></li>
-                            <li><a href="#">category</a></li>
+                            <li><a href="category/@Model.Category.Slug">@Model.Category.Name</a></li>
                             <li class="active">@Model.Title</li>
                         </ul>
                     </nav>
-
                     <div class="article-body">
-
-                        <div class="ad article-top-ad">
-                            <img src="~/img/aX-horizontal.jpg" alt="alt" class="img-responsive">
-                        </div>
-
                         @Html.Raw(Model.PostBody)
-
                     </div>
 
                     <div class="likely-on-page">
@@ -155,25 +148,13 @@
 
             </div>
 
+            @*5 последних постов справа в кололке*@
             <div class="col-md-3">
-
                 <aside class="main-aside">
-
-                    @*5 последних постов справа в кололке*@
                     <div class="aside-box">
                         @await Component.InvokeAsync("_FiveLastPostsColumn")
                     </div>
-
-                    <div class="aside-box">
-                        <img src="img/vk-witget.jpg" alt="alt" class="img-responsive">
-                    </div>
-
-                    <div class="aside-box">
-                        Latest Comments
-                    </div>
-
                 </aside>
-
             </div>
 
         </div>
