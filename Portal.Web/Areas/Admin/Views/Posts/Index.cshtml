@@ -2,9 +2,9 @@
 
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Посты";
 }
-<h1>Index</h1>
+<h1>Посты</h1>
 
 @if (User.Identity.IsAuthenticated)
 {
@@ -17,7 +17,7 @@
 }
 
 <table class="table">
-    <thead>
+    <thead class="text-center">
         <tr>
             <th>@Html.DisplayNameFor(model => model.Id)</th>
             <th>@Html.DisplayNameFor(model => model.Slug)</th>
@@ -27,14 +27,13 @@
             <th>@Html.DisplayNameFor(model => model.CommentsNum)</th>
             <th>@Html.DisplayNameFor(model => model.PostImage)</th>
             <th style="width:300px;">@Html.DisplayNameFor(model => model.PostVideo)</th>
-            <th>Изменить</th>
-            <th>Удалить</th>
+            <th> </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="text-center">
                 <td>@item.Id</td>
                 <td>@item.Slug</td>
                 <td>@item.CreatedAt</td>
@@ -53,8 +52,11 @@
                     </div>
                 </td>
 
-                <td><a asp-action="UpdateGet" asp-route-id="@item.Id">изм<i class="fa-solid fa-pencil fa-fade" style="font-size:48px; color: #917cf8;"></i></a></td>
-                <td><a asp-action="Delete" asp-route-id="@item.Id">удал <i class="fa fa-remove" style="font-size:48px;color:red"></i></a></td>
+                <td>
+                    <a asp-action="UpdateGet" asp-route-id="@item.Id"><i class="fa-solid fa-pencil" style="font-size: 38px; color: #917cf8;"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-solid fa-trash" style="font-size: 38px; color: red;"></i></a>
+                </td>
+
 
             </tr>
         }
