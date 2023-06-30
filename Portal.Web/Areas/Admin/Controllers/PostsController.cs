@@ -107,7 +107,7 @@ public class PostsController : BaseController<Post, IPostRepository>
         /*if(content.PostImage!=null) */
         ViewBag.oldImage = content.PostImage;
         ViewBag.AllCategories = await uow.CategoryRep.ListAllAsync();
-        ViewBag.PostCategories = await uow.PostCategoryRep.GetCategoryPosts(id);/*postId*/
+        ViewBag.PostCategories = await uow.PostCategoryRep.GetCategoryPosts(postId: id);
         return View("Update", editPost);
     }
 

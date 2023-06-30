@@ -56,8 +56,22 @@ public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : Ba
                         .Take(size)
                         .ToListAsync();
 
-    public async Task<IReadOnlyList<T>> ListAllAsync() => await db.Set<T>().ToListAsync();
-    public async Task<IReadOnlyList<T>> ListAllAsync(int count, string include) => await db.Set<T>().Include(include).Take(count).ToListAsync();
+    public async Task<IReadOnlyList<T>> ListAllAsync() => await
+        db.Set<T>()
+        .ToListAsync();
+    public async Task<IReadOnlyList<T>> ListAllAsync(int count, string include) => await
+        db.Set<T>()
+        .Include(include)
+        .Take(count)
+        .ToListAsync();
+
+    public async Task<IReadOnlyList<T>> ListAllAsync(int count, string include, string include2) => await
+        db.Set<T>()
+        .Include(include)
+        .Include(include2)
+        .Take(count)
+        .ToListAsync();
+
     public async Task<IReadOnlyList<T>> ListAllWithIncludeAsync() => await db.Set<T>().ToListAsync();
 
 }

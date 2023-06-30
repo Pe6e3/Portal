@@ -1,0 +1,57 @@
+﻿@using Portal.DAL.Entities;
+@model List<Portal.DAL.Entities.PostCategory>
+
+@*Первые три поста категории*@
+<div class="cat-list-first">
+    <div class="container">
+        <section class="type-one type-one-cat">
+            <div class="row">
+
+                <div class="col-md-7">
+                    @{
+                        // 1. Пост посередине
+                        Post? firstPost = Model?.FirstOrDefault()?.Post;
+                        <div class="type-one-first">
+                            <a href="/posts/@firstPost?.Slug" title="@firstPost?.Content?.Title">
+                                <img src="/img/uploads/Posts/@firstPost?.Content?.PostImage" alt="alt" class="img-responsive img-width">
+                            </a>
+
+                            <div class="item-social">
+                                <div class="item-comments" title="Количество комментариев">
+                                    <i class="fa-solid fa-comment"></i><a class="item-comments-count" href="#"> @firstPost?.Content?.CommentsNum</a>
+                                    <span class="date">@firstPost?.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                </div>
+                            </div>
+                            <h3><a href="#">@firstPost?.Content.Title</a></h3>
+                        </div>
+                    }
+                </div>
+
+
+                <div class="col-md-5 item-title-white">
+                    @{
+                        // 2. 2 поста справа
+                        IEnumerable<PostCategory> postCats = Model.Take(3).Skip(1);
+
+                        @foreach (PostCategory postCat in postCats)
+                        {
+                            <div class="pattern">
+                                <div class="overlay item-title" style="background-image: url('/img/uploads/Posts/@postCat.Post.Content.PostImage')">
+                                    <div class="item-title-content">
+                                        <h3><a href="/posts/@postCat.Post.Slug">@postCat.Post.Content.Title</a></h3>
+                                        <div class="item-social">
+                                            <div class="item-comments" title="Количество комментариев">
+                                                <i class="fa-solid fa-comment"></i><a class="item-comments-count" href="#"> @postCat.Post.Content.CommentsNum</a>
+                                                <span class="date">@postCat.Post.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

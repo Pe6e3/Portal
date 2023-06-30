@@ -26,8 +26,30 @@ public class PostCategoryRepository : GenericRepositoryAsync<PostCategory>, IPos
 
     }
 
-    public async Task<List<PostCategory>> GetCategoryPosts(int postId)
-    {
-        return await db.PostCategories.Where(x => x.PostId == postId).ToListAsync();
-    }
+    public async Task<List<PostCategory>> GetCategoryPosts(int postId) => await
+        db.PostCategories
+        .Where(x => x.PostId == postId)
+        .ToListAsync();
+
+    public async Task<List<PostCategory>> GetCategoryPosts(int catId, int count) => await
+        db.PostCategories
+        .Include(p => p.Post)
+        .ThenInclude(c => c.Content)
+        .Where(x => x.CategoryId == catId)
+        .Take(count)
+        .ToListAsync();
+
+    public async Task<List<PostCategory>> GetCategoryPosts(int catId, int count, int skip) => await
+    db.PostCategories
+    .Include(p => p.Post)
+    .ThenInclude(c => c.Content)
+    .Where(x => x.CategoryId == catId)
+    .Skip(skip)
+    .Take(count)
+    .ToListAsync();
+
+
+
+
+
 }
