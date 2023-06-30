@@ -33,7 +33,7 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreatePost(MenuCatPostViewModel mcpwv)
+    public async Task<IActionResult> CreateHttpPost(MenuCatPostViewModel mcpwv)
     {
         if (ModelState.IsValid)
         {
