@@ -48,7 +48,7 @@
     <div class="container">
         <div class="row">
 
-            <div class="col-md-8">
+            <div class="col-md-9">
 
                 <article class="main-article">
 
@@ -82,21 +82,21 @@
 
 
 
-                @*    <div class="read-more">
-                        <div class="read-more-header">Читать еще:</div>
-                        <ul>
-                            @foreach (var postElse in Model.Category.Posts.ToList())
-                            {
-                                <li>
-                                    <a asp-controller="Category"
-                                       asp-action="Post"
-                                       asp-route-categorySlug="category Slug"
-                                       asp-route-postSlug="#">
-                                        @postElse.Content.Title
-                                    </a>
-                                </li>
-                            }
-                        </ul>
+                    @*    <div class="read-more">
+                    <div class="read-more-header">Читать еще:</div>
+                    <ul>
+                    @foreach (var postElse in Model.Category.Posts.ToList())
+                    {
+                    <li>
+                    <a asp-controller="Category"
+                    asp-action="Post"
+                    asp-route-categorySlug="category Slug"
+                    asp-route-postSlug="#">
+                    @postElse.Content.Title
+                    </a>
+                    </li>
+                    }
+                    </ul>
                     </div>*@
 
 
@@ -155,12 +155,13 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
 
                 <aside class="main-aside">
 
+                    @*5 последних постов справа в кололке*@
                     <div class="aside-box">
-                        await Component.InvokeAsync("Lasts")
+                        @await Component.InvokeAsync("_FiveLastPostsColumn")
                     </div>
 
                     <div class="aside-box">
