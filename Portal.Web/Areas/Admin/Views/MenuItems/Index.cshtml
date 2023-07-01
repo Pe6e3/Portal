@@ -16,6 +16,7 @@
             <th>Название пункта</th>
             <th>Slug</th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -26,6 +27,7 @@
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.Slug)</td>
                 <td><a asp-action="Delete" asp-route-id="@item.Id" asp-route-menuId="@ViewBag.MenuID">Удалить</a></td>
+                <td><a asp-action="Edit" asp-route-id="@item.Id"  >Изменить</a></td>
             </tr>
         }
     </tbody>
