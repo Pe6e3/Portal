@@ -7,13 +7,13 @@
         <section class="type-one type-one-cat">
             <div class="row">
 
-                <div class="col-md-7">
+                <div class="col-md-8">
                     @{
                         // 1. Пост посередине
                         Post? firstPost = Model?.FirstOrDefault()?.Post;
                         <div class="type-one-first">
                             <a href="/posts/@firstPost?.Slug" title="@firstPost?.Content?.Title">
-                                <img src="/img/uploads/Posts/@firstPost?.Content?.PostImage" alt="alt" class="img-responsive img-width">
+                                <div class="item-title" style="background-image: url('/img/uploads/Posts/@firstPost?.Content?.PostImage'); background-size: cover; background-position: center;"></div>
                             </a>
 
                             <div class="item-social">
@@ -22,13 +22,13 @@
                                     <span class="date">@firstPost?.CreatedAt.ToString("dd/MM/yyyy")</span>
                                 </div>
                             </div>
-                            <h3><a href="#">@firstPost?.Content.Title</a></h3>
+                            <h3><a href="/posts/@firstPost?.Slug">@firstPost?.Content.Title</a></h3>
                         </div>
                     }
                 </div>
 
 
-                <div class="col-md-5 item-title-white">
+                <div class="col-md-4 item-title-white">
                     @{
                         // 2. 2 поста справа
                         IEnumerable<PostCategory> postCats = Model.Take(3).Skip(1);

@@ -21,6 +21,7 @@
     </div>
 </div>
 
+
 @*Первые три поста категории*@
 @await Component.InvokeAsync("_ThreeCategoryPosts", new {categoryId = Model?.FirstOrDefault()?.CategoryId});
 
