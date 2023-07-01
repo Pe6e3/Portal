@@ -15,10 +15,20 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
         this.uow = uow;
     }
 
+
     public async Task<IActionResult> IndexMenuItem(int id)
     {
         ViewBag.MenuID = id;
         return View("Index", await uow.MenuItemRep.GetByMenuIdAsync(id));
+    }
+
+    [HttpGet]
+    public override async Task<IActionResult> Delete(int id, int menuId)
+    {
+        MenuItem mItem = await uow.MenuItemRep.GetByIdAsync(id);
+        if (mItem != null)
+            await uow.MenuItemRep.DeleteAsync(mItem);
+        return RedirectToAction(nameof(IndexMenuItem), new { id = menuId });
     }
 
     [HttpGet]

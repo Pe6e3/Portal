@@ -26,12 +26,15 @@ namespace Portal.Web.Areas.Admin.Controllers
             _uow = uow;
         }
 
-        public virtual async Task<IActionResult> Index() => View(await _repository.ListAllAsync());
+        public virtual async Task<IActionResult> Index() =>
+            View(await _repository.ListAllAsync());
 
-        public virtual async Task<IActionResult> Details(int id) => View(await _repository.GetByIdAsync(id));
+        public virtual async Task<IActionResult> Details(int id) =>
+            View(await _repository.GetByIdAsync(id));
 
         [HttpGet]
-        public virtual async Task<IActionResult> Create() => View();
+        public virtual async Task<IActionResult> Create() =>
+            View();
 
 
 
@@ -62,6 +65,10 @@ namespace Portal.Web.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public virtual async Task<IActionResult> Delete(int id, int menuId) =>
+            RedirectToAction(nameof(Index));
+
 
         [HttpPost]
         public virtual async Task<IActionResult> Create(TEntity entity)

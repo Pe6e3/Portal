@@ -25,7 +25,7 @@
                 <td>@Html.DisplayFor(modelItem => item.Position)</td>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.Slug)</td>
-                <td><a asp-action="Delete" asp-route-id="@item.Id">Удалить</a></td>
+                <td><a asp-action="Delete" asp-route-id="@item.Id" asp-route-menuId="@ViewBag.MenuID">Удалить</a></td>
             </tr>
         }
     </tbody>
