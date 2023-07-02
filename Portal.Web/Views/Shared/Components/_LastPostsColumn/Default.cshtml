@@ -1,0 +1,45 @@
+﻿@using Portal.DAL.Entities;
+@model List<Portal.DAL.Entities.Post>
+
+@*5 последних постов справа в кололке*@
+<body>
+
+    <section class="hero">
+        <div class="container">
+            <div class="row no-gutters">
+                @foreach (Post lastPost in Model)
+                {
+                    string timeAgo = (DateTime.Now - lastPost.CreatedAt).TotalHours.ToString("F1");
+
+                    <div class="pattern my-1" style="padding:0;">
+                        <div class="overlay oversmall" style="background-image: url('/img/uploads/Posts/@lastPost.Content.PostImage')">
+                            <div class="item-title-content">
+                                <h5 style="text-align: center; position: relative; top:-80px;">
+                                    <a href="/posts/@lastPost.Slug">@lastPost.Content.Title</a>
+                                </h5>
+
+                                <div class="item-social">
+                                    <div class="item-comments" style="position: absolute; bottom: 5px; left: 5px;">
+                                        <i class="fa-solid fa-comments"></i>
+                                        <a href="#" class="item-comments-count"> @lastPost.Comments.Count()</a>
+                                    </div>
+
+                                    <div class="item-comments" style="position: absolute; bottom: 5px; right: 5px;">
+                                        <span class="item-comments-count"> @timeAgo ч. назад</span>
+                                    </div>
+
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+
+
+
+            </div>
+        </div>
+    </section>
+</body>

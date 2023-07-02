@@ -5311,7 +5311,7 @@ html {
     height: 100vh !important;
 }
 
- */
+*/
 /* FONT PATH
  * -------------------------- */
 @font-face {
@@ -8532,6 +8532,13 @@ body {
     display: block;
 }
 
+    .overlay.oversmall {
+        min-height: 220px;
+    }
+
+ 
+
+
     .overlay::before {
         content: "";
         background-color: #202222;
@@ -8565,6 +8572,7 @@ body {
         line-height: 1.25;
         font-size: 19px;
     }
+
 
     .item-title-content a {
         color: #fff;
@@ -19205,4 +19213,3 @@ a.cat-list-item {
 .validation-summary-valid {
     display: none;
 }
-
