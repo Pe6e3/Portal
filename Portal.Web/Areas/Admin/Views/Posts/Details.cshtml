@@ -19,7 +19,7 @@
         <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Title)</dt>
         <dd class="col-sm-10">@Html.DisplayFor(model => model.Title)</dd>
         <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PostBody)</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.PostBody)</dd>
+        <dd class="col-sm-10">@Html.Raw(@Model.PostBody)</dd>
         <dt class="col-sm-2">@Html.DisplayNameFor(model => model.CommentsClosed)</dt>
         <dd class="col-sm-10">@Html.DisplayFor(model => model.CommentsClosed)</dd>
         <dt class="col-sm-2">@Html.DisplayNameFor(model => model.CreatedBy)</dt>

@@ -34,7 +34,7 @@ public class PostsController : BaseController<Post, IPostRepository>
 
         mapper.Map(allPosts, posts);
         mapper.Map(allContent, posts);
-       
+
         return View(posts);
     }
 
@@ -228,7 +228,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             postCat.CategoryId = randomCat.Id;
 
             content.Title = post.Id + ". (" + randomCat.Name + ") " + await GetRandomWords(random.Next(2, 6));
-            content.PostBody = await GetRandomWords(random.Next(50, 150));
+            content.PostBody = await GetRandomWords(random.Next(150, 350));
             content.PostImage = random.Next(1, 32).ToString() + ".jpg"; // надо добавить в папку uploads изображения с названием 1.jpg, 2.jpg  и так далее попорядку. Количество поставить в random.Next (у меня 32)
             content.PostId = post.Id;
 
@@ -245,29 +245,32 @@ public class PostsController : BaseController<Post, IPostRepository>
         string space = count > 1 ? " " : "";
         using (HttpClient client = new HttpClient())
         {
-            string apiUrl = $"https://random-word-api.herokuapp.com/word?number={count}";
+            string apiUrl = $"https://random-word-api.herokuapp.com/word?number={count}"; // получаем по API случайное английское слово
             HttpResponseMessage response = await client.GetAsync(apiUrl);
             if (response.IsSuccessStatusCode)
             {
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                words = JsonSerializer.Deserialize<string[]>(jsonResponse);
+                words = JsonSerializer.Deserialize<string[]>(jsonResponse); // добавляем слово из Json ответа в строку
             }
             else
-            {
                 throw new Exception("Failed to retrieve random words.");
-            }
         }
 
         Random random = new Random();
         for (int i = 1; i < words.Length; i++)
         {
-            if (random.NextDouble() <= 0.05)
+            if (random.NextDouble() <= 0.05 && i > 6) // с вероятностью 5% и не раньше 7го слова делаем новый абзац и заглавную букву
             {
-                words[i - 1] += Environment.NewLine;
+                words[i - 1] += ".<br />";
+                words[i] = char.ToUpper(words[i][0]) + words[i].Substring(1);
             }
+            else if (random.NextDouble() <= 0.1) // с вероятностью 10% ставим запятую, если перед этим не было нового абзаца
+                words[i - 1] += ",";
+            else if (random.NextDouble() <= 0.03) // с вероятностью 3% ставим тире, если перед этим не было нового абзаца
+                words[i - 1] += " - ";
         }
 
-        words[0] = char.ToUpper(words[0][0]) + words[0].Substring(1);
+        words[0] = char.ToUpper(words[0][0]) + words[0].Substring(1); // Первая буква - всегда заглавная
         return string.Join(space, words);
     }
 

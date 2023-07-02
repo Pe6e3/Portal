@@ -40,6 +40,7 @@
                 <td>@item.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss")</td>
                 <td>@item.Title</td>
                 <td class="limited-lines">@item.PostBody</td>
+
                 <td>@item.CommentsNum</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">
@@ -63,6 +64,7 @@
         }
     </tbody>
 </table>
+
 
 <style>
 
