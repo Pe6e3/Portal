@@ -23,7 +23,7 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
     }
 
     [HttpGet]
-    public override async Task<IActionResult> Delete(int id, int menuId)
+    public async Task<IActionResult> DeleteMenuItem(int id, int menuId)
     {
         MenuItem mItem = await uow.MenuItemRep.GetByIdAsync(id);
         if (mItem != null)

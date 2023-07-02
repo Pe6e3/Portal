@@ -66,8 +66,7 @@ namespace Portal.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public virtual async Task<IActionResult> Delete(int id, int menuId) =>
-            RedirectToAction(nameof(Index));
+     
 
 
         [HttpPost]

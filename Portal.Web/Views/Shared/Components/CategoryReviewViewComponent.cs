@@ -4,7 +4,7 @@ using Portal.DAL.Entities;
 
 namespace Portal.Web.Views.Shared.Components
 {
-    [ViewComponent(Name = "_TopMenu")]
+    [ViewComponent(Name = "_CategoryReview")]
     public class CategoryReviewViewComponent : ViewComponent
     {
         private readonly UnitOfWork uow;

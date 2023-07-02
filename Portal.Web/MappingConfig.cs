@@ -9,10 +9,21 @@ namespace Portal.Web
 
         public MappingConfig()
         {
-            CreateMap<Post, PostViewModel>().ReverseMap();
-            CreateMap<PostContent, PostViewModel>().ReverseMap();
-            CreateMap<PostComment, PostViewModel>().ReverseMap();
-            CreateMap<User, PostViewModel>().ReverseMap();
+            CreateMap<Post, PostViewModel>();
+            CreateMap<PostViewModel, Post>();
+
+            CreateMap<PostContent, PostViewModel>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.Post.CreatedAt));
+
+
+            CreateMap<PostViewModel, PostContent>();
+
+
+            CreateMap<PostComment, PostViewModel>();
+            CreateMap<PostViewModel, PostComment>();
+
+            CreateMap<User, PostViewModel>();
+            CreateMap<PostViewModel, User>();
 
         }
     }

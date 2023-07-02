@@ -34,7 +34,7 @@ public class PostsController : BaseController<Post, IPostRepository>
 
         mapper.Map(allPosts, posts);
         mapper.Map(allContent, posts);
-
+       
         return View(posts);
     }
 
@@ -54,6 +54,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             Post post = new Post();
             mapper.Map(postViewModel, post);
             post.CreatedBy = await uow.UserRep.GetUserByLogin(User.Identity.Name);
+            post.CategoryId = postViewModel.CategoriesId[0];
 
             await uow.PostRep.InsertAsync(post);
 
@@ -214,19 +215,20 @@ public class PostsController : BaseController<Post, IPostRepository>
             Post post = new Post();
             PostContent content = new PostContent();
             PostCategory postCat = new PostCategory();
+            Category randomCat = await uow.CategoryRep.RandomCatId();
             Random random = new Random();
 
             post.Slug = await GetRandomWords(1);
             post.CreatedAt = DateTime.Now;
             post.CreatedBy = await uow.UserRep.GetUserByLogin(User.Identity.Name);
+            post.CategoryId = randomCat.Id;
             await uow.PostRep.InsertAsync(post);
 
-            Category randomCat = await uow.CategoryRep.RandomCatId();
             postCat.PostId = post.Id;
             postCat.CategoryId = randomCat.Id;
 
-            content.Title = post.Id + ". (" + randomCat.Name + ") " + await GetRandomWords(3);
-            content.PostBody = await GetRandomWords(50);
+            content.Title = post.Id + ". (" + randomCat.Name + ") " + await GetRandomWords(random.Next(2, 6));
+            content.PostBody = await GetRandomWords(random.Next(50, 150));
             content.PostImage = random.Next(1, 32).ToString() + ".jpg"; // надо добавить в папку uploads изображения с названием 1.jpg, 2.jpg  и так далее попорядку. Количество поставить в random.Next (у меня 32)
             content.PostId = post.Id;
 
@@ -251,11 +253,24 @@ public class PostsController : BaseController<Post, IPostRepository>
                 words = JsonSerializer.Deserialize<string[]>(jsonResponse);
             }
             else
+            {
                 throw new Exception("Failed to retrieve random words.");
+            }
         }
-        return string.Join(space, words);
 
+        Random random = new Random();
+        for (int i = 1; i < words.Length; i++)
+        {
+            if (random.NextDouble() <= 0.05)
+            {
+                words[i - 1] += Environment.NewLine;
+            }
+        }
+
+        words[0] = char.ToUpper(words[0][0]) + words[0].Substring(1);
+        return string.Join(space, words);
     }
+
 }
 
 

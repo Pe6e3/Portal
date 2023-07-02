@@ -11,6 +11,7 @@
 
     <div class="col-2 text-left mb-2">
         <a asp-action="Create" class="btn btn-success mb-2">Новый пост</a>
+        <a asp-area="Admin" asp-controller="Posts" asp-action="GenerateRandomPosts" asp-route-count="1" class="btn btn-danger mt-2">+1 случайный пост</a>
         <a asp-area="Admin" asp-controller="Posts" asp-action="GenerateRandomPosts" asp-route-count="5" class="btn btn-danger mt-2">+5 случайных постов</a>
         <a asp-area="Admin" asp-controller="Posts" asp-action="GenerateRandomPosts" asp-route-count="20" class="btn btn-danger mt-2">+20 случайных постов</a>
     </div>
@@ -36,7 +37,7 @@
             <tr class="text-center">
                 <td>@item.Id</td>
                 <td>@item.Slug</td>
-                <td>@item.CreatedAt</td>
+                <td>@item.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss")</td>
                 <td>@item.Title</td>
                 <td class="limited-lines">@item.PostBody</td>
                 <td>@item.CommentsNum</td>
