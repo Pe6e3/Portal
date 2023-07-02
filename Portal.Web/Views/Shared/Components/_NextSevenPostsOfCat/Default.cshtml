@@ -24,7 +24,7 @@
                                     <div class="col-sm-9">
                                         <h3>@pc.Post?.Content?.Title</h3>
                                         <div class="date">@pc.Post.CreatedAt</div>
-                                        <p>@pc.Post?.Content?.PostBody </p>
+                                        <p class="limited-lines line_5">@Html.Raw(pc.Post?.Content?.PostBody) </p>
                                     </div>
                                 </div>
                             </a>
@@ -35,3 +35,4 @@
         </div>
     </div>
 </div>
+

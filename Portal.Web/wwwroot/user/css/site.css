@@ -1,22 +1,43 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
+
+.limited-lines {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    position: relative;
+    /* Применяем маску для текста с помощью изображения */
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 1)), color-stop(65%, rgba(0, 0, 0, 0.9)), color-stop(100%, rgba(0, 0, 0, 0.4)));
+}
+
+    .limited-lines.line_5 {
+        -webkit-line-clamp: 5;
+    }
+
+    .limited-lines.line_6 {
+        -webkit-line-clamp: 6;
+    }
+
+    .limited-lines.line_7 {
+        -webkit-line-clamp: 7;
+    }
