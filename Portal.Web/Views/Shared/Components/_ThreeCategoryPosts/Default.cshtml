@@ -9,8 +9,15 @@
 
                 <div class="col-md-8">
                     @{
+
                         // 1. Пост посередине
                         Post? firstPost = Model?.FirstOrDefault()?.Post;
+                        string Ago = "";
+                        int timeAgo = Convert.ToInt32((DateTime.Now - firstPost.CreatedAt).TotalHours.ToString("F0"));
+                        int daysAgo = Convert.ToInt32((DateTime.Now - firstPost.CreatedAt).TotalDays.ToString("F0"));
+                        Ago = timeAgo < 36 ? timeAgo.ToString() + " ч назад" : daysAgo.ToString() + " д назад";
+
+
                         <div class="type-one-first">
                             <a href="/posts/@firstPost?.Slug" title="@firstPost?.Content?.Title">
                                 <div class="item-title" style="background-image: url('/img/uploads/Posts/@firstPost?.Content?.PostImage'); background-size: cover; background-position: center;"></div>
@@ -19,7 +26,7 @@
                             <div class="item-social">
                                 <div class="item-comments" title="Количество комментариев">
                                     <i class="fa-solid fa-comment"></i><a class="item-comments-count" href="#"> @firstPost?.Content?.CommentsNum</a>
-                                    <span class="date">@firstPost?.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                    <span class="date">@firstPost?.CreatedAt.ToString("dd/MM/yyyy") (@Ago)</span>
                                 </div>
                             </div>
                             <h3><a href="/posts/@firstPost?.Slug">@firstPost?.Content.Title</a></h3>
@@ -32,9 +39,12 @@
                     @{
                         // 2. 2 поста справа
                         IEnumerable<PostCategory> postCats = Model.Take(3).Skip(1);
-
                         @foreach (PostCategory postCat in postCats)
                         {
+                            timeAgo = Convert.ToInt32((DateTime.Now - postCat.Post.CreatedAt).TotalHours.ToString("F0"));
+                            daysAgo = Convert.ToInt32((DateTime.Now - postCat.Post.CreatedAt).TotalDays.ToString("F0"));
+                            Ago = timeAgo < 36 ? timeAgo.ToString() + " ч назад" : daysAgo.ToString() + " д назад";
+
                             <div class="pattern">
                                 <div class="overlay item-title" style="background-image: url('/img/uploads/Posts/@postCat.Post.Content.PostImage')">
                                     <div class="item-title-content">
@@ -42,7 +52,7 @@
                                         <div class="item-social">
                                             <div class="item-comments" title="Количество комментариев">
                                                 <i class="fa-solid fa-comment"></i><a class="item-comments-count" href="#"> @postCat.Post.Content.CommentsNum</a>
-                                                <span class="date">@postCat.Post.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                                <span class="date">@postCat.Post.CreatedAt.ToString("dd/MM/yyyy") (@Ago)</span>
                                             </div>
                                         </div>
                                     </div>
