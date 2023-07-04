@@ -12,10 +12,10 @@ public class NextSevenPostsOfCatViewComponent : ViewComponent
         this.uow = uow;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(int categoryId) => View(await
+    public async Task<IViewComponentResult> InvokeAsync(string categorySlug) => View(await
             uow.PostCategoryRep
             .GetCategoryPosts(
-                catId: categoryId,
+                categorySlug: categorySlug,
                 count: 7,
                 skip: 3
                 ));

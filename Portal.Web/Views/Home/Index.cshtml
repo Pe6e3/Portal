@@ -3,95 +3,16 @@
 @{
     ViewData["Title"] = "Новости";
 }
-  
-    @await Component.InvokeAsync("_FiveLastPosts")
-
-     
 
 
-    <section class="dark-section">
-       
+@await Component.InvokeAsync("_FiveLastPosts")
 
-    </section>
+@await Component.InvokeAsync("_CategoryReview", new {categorySlug = "economics", sectionClass = "dark"});
 
+@await Component.InvokeAsync("_CategoryReview", new {categorySlug = "lifehacks", sectionClass = "light"});
 
-    <!-- Лайфхаки -->
-    <section class="homeright">
-        <div class="container">
-            <div class="row">
+@await Component.InvokeAsync("_CategoryReview", new {categorySlug = "technology", sectionClass = "dark"});
 
-                <div class="col-8">
-                    <h2><a href="/category.html"> Лайфхаки</a></h2>
-
-                    <div class="row news-wrap ">
-
-                        <div class="col-6">
-                            <div class="pattern">
-                                <a href="/page.html" class="overlay"
-                                   style="background-image: url('/img/blog/lifehacks/14.jpg')">
-                                    <div class="item-news-content">
-                                        <h3>Как сфотографировать себя на телефон с зеркалкой</h3>
-                                        <span class="date">05.05.2023</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <div class="pattern">
-                                <a href="/page.html" class="overlay"
-                                   style="background-image: url('/img/blog/lifehacks/15.jpg')">
-                                    <div class="item-news-content">
-                                        <h3>Упрощаем жизнь наушникам, вешаем их на мониторы</h3>
-                                        <span class="date">05.05.2023</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <div class="pattern">
-                                <a href="/page.html" class="overlay"
-                                   style="background-image: url('/img/blog/lifehacks/16.jpg')">
-                                    <div class="item-news-content">
-                                        <h3>Как разложить фотоаппараты на столе и не запутаться</h3>
-                                        <span class="date">05.05.2023</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <div class="pattern">
-                                <a href="/page.html" class="overlay"
-                                   style="background-image: url('/img/blog/lifehacks/17.jpg')">
-                                    <div class="item-news-content">
-                                        <h3>Правильное подключение проводов к магнитофону</h3>
-                                        <span class="date">05.05.2023</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+@await Component.InvokeAsync("_CategoryReview", new {categorySlug = "sport", sectionClass = "light"});
 
 
-                    </div>
-                </div>
-
-
-                
-
-            </div>
-        </div>
-
-    </section>
-
-
-
- 
-
-
-
-
-
-
- 

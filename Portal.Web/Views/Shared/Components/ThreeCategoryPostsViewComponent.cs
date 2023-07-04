@@ -13,7 +13,7 @@ public class ThreeCategoryPostsViewComponent : ViewComponent
         this.uow = uow;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(int categoryId) =>
-        View(await uow.PostCategoryRep.GetCategoryPosts(catId: categoryId, count: 3));
+    public async Task<IViewComponentResult> InvokeAsync(string categorySlug) =>
+        View(await uow.PostCategoryRep.GetCategoryPosts(categorySlug: categorySlug, count: 3));
 
 }

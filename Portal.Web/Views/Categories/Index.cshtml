@@ -23,11 +23,11 @@
 
 
 @*Первые три поста категории*@
-@await Component.InvokeAsync("_ThreeCategoryPosts", new {categoryId = Model?.FirstOrDefault()?.CategoryId});
+@await Component.InvokeAsync("_ThreeCategoryPosts", new {categorySlug = Model?.FirstOrDefault()?.Category.Slug});
 
 
 @*7 постов из этой категории*@
-@await Component.InvokeAsync("_NextSevenPostsOfCat", new {categoryId = Model?.FirstOrDefault()?.CategoryId});
+@await Component.InvokeAsync("_NextSevenPostsOfCat", new {categorySlug = Model?.FirstOrDefault()?.Category.Slug});
 
 
 @*5 последних постов внизу (любые категории)*@

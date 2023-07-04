@@ -38,19 +38,20 @@ public class PostCategoryRepository : GenericRepositoryAsync<PostCategory>, IPos
         .Where(x => x.PostId == postId)
         .ToListAsync();
 
-    public async Task<List<PostCategory>> GetCategoryPosts(int catId, int count) => await
+    public async Task<List<PostCategory>> GetCategoryPosts(string categorySlug, int count) => await
         db.PostCategories
         .Include(p => p.Post)
         .ThenInclude(c => c.Content)
-        .Where(x => x.CategoryId == catId)
+        .Include(p => p.Category)
+        .Where(x => x.Category.Slug == categorySlug)
         .Take(count)
         .ToListAsync();
 
-    public async Task<List<PostCategory>> GetCategoryPosts(int catId, int count, int skip) => await
+    public async Task<List<PostCategory>> GetCategoryPosts(string categorySlug, int count, int skip) => await
     db.PostCategories
     .Include(p => p.Post)
     .ThenInclude(c => c.Content)
-    .Where(x => x.CategoryId == catId)
+     .Where(x => x.Category.Slug == categorySlug)
     .Skip(skip)
     .Take(count)
     .ToListAsync();

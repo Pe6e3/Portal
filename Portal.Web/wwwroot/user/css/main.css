@@ -8734,6 +8734,39 @@ body {
 
         .dark-section h2 a {
             color: #ec1c1c;
+            font-size: 22px;
+            text-decoration: underline;
+        }
+
+.light-section {
+    background-color: white;
+    padding: 20px 0;
+}
+
+    .light-section .overlay {
+        min-height: auto;
+    }
+
+    .light-section a, .light-section .item-comments, .light-section date {
+        color: #a0a0a0;
+        font-size: 13px;
+    }
+
+    .light-section date {
+        color: #ec1c1c;
+        margin-right: 20px;
+    }
+
+    .light-section h2 {
+        text-transform: uppercase;
+        margin: 0 0 20px 0;
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+        .light-section h2 a {
+            color: #ec1c1c;
+            font-size: 22px;
             text-decoration: underline;
         }
 
@@ -18642,15 +18675,7 @@ nav.soc {
 .home-aside {
     padding-top: 4rem;
 }
-
-.dark-section {
-    padding: 3rem 0;
-    background-color: #202222;
-}
-
-    .dark-section h2 a {
-        color: #ffffff;
-    }
+ 
 
 .col-item {
     margin: 1.2rem 0 1.5rem;

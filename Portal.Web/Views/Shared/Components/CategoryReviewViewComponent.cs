@@ -14,11 +14,10 @@ namespace Portal.Web.Views.Shared.Components
             this.uow = uow;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()  
+        public async Task<IViewComponentResult> InvokeAsync(string categorySlug, string sectionClass)
         {
-
-            return View( );
+            ViewBag.Section = sectionClass;
+            return View(await uow.PostCategoryRep.GetCategoryPosts(categorySlug: categorySlug, count: 4));
         }
-
     }
 }
