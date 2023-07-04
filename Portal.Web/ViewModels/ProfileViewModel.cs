@@ -19,5 +19,6 @@ public class ProfileViewModel
     [Display(Name = "Аватар")] public IFormFile? AvatarFile { get; set; }
 
     public int Id { get; set; }
-    public Role? Role { get; set; }
+    [Display(Name = "Роль")] public Role? Role { get; set; }
+    public int RoleId { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using NuGet.Protocol.Plugins;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
@@ -41,6 +42,22 @@ public class UsersController : BaseController<User, IUserRepository>
         });
 
         return View(profiles);
-
     }
+
+
+    public async Task<IActionResult> EditUser(string login)
+    {
+        User user = await uow.UserRep.GetUserByLogin(login);
+        ProfileViewModel profileVM = new ProfileViewModel();
+        mapper.Map(user, profileVM);
+        mapper.Map(user.Profile, profileVM);
+        profileVM.Role = user.Role;
+
+        ViewBag.Roles = await uow.RoleRep.ListAllAsync();
+        return View("Edit", profileVM);
+    }
+
+ 
+
+
 }

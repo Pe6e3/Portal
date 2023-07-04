@@ -157,7 +157,7 @@ namespace Portal.Web.Controllers
             return View(profileVM);
         }
 
-        public async Task<IActionResult> SaveProfile(ProfileViewModel profileVM)
+        public async Task<IActionResult> SaveProfile(ProfileViewModel profileVM, bool fromAdmin = false)
         {
             User user = await uow.UserRep.GetUserByLogin(profileVM.Login);
             UserProfile profile = await uow.UserProfileRep.GetByIdAsync(user.Profile.Id);
@@ -167,6 +167,16 @@ namespace Portal.Web.Controllers
             if (profile.Lastname != profileVM.Lastname) profile.Lastname = profileVM.Lastname;
             if (profile.Birthday != profileVM.Birthday) profile.Birthday = profileVM.Birthday;
             if (profile.Email != profileVM.Email) profile.Email = profileVM.Email;
+
+
+
+            if (fromAdmin /* && User.IsInRole("1") */)
+            {
+                if (user.Role.Id != profileVM.RoleId) user.RoleId = profileVM.RoleId;
+                await uow.UserProfileRep.UpdateAsync(profile);
+                return RedirectToAction("Index", "Users", new { area = "Admin", login = user.Login });
+            }
+
             await uow.UserProfileRep.UpdateAsync(profile);
             return RedirectToAction("Profile", "Account", new { login = user.Login });
         }
