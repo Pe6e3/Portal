@@ -25,6 +25,13 @@ namespace Portal.Web
             CreateMap<User, PostViewModel>();
             CreateMap<PostViewModel, User>();
 
+            CreateMap<ProfileViewModel, User>();
+            CreateMap<User, ProfileViewModel>();
+
+            CreateMap<ProfileViewModel, UserProfile>();
+            CreateMap<UserProfile, ProfileViewModel>();
+
+
         }
     }
 }

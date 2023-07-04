@@ -14,7 +14,11 @@ public class UserRepository : GenericRepositoryAsync<User>, IUserRepository
         this.db = db;
     }
 
-    public async Task<List<User>> GetAllUsers() => await db.Users.Include(x => x.Profile).ToListAsync();
+    public async Task<List<User>> GetAllUsers() => await
+        db.Users
+        .Include(x => x.Profile)
+        .Include(x => x.Role)
+        .ToListAsync();
 
     public async Task<User> GetDefaultUser() => await db.Users.Include(u => u.Profile).FirstOrDefaultAsync(u => u.Login == "Default");
 
