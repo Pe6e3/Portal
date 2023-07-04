@@ -19,10 +19,19 @@
                 <input type="text" class="my_field prof_name" name="Lastname" value="@Model.Lastname">
             </div>
 
+
             <div class="row align-items-center">
                 <div class="col-6 text-end"><strong>Логин <i class="fa-solid fa-user" aria-hidden="true"></i>:</strong></div>
                 <div class="col-6 text-left d-flex align-items-center">
                     @Model.Login
+                </div>
+            </div>
+
+
+            <div class="row align-items-center">
+                <div class="col-6 text-end"><strong>Уровень прав <i class="fa-solid fa-stairs" aria-hidden="true"></i>:</strong></div>
+                <div class="col-6 text-left d-flex align-items-center">
+                    @Model.Role.RoleName
                 </div>
             </div>
 
@@ -40,6 +49,8 @@
                 <div class="col-6 text-end"><strong>Зарегистрирован <i class="fa-solid fa-file-text-o" aria-hidden="true"></i></i>: </strong></div>
                 <div class="col-6 text-left d-flex align-items-center"> <p style="font-size:16px;"> @Model.RegistrationDate  </div>
             </div>
+
+             
 
         </div>
         <input type="hidden" name="Login" value="@Model.Login" />

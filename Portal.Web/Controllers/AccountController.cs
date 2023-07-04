@@ -153,6 +153,7 @@ namespace Portal.Web.Controllers
             profileVM.Login = login;
             profileVM.RegistrationDate = user.Profile.RegistrationDate;
             profileVM.AvatarImg = user.Profile.AvatarImg;
+            profileVM.Role = user.Role;
 
             return View(profileVM);
         }

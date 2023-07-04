@@ -47,13 +47,18 @@
                     <select class="my_field" name="RoleId">
                         @foreach (var role in ViewBag.Roles)
                         {
-                            <option value="@role.Id">@role.RoleName</option>
+                            if (Model.RoleId == role.Id)
+                            {
+                                <option selected value="@role.Id">@role.RoleName</option>
+                            }
+                            else
+                            {
+                                <option value="@role.Id">@role.RoleName</option>
+                            }
                         }
                     </select>
                 </div>
             </div>
-            № @Model.RoleId
-            Роль: @Model.Role.RoleName
 
         </div>
         <input type="hidden" name="Login" value="@Model.Login" />
