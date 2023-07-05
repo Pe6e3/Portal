@@ -1,5 +1,5 @@
 ﻿@using Portal.DAL.Entities;
-@model List<Portal.DAL.Entities.Post>
+@model IEnumerable<Portal.DAL.Entities.Post>
 
 @*5 последних постов справа в кололке*@
 <body>
@@ -23,10 +23,10 @@
                                 </h5>
 
                                 <div class="item-social">
-                                    <div class="item-comments" style="position: absolute; bottom: 5px; left: 5px;">
+                                    <a href="/posts/@lastPost.Slug#comments" class="item-comments" style="position: absolute; bottom: 5px; left: 5px;">
                                         <i class="fa-solid fa-comments"></i>
-                                        <a href="#" class="item-comments-count"> @lastPost.Comments.Count()</a>
-                                    </div>
+                                        <p class="item-comments-count"> @lastPost.Content.CommentsNum !</p>
+                                    </a>
 
                                     <div class="item-comments" style="position: absolute; bottom: 5px; right: 5px;">
                                         <span class="item-comments-count"> @Ago </span>

@@ -13,7 +13,12 @@ public class LastPostsColumnViewComponent : ViewComponent
         this.uow = uow;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync() => 
-        View(await uow.PostRep.ListAllAsync(4, "Content","Comments"));
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        IEnumerable<Post> posts = await uow.PostRep.ListAllAsync(4, "Content", "Comments");
+        foreach (Post  post in posts)
+            post.Content.CommentsNum = await uow.CommentRep.GetPostCommentsCount(post.Id);
+        return View(posts);
 
+    }
 }

@@ -22,6 +22,10 @@ public class CommentRepository : GenericRepositoryAsync<Comment>, ICommentReposi
         .ThenInclude(x=>x.Profile)
         .Where(c => c.PostId == postId)
         .ToListAsync();
-   
 
+    public async Task<int> GetPostCommentsCount(int postId)
+    {
+        List<Comment> comments  = await db.Comments.Where(x=>x.PostId == postId).ToListAsync();
+        return comments.Count;
+    }
 }
