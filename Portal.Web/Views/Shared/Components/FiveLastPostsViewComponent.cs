@@ -13,7 +13,9 @@ public class FiveLastPostsViewComponent : ViewComponent
         this.uow = uow;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync() => 
-        View(await uow.PostRep.ListAllAsync(5, "Content","Comments"));
+    public async Task<IViewComponentResult> InvokeAsync() =>
+    View(await uow.PostRep.ListPostsWithComments(count: 5));
+
+
 
 }

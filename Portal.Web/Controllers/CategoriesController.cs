@@ -41,6 +41,7 @@ public class CategoriesController : BaseController<Category, ICategoryRepository
         postViewModel.CommentsClosed = post.Content.CommentsClosed;
         postViewModel.Category = await uow.PostCategoryRep.GetCatByPostId(post.Id);
         postViewModel.Comments = await uow.CommentRep.GetCommentsByPostId(post.Id);
+        postViewModel.CommentsNum = postViewModel.Comments.Count();
         return View(postViewModel);
     }
 

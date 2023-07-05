@@ -43,5 +43,17 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
         .Include(p => p.Content)
         .ToListAsync();
 
+    public async Task<List<Post>> ListPostsWithComments(int count)
+    {
+        List<Post> posts = await db.Posts
+            .Include(x => x.Content)
+            .Take(count)
+            .ToListAsync();
+        List<Comment> comments = new List<Comment>();
+        foreach (Post post in posts)
+            post.Comments = await db.Comments.Where(x => x.PostId == post.Id).ToListAsync();
 
+        return posts;
+
+    }
 }

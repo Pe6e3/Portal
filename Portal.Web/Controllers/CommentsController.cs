@@ -55,7 +55,9 @@ public class CommentsController : BaseController<Comment, ICommentRepository>
 
         await uow.PostCommentRep.InsertAsync(postComment);
 
-        return RedirectToAction("Post", "Categories", new { postSlug = postSlug });
+        return RedirectToAction("Post", "Categories", new { postSlug = postSlug});
+
+
     }
 
 }

@@ -24,9 +24,10 @@
                         <h1>@Model.Title</h1>
 
                         <div class="item-social">
-                            <div class="item-comments" title="Количество комментариев">
-                                <i class="fa-solid fa-comment"></i><a href="#comments_thread" class="item-comments-count">@Model.CommentsNum</a>
-                            </div>
+                            <a href="/posts/@Model.Slug#comments" class="item-comments" title="Количество комментариев">
+                                <i class="fa-solid fa-comments"></i>
+                                <span class="item-comments-count"> @Model.CommentsNum</span>
+                            </a>
                             <div class="fa-solid fa-share-alt" title="Поделиться в соц. сетях"></div>
                             <div class="likely likely-custom" data-media="/uploads/@Model.PostImage" data-title="@Model.Title">
                                 <div class="vkontakte" title="Поделиться Вконтакте">Вконтакте</div>
@@ -93,3 +94,5 @@
         </div>
     </div>
 </div>
+
+ 
