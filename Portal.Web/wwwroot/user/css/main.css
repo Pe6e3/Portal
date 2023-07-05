@@ -8467,9 +8467,7 @@ body {
         text-decoration: none;
         color: antiquewhite;
         background-color: #454949;
-        -webkit-transform: scale(1.13);
-        -ms-transform: scale(1.13);
-        transform: scale(1.13);
+      
     }
 
 .header__search-icon {

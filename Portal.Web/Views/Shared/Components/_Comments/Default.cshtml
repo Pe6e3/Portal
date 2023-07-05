@@ -2,36 +2,41 @@
 @model List<Comment>
 <div class="comments">
 
-    <h4>Комментарии</h4>
+    <h3>Комментарии:</h3>
+    <br />
 
     <div class="comments-last">
-        <div class="row">
-            @{
-                if (Model.Count == 0)
-                {
-                    <p>Пока нет комментариев</p>
-                }
-                //else
+        @{
+            if (Model.Count == 0)
+            {
+                <p>Пока нет комментариев</p>
+            }
+            else
                 @foreach (Comment? comment in Model)
                 {
-                    <div class="col-5">
-                        @comment.UserId
-                        <br>
-                        @comment.CreatedAt.ToShortDateString()
+                    <div class="row message">
+                        <div class="col-2 col-lg-1">
+                            <img src="~/img/uploads/Profiles/@comment.User.Profile.AvatarImg" alt="@comment.User.Profile.Firstname @comment.User.Profile.Lastname" style="width: 100%; min-width: 50px; border-radius: 5px;" />
+                        </div>
+
+                        <div class="col-9 col-lg-3 d-flex align-items-start mt-1" style="font-size: 12px;">
+                            @comment.User.Profile.Firstname @comment.User.Profile.Lastname
+                            <br>
+                            @comment.CreatedAt
+                        </div>
+
+                        <div class="col-12 col-lg-8 text-start">
+                            @comment.TextComment
+                        </div>
                     </div>
-                    <div class="col-7">
-                        @comment.TextComment
-                    </div>
+
                 }
-            }
-        </div>
+        }
     </div>
-    <hr />
 
     <div class="comments-form">
         <form asp-controller="Comments" asp-action="AddComment" method="post">
             <input type="hidden" name="postSlug" value="@ViewBag.PostSlug" />
-            @*<input type="hidden" name="Url" value="@Model.Post?.Slug" />*@
 
 
             @if (!User.Identity.IsAuthenticated)
@@ -42,13 +47,92 @@
                 </div>
             }
 
-            <div class="form-group">
-                <label class="control-label">Сообщение</label>
-                <textarea name="Message" class="form-control"></textarea>
+
+            <div class="messagebox">
+                <textarea name="Message" placeholder="Ваш комментарий..."></textarea>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Отправить" class="btn btn-primary" />
+
+
+            <div class="form-group d-flex justify-content-end mx-4">
+                <button class="addcomment-btn" type="submit">Добавить</button>
             </div>
         </form>
     </div>
 </div>
+
+
+<style>
+    .message {
+        margin: 5px 0 10px 0;
+        padding: 8px 3px 8px 3px;
+        background-image: linear-gradient(to bottom, #FAFAFA, #F0F0F0);
+        border-radius: 8px;
+        border: 2px solid rgba(241, 242, 217, 0.1);
+        -webkit-box-shadow: 3px 3px 7px 0px rgba(34, 60, 80, 0.14);
+        -moz-box-shadow: 3px 3px 7px 0px rgba(34, 60, 80, 0.14);
+        box-shadow: 3px 3px 7px 0px rgba(34, 60, 80, 0.14);
+    }
+
+
+
+    .messagebox {
+        margin: 20px;
+        background-color: #fafafa;
+    }
+
+    textarea {
+        width: 100%;
+        resize: vertical;
+        padding: 15px;
+        border-radius: 15px;
+        border: 2px solid rgba(241, 242, 217, 0.2);
+        box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
+        height: 150px;
+    }
+
+    .addcomment-btn {
+        display: inline-flex;
+        margin: 10px;
+        text-decoration: none;
+        border: 2px solid #706c6c;
+        border-radius:5px;
+        position: relative;
+        overflow: hidden;
+        font-size: 20px;
+        line-height: 20px;
+        padding: 12px 30px;
+        color: #FFF;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-family: 'Roboto', Тahoma, sans-serif;
+        background: #a3a2a2;
+        transition: box-shadow 0.3s, transform 0.3s;
+        cursor: pointer;
+    }
+
+        .addcomment-btn:hover,
+        .addcomment-btn:active,
+        .addcomment-btn:focus {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 16px 20px rgba(0,0,0,0.2);
+            color: #FFF;
+        }
+
+        .addcomment-btn:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, transparent, rgba(191, 226, 255, 0.3), transparent);
+            transition: left 0.7s;
+        }
+
+        .addcomment-btn:hover:before,
+        .addcomment-btn:active:before,
+        .addcomment-btn:focus:before {
+            left: 100%;
+        }
+
+</style>

@@ -18,6 +18,8 @@ public class CommentRepository : GenericRepositoryAsync<Comment>, ICommentReposi
 
     public async Task<List<Comment>?> GetCommentsByPostId(int postId) => await
         db.Comments
+        .Include(x=>x.User)
+        .ThenInclude(x=>x.Profile)
         .Where(c => c.PostId == postId)
         .ToListAsync();
    

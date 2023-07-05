@@ -37,7 +37,7 @@ public class CommentsController : BaseController<Comment, ICommentRepository>
         if (commentatorName != null)
         {
             comment.UserId = await uow.UserRep.GetDefaultUserId();
-            comment.TextComment = $"({commentatorName}:) {comment.TextComment}";
+            comment.TextComment = $"({commentatorName}): {comment.TextComment}";
         }
         else
         {
