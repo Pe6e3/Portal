@@ -28,7 +28,7 @@ public class CategoriesController : BaseController<Category, ICategoryRepository
     [HttpGet("/posts/{*postSlug}")]
     public async Task<IActionResult> Post( string postSlug)
     {
-        Post? post = await uow.PostRep.GetPostBySlugAsync(postSlug);
+        Post? post = await uow.PostRep.GetPostBySlug(postSlug);
         PostViewModel postViewModel = new PostViewModel();
 
         postViewModel.Slug = post.Slug;
@@ -40,7 +40,7 @@ public class CategoriesController : BaseController<Category, ICategoryRepository
         postViewModel.PostVideo = post.Content.PostVideo;
         postViewModel.CommentsClosed = post.Content.CommentsClosed;
         postViewModel.Category = await uow.PostCategoryRep.GetCatByPostId(post.Id);
-        postViewModel.Comments = await uow.CommentRep.GetCommentsByPostSlug(post.Id);
+        postViewModel.Comments = await uow.CommentRep.GetCommentsByPostId(post.Id);
         return View(postViewModel);
     }
 

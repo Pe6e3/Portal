@@ -20,9 +20,17 @@ public class UserRepository : GenericRepositoryAsync<User>, IUserRepository
         .Include(x => x.Role)
         .ToListAsync();
 
-    public async Task<User> GetDefaultUser() => await db.Users.Include(u => u.Profile).FirstOrDefaultAsync(u => u.Login == "Default");
+    public async Task<User> GetDefaultUser() => await
+        db.Users
+        .Include(u => u.Profile)
+        .FirstOrDefaultAsync(u => u.Login == "Default");
+    public async Task<int> GetDefaultUserId()
+    {
+        User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == "Default");
+        return user.Id;
+    }
 
-    public async Task<User> GetUserByLogin(string login) => await 
+    public async Task<User> GetUserByLogin(string login) => await
         db.Users
         .Include(u => u.Profile)
         .Include(u => u.Role)

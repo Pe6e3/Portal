@@ -75,74 +75,7 @@
 
 
 
-                    @*    <div class="read-more">
-                    <div class="read-more-header">Читать еще:</div>
-                    <ul>
-                    @foreach (var postElse in Model.Category.Posts.ToList())
-                    {
-                    <li>
-                    <a asp-controller="Category"
-                    asp-action="Post"
-                    asp-route-categorySlug="category Slug"
-                    asp-route-postSlug="#">
-                    @postElse.Content.Title
-                    </a>
-                    </li>
-                    }
-                    </ul>
-                    </div>*@
-
-
-                    <div class="comments">
-
-                        <h4>Comments</h4>
-                        <div class="comments-last">
-                            <div class="row">
-                                @foreach (Comment comment in Model.Comments)
-                                {
-                                    <div class="col-5">
-                                        @comment.UserId
-                                        <br>
-                                        @comment.CreatedAt.ToShortDateString()
-                                    </div>
-                                    <div class="col-7">
-                                        @comment.TextComment
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="comments-form">
-                            <form asp-action="AddComment" method="post">
-                                <input type="hidden" name="categorySlugOld" value="@Model.Category" />
-                                <input type="hidden" name="postSlugOld" value="@Model.Slug" />
-                                <input type="hidden" name="Url" value="@Model.Slug" />
-
-                                <div class="form-group">
-                                    <label class="control-label">Имя</label>
-                                    <input name="Name" class="form-control" />
-                                </div>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <input type="hidden" name="Email" value="@User.Identity.Name" />
-                                }
-                                else
-                                {
-                                    <div class="form-group">
-                                        <label class="control-label">Email</label>
-                                        <input name="Email" class="form-control" />
-                                    </div>
-                                }
-                                <div class="form-group">
-                                    <label class="control-label">Сообщение</label>
-                                    <textarea name="Message" class="form-control"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <input type="submit" value="Отправить" class="btn btn-primary" />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                    @await Component.InvokeAsync("_Comments", new {postSlug=Model.Slug, postId=Model.Id})
 
                 </article>
 

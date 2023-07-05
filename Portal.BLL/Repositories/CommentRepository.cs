@@ -14,6 +14,12 @@ public class CommentRepository : GenericRepositoryAsync<Comment>, ICommentReposi
         this.db = db;
     }
 
-    public async Task<List<Comment>?> GetCommentsByPostSlug(int postId) => await db.Comments.Where(c => c.PostId == postId).ToListAsync();
-    
+
+
+    public async Task<List<Comment>?> GetCommentsByPostId(int postId) => await
+        db.Comments
+        .Where(c => c.PostId == postId)
+        .ToListAsync();
+   
+
 }

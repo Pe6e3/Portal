@@ -18,12 +18,22 @@ public class CategoryRepository : GenericRepositoryAsync<Category>, ICategoryRep
         .ThenInclude(x => x.Content)
         .FirstOrDefaultAsync(x => x.Slug == categorySlug);
 
+    public async Task<string> GetCategorySlugByPostSlug(string postSlug)
+    {
+        PostCategory? pc = await db.PostCategories
+        .Include(x => x.Post)
+        .Include(x => x.Category)
+        .FirstOrDefaultAsync(p => p.Post.Slug == postSlug);
+
+        return pc?.Category?.Slug;
+    }
+
     public async Task<List<PostCategory>> GetPostsByCatSlugAsync(string categorySlug)
     {
         Category? cat = await db.Categories.Where(c => c.Slug == categorySlug).FirstOrDefaultAsync();
         if (cat == null) return null;
 
-        List<PostCategory>? pc = await 
+        List<PostCategory>? pc = await
             db.PostCategories
             .Where(x => x.CategoryId == cat.Id)
             .Include(db => db.Category)

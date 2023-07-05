@@ -28,13 +28,15 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
         .Include(include1).Include(include2)
         .FirstOrDefaultAsync(x => x.Id == id);
 
- 
 
-    public async Task<Post?> GetPostBySlugAsync(string postSlug) => await
+
+    public async Task<Post?> GetPostBySlug(string postSlug) => await
         db.Posts
         .Include(x => x.Categories)
         .Include(x => x.Content)
+        .Include(x => x.Comments)
         .FirstOrDefaultAsync(post => post.Slug == postSlug);
+
 
     public async Task<IReadOnlyList<Post>?> ListAllPostsWithContentsAsync() => await
         db.Posts

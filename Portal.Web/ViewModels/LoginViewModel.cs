@@ -9,7 +9,6 @@ public class LoginViewModel
     [Required(ErrorMessage = "Не указан логин")]
     [Display(Name = "Логин")] public string Login { get; set; } = null!;
 
-    [Required(ErrorMessage = "Не указан Email")]
     [DataType(DataType.EmailAddress)]
     [Display(Name = "Эл. почта")] public string? Email { get; set; }
 

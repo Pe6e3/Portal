@@ -71,6 +71,16 @@ public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : Ba
         .Include(include2)
         .Take(count)
         .ToListAsync();
+    public async Task<IReadOnlyList<T>> ListAllAsync(string include) => await
+    db.Set<T>()
+    .Include(include)
+    .ToListAsync();
+
+    public async Task<IReadOnlyList<T>> ListAllAsync(string include, string include2) => await
+    db.Set<T>()
+    .Include(include)
+    .Include(include2)
+    .ToListAsync();
 
     public async Task<IReadOnlyList<T>> ListAllWithIncludeAsync() => await db.Set<T>().ToListAsync();
 
