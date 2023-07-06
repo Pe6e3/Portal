@@ -30,6 +30,7 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostContentRepository, PostContentRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMyLoggerRepository, MyLoggerRepository>();
 
 var app = builder.Build();
 

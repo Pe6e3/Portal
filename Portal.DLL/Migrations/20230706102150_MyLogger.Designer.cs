@@ -12,7 +12,7 @@ using Portal.DAL.Data;
 namespace Portal.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230706095045_MyLogger")]
+    [Migration("20230706102150_MyLogger")]
     partial class MyLogger
     {
         /// <inheritdoc />
@@ -186,6 +186,36 @@ namespace Portal.DAL.Migrations
                     b.HasIndex("MenuId");
 
                     b.ToTable("MenuItems");
+                });
+
+            modelBuilder.Entity("Portal.DAL.Entities.MyLogger", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserClick")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MyLoggers");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Post", b =>
@@ -449,6 +479,17 @@ namespace Portal.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Menu");
+                });
+
+            modelBuilder.Entity("Portal.DAL.Entities.MyLogger", b =>
+                {
+                    b.HasOne("Portal.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Post", b =>

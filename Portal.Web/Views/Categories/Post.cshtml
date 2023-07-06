@@ -18,7 +18,7 @@
                 <div class="col-lg-7 col-md-8">
 
                     <div class="page-header-meta">
-                        
+
                         <a href="category/@Model.Category.Slug" class="page-category-link">@Model.Category.Name</a> <span class="date">@Model.CreatedAt</span>
 
                         <h1>@Model.Title</h1>
@@ -91,8 +91,11 @@
                 </aside>
             </div>
 
+
+                @await Component.InvokeAsync("_MyLogger")
+
         </div>
     </div>
 </div>
 
- 
+

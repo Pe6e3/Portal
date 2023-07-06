@@ -2,27 +2,31 @@
 using Portal.BLL;
 using Portal.DAL.Entities;
 
-namespace Portal.Web.Views.Shared.Components
+namespace Portal.Web.Views.Shared.Components;
+
+[ViewComponent(Name = "_MyLogger")]
+public class MyLoggerViewComponent : ViewComponent
 {
-    [ViewComponent(Name = "_CategoryReview")]
-    public class CategoryReviewViewComponent : ViewComponent
+    private readonly UnitOfWork uow;
+
+    public MyLoggerViewComponent(UnitOfWork uow)
     {
-        private readonly UnitOfWork uow;
+        this.uow = uow;
+    }
 
-        public CategoryReviewViewComponent(UnitOfWork uow)
-        {
-            this.uow = uow;
-        }
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        var user = await uow.UserRep.GetUserByLogin(User.Identity.Name);
 
-        public async Task<IViewComponentResult> InvokeAsync(string categorySlug, string sectionClass)
-        {
-            ViewBag.Section = sectionClass;
+        var logger = new MyLogger();
+        logger.UserIP = HttpContext.Connection.RemoteIpAddress?.ToString();
+        logger.UserClick = HttpContext.Request.Path;
+        logger.UserId = user.Id;
+        logger.Date = DateTime.UtcNow;
 
-            List<PostCategory> postCategory = await 
-                uow.PostCategoryRep
-                   .GetCategoryPosts(categorySlug: categorySlug, count: 4);
+        await uow.MyLoggerRep.InsertAsync(logger);
 
-            return View(postCategory);
-        }
+        var allLogs = await uow.MyLoggerRep.ListAllAsync();
+        return View(allLogs);
     }
 }
