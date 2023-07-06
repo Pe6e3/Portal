@@ -1,15 +1,18 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using NuGet.Protocol.Plugins;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
+using Portal.Web.Controllers;
 using Portal.Web.ViewModels;
 
 namespace Portal.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = "1")]
 public class UsersController : BaseController<User, IUserRepository>
 {
     private readonly UnitOfWork uow;
@@ -57,7 +60,7 @@ public class UsersController : BaseController<User, IUserRepository>
         return View("Edit", profileVM);
     }
 
- 
+
 
 
 }

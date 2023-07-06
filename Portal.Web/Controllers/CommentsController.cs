@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
-using Portal.Web.Areas.Admin.Controllers;
 
 namespace Portal.Web.Controllers;
 

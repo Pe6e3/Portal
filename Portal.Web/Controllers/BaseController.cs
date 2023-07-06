@@ -6,8 +6,9 @@ using Portal.DAL.Interfaces;
 using Portal.Web.Models;
 using Portal.Web.ViewModels;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
-namespace Portal.Web.Areas.Admin.Controllers
+namespace Portal.Web.Controllers
 {
 
     public abstract class BaseController<TEntity, TRepository> : Controller
@@ -66,7 +67,7 @@ namespace Portal.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-     
+
 
 
         [HttpPost]

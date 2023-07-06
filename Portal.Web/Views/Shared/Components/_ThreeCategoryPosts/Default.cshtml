@@ -25,7 +25,7 @@
 
                             <div class="item-social">
                                 <div class="item-comments" title="Количество комментариев">
-                                    <i class="fa-solid fa-comment"></i><a class="item-comments-count" href="#"> @firstPost?.Content?.CommentsNum</a>
+                                    <i class="fa-solid fa-comment"></i><a class="item-comments-count" href="#"> @firstPost?.Comments.Count()</a>
                                     <span class="date">@firstPost?.CreatedAt.ToString("dd/MM/yyyy") (@Ago)</span>
                                 </div>
                             </div>

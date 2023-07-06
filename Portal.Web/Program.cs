@@ -15,7 +15,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext")));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => { options.LoginPath = new PathString("/Account/Login"); });
+    .AddCookie(options => { options.LoginPath = new PathString("/Account/Login");
+                            options.AccessDeniedPath = new PathString("/Home/AccessDenied");
+    });
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
@@ -44,6 +46,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "areas",

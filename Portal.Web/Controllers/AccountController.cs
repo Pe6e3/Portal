@@ -28,7 +28,7 @@ namespace Portal.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!await uow.UserRep.UserCheck(lvm.Login, lvm.Email)) // TODO: проверяем, нет ли в базе пользователя с таким же логином или почтой.  (Как пользователь узнает, если уже есть?)
+                if (!await uow.UserRep.UserCheck(lvm.Login)) // TODO: проверяем, нет ли в базе пользователя с таким же логином.  (Как пользователь узнает, если уже есть?)
                 {
                     if (lvm.Password == lvm.PasswordConfirm) // TODO: нужно вернуться обратно в форму регистрации и сообщить, что пароли не совпадают
                     {

@@ -8,6 +8,6 @@ public class Post : BaseEntity
     public int? CategoryId { get; set; }
 
     public List<Category>? Categories { get; set; }
-    public List<Comment>? Comments { get; set; }
+    public virtual List<Comment>? Comments { get; set; }
     public PostContent? Content { get; set; }
 }

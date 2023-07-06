@@ -1,0 +1,17 @@
+﻿@using Portal.DAL.Entities;
+@model User
+@{
+    ViewData["Title"] = "Доступ запрещен";
+}
+
+<div class="container">
+    <div class="row text-center d-flex justify-content-center">
+        <h1 class="my-5">Доступ запрещен</h1>
+
+        <div class="my-5">
+            <p>У Вас нет прав для просмотра данной страницы</p>
+            <p>Ваш уровень прав: @Model.Role.RoleName</p>
+        </div>
+    </div>
+
+</div>

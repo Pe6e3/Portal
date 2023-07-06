@@ -35,10 +35,11 @@ public class UserRepository : GenericRepositoryAsync<User>, IUserRepository
         .Include(u => u.Profile)
         .Include(u => u.Role)
         .FirstOrDefaultAsync(u => u.Login == login);
+ 
 
     public string? HashPass(string? password) => BCrypt.Net.BCrypt.HashPassword(password);
 
-    public async Task<bool> UserCheck(string login, string? email) => await db.Users.Include(u => u.Profile).AnyAsync(u => u.Profile.Email == email || u.Login == login);
+    public async Task<bool> UserCheck(string login) => await db.Users.Include(u => u.Profile).AnyAsync(u => u.Login == login);
 
     public async Task<User> ValidateUser(string login, string? password)
     {

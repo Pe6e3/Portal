@@ -37,11 +37,10 @@ public class PostCategoryRepository : GenericRepositoryAsync<PostCategory>, IPos
         db.PostCategories
         .Where(x => x.PostId == postId)
         .ToListAsync();
-
     public async Task<List<PostCategory>> GetCategoryPosts(string categorySlug, int count) => await
         db.PostCategories
-        .Include(p => p.Post)
-        .ThenInclude(c => c.Content)
+        .Include(p => p.Post.Comments)
+        .Include(p => p.Post.Content)
         .Include(p => p.Category)
         .Where(x => x.Category.Slug == categorySlug)
         .Take(count)

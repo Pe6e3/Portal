@@ -27,8 +27,9 @@
                         <div class="col-item-meta">
                             <div class="item-comments" title="Количество комментариев">
                                 <span class="date">@pc.Post.CreatedAt</span>
-                                <i class="fa-solid fa-comments"></i><a href="#comments_thread"
-                                                                       class="item-comments-count">@pc.Post.Content.CommentsNum</a>
+                                <a href="posts/@pc.Post.Slug#comments">
+                                    <i class="fa-solid fa-comments"></i><p class="item-comments-count">@pc.Post.Comments.Count()</p>
+                                </a>
                             </div>
                         </div>
                         <h4>
