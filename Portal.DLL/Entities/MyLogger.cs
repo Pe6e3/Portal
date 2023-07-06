@@ -13,18 +13,6 @@ namespace Portal.DAL.Entities
         public string? UserClick { get; set; }
         public virtual User? User { get; set; }
 
-        public void FillFromHttpContext(HttpContext httpContext)
-        {
-          
-
-            // Получение IP-адреса пользователя
-            UserIP = httpContext.Connection.RemoteIpAddress?.ToString();
-
-            // Получение информации о местоположении пользователя
-            // (требуется дополнительная логика или сервис для определения местоположения)
-
-            // Получение информации о действии пользователя (например, URL или действие)
-            UserClick = httpContext.Request.Path;
-        }
+        
     }
 }

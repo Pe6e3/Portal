@@ -23,7 +23,6 @@ public class MyLoggerViewComponent : ViewComponent
         logger.UserClick = HttpContext.Request.Path;
         logger.UserId = user.Id;
         logger.Date = DateTime.UtcNow;
-
         await uow.MyLoggerRep.InsertAsync(logger);
 
         var allLogs = await uow.MyLoggerRep.ListAllAsync();

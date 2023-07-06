@@ -22,6 +22,23 @@ namespace Portal.Web.Controllers
 
         public IActionResult Register() => View();
 
+
+        public async Task AddUserActionToLog()
+        {
+            var user = await uow.UserRep.GetUserByLogin(User.Identity.Name);
+
+            var logger = new MyLogger();
+            logger.UserIP = HttpContext.Connection.RemoteIpAddress?.ToString();
+            logger.UserClick = HttpContext.Request.Path;
+            logger.UserId = user.Id;
+            logger.Date = DateTime.Now;
+            await uow.MyLoggerRep.InsertAsync(logger);
+        }
+
+
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginViewModel lvm)

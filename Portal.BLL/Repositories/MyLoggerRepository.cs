@@ -14,4 +14,24 @@ public class MyLoggerRepository : GenericRepositoryAsync<MyLogger>, IMyLoggerRep
         this.db = db;
     }
 
+    public async Task<List<MyLogger>> ListLogs()
+    {
+        List<MyLogger> logs = await
+            db.MyLoggers
+            .Include(x => x.User)
+            .ThenInclude(x=>x.Profile)
+            .ToListAsync();
+            return logs;
+    }
+
+    public async Task<List<MyLogger>> ListLogs(string login)
+    {
+        List<MyLogger> logs = await
+            db.MyLoggers
+            .Include(x => x.User)
+            .ThenInclude(x => x.Profile)
+            .Where(x=>x.User.Login==login)
+            .ToListAsync();
+        return logs;
+    }
 }
