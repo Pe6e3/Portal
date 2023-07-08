@@ -1,6 +1,5 @@
 ﻿using Portal.BLL.Repositories;
 using Portal.DAL.Data;
-
 namespace Portal.BLL;
 
 public class UnitOfWork
@@ -36,6 +35,4 @@ public class UnitOfWork
     public UserRepository UserRep => _userRep ??= new UserRepository(_db);
     public UserProfileRepository UserProfileRep => _userProfileRep ??= new UserProfileRepository(_db);
     public MyLoggerRepository MyLoggerRep => _myLogRep ??= new MyLoggerRepository(_db);
-
-
 }

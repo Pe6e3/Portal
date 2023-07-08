@@ -31,6 +31,9 @@ builder.Services.AddScoped<IPostContentRepository, PostContentRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMyLoggerRepository, MyLoggerRepository>();
+builder.Services.AddScoped<LogUserActionMiddleware>();
+
+
 
 var app = builder.Build();
 
@@ -39,6 +42,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -57,6 +61,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.UseMiddleware<LogUserActionMiddleware>();
 
 app.Run();
 
