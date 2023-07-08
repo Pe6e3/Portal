@@ -22,6 +22,8 @@ public class UnitOfWork
     private UserRepository _userRep;
     private UserProfileRepository _userProfileRep;
     private MyLoggerRepository _myLogRep;
+    private ChatRepository _chatRep;
+    private MessageRepository _messageRep;
 
     public CategoryRepository CategoryRep => _categoryRep ??= new CategoryRepository(_db);
     public CommentRepository CommentRep => _commentRep ??= new CommentRepository(_db);
@@ -35,4 +37,6 @@ public class UnitOfWork
     public UserRepository UserRep => _userRep ??= new UserRepository(_db);
     public UserProfileRepository UserProfileRep => _userProfileRep ??= new UserProfileRepository(_db);
     public MyLoggerRepository MyLoggerRep => _myLogRep ??= new MyLoggerRepository(_db);
+    public ChatRepository ChatRep => _chatRep ??= new ChatRepository(_db);
+    public MessageRepository MessageRep => _messageRep ??= new MessageRepository(_db);
 }
