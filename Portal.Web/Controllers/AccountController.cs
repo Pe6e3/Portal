@@ -23,15 +23,16 @@ namespace Portal.Web.Controllers
         public IActionResult Register() => View();
 
 
-        public async Task AddUserActionToLog()
+        public async Task LogUserAction()
         {
-            var user = await uow.UserRep.GetUserByLogin(User.Identity.Name);
+            User? user = await uow.UserRep.GetUserByLogin(User.Identity.Name); // TODO: Брать данные из куки/из кеша, а не каждый раз из БД
 
             var logger = new MyLogger();
             logger.UserIP = HttpContext.Connection.RemoteIpAddress?.ToString();
             logger.UserClick = HttpContext.Request.Path;
-            logger.UserId = user.Id;
-            logger.Date = DateTime.Now;
+            logger.UserId = user != null ? user.Id : await uow.UserRep.GetDefaultUserId();
+
+            logger.Date = DateTime.UtcNow;
             await uow.MyLoggerRep.InsertAsync(logger);
         }
 
