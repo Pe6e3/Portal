@@ -22,20 +22,26 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<UserProfile> UserProfiles { get; set; }
     public DbSet<MyLogger> MyLoggers { get; set; }
+    public DbSet<Chat> Chats { get; set; }
+    public DbSet<Message> Messages { get; set; }
+        
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<User>()
+            .HasMany(e => e.Chats)
+            .WithMany(e => e.Users);
+
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Post>()
             .HasMany(e => e.Categories)
             .WithMany(e => e.Posts);
-        //.UsingEntity<PostCategory>();
 
 
         modelBuilder.Entity<Post>()
             .HasMany(e => e.Comments)
             .WithMany(e => e.Posts);
-        //.UsingEntity<PostComment>();
 
         modelBuilder.Entity<Menu>()
             .HasData(new Menu
