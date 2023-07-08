@@ -20,6 +20,7 @@ public class MyLoggerRepository : GenericRepositoryAsync<MyLogger>, IMyLoggerRep
             db.MyLoggers
             .Include(x => x.User)
             .ThenInclude(x=>x.Profile)
+            .OrderByDescending(x=>x.Id)
             .ToListAsync();
             return logs;
     }
