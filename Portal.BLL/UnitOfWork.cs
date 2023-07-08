@@ -1,5 +1,7 @@
 ﻿using Portal.BLL.Repositories;
 using Portal.DAL.Data;
+using Portal.DAL.Entities;
+
 namespace Portal.BLL;
 
 public class UnitOfWork
@@ -41,4 +43,5 @@ public class UnitOfWork
     public ChatRepository ChatRep => _chatRep ??= new ChatRepository(_db);
     public ChatUserRepository ChatUserRep => _chatUserRep ??= new ChatUserRepository(_db);
     public MessageRepository MessageRep => _messageRep ??= new MessageRepository(_db);
+
 }

@@ -14,5 +14,10 @@ public class ChatRepository : GenericRepositoryAsync<Chat>, IChatRepository
         this.db = db;
     }
 
-
+    public async Task<IEnumerable<Chat>> GetAllChats()
+    {
+        return await db.Chats
+            .Include(x=>x.Users)
+            .ToListAsync();
+    }
 }
