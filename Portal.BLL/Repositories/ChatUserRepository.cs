@@ -18,7 +18,7 @@ public class ChatUserRepository : GenericRepositoryAsync<ChatUser>, IChatUserRep
     {
         List<ChatUser>? chatUsers = await
             db.ChatUsers
-            .Where(x=>x.ChatId==chatId)
+            .Where(x => x.ChatId == chatId)
             .Include(x => x.Chat)
             .Include(x => x.User)
             .ThenInclude(u => u.Profile)
@@ -26,4 +26,11 @@ public class ChatUserRepository : GenericRepositoryAsync<ChatUser>, IChatUserRep
             .ToListAsync();
         return chatUsers;
     }
+
+    public async Task<bool> IsExist(int chatId, int userId)
+    {
+        ChatUser chatUser = await db.ChatUsers.FirstOrDefaultAsync(x => x.UserId == userId && x.ChatId == chatId);
+        return chatUser != null;
+    }
+
 }

@@ -44,13 +44,17 @@ public class ChatsController : BaseController<Chat, IChatRepository>
 
     public async Task<IActionResult> AddUserToChat(int chatId, int userId)
     {
-        ChatUser chatUser = new ChatUser();
-        chatUser.ChatId = chatId;
-        chatUser.UserId = userId;
-        await uow.ChatUserRep.InsertAsync(chatUser);
-        Chat chat = await uow.ChatRep.GetByIdAsync(chatId);
-        chat.UserCount++;
-        await uow.ChatRep.UpdateAsync(chat);
+        bool isUserExistInChat = await uow.ChatUserRep.IsExist(chatId, userId);
+        if (!isUserExistInChat)
+        {
+            ChatUser chatUser = new ChatUser();
+            chatUser.ChatId = chatId;
+            chatUser.UserId = userId;
+            await uow.ChatUserRep.InsertAsync(chatUser);
+            Chat chat = await uow.ChatRep.GetByIdAsync(chatId);
+            chat.UserCount++;
+            await uow.ChatRep.UpdateAsync(chat);
+        }
         return RedirectToAction("Index");
 
     }
@@ -67,7 +71,7 @@ public class ChatsController : BaseController<Chat, IChatRepository>
         ViewBag.ChatIMG = chatUser.FirstOrDefault().Chat.ChatIMG;
         ViewBag.CreatedAt = chatUser.FirstOrDefault().Chat.CreatedAt;
         ViewBag.UserCount = chatUser.FirstOrDefault().Chat.UserCount;
-        return View("ChatInfo",chatProfileVM);
+        return View("ChatInfo", chatProfileVM);
     }
 
 
