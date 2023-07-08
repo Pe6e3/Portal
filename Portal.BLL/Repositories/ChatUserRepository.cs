@@ -14,5 +14,16 @@ public class ChatUserRepository : GenericRepositoryAsync<ChatUser>, IChatUserRep
         this.db = db;
     }
 
-
+    public async Task<List<ChatUser>> GetChatInfo(int chatId)
+    {
+        List<ChatUser>? chatUsers = await
+            db.ChatUsers
+            .Where(x=>x.ChatId==chatId)
+            .Include(x => x.Chat)
+            .Include(x => x.User)
+            .ThenInclude(u => u.Profile)
+            .Include(x => x.User.Role)
+            .ToListAsync();
+        return chatUsers;
+    }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portal.DAL.Data;
 
@@ -11,9 +12,11 @@ using Portal.DAL.Data;
 namespace Portal.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230708134257_ChatName")]
+    partial class ChatName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasIndex("PostsId");
 
-                    b.ToTable("CategoryPost", (string)null);
+                    b.ToTable("CategoryPost");
                 });
 
             modelBuilder.Entity("ChatUser", b =>
@@ -49,7 +52,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("ChatUser", (string)null);
+                    b.ToTable("ChatUser");
                 });
 
             modelBuilder.Entity("CommentPost", b =>
@@ -64,7 +67,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasIndex("PostsId");
 
-                    b.ToTable("CommentPost", (string)null);
+                    b.ToTable("CommentPost");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Category", b =>
@@ -89,7 +92,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -137,7 +140,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.ChatUser", b =>
@@ -158,7 +161,9 @@ namespace Portal.DAL.Migrations
 
                     b.HasIndex("ChatId");
 
-                    b.ToTable("ChatUsers", (string)null);
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChatUsers");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Comment", b =>
@@ -188,7 +193,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Menu", b =>
@@ -204,7 +209,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Menus", (string)null);
+                    b.ToTable("Menus");
 
                     b.HasData(
                         new
@@ -243,7 +248,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasIndex("MenuId");
 
-                    b.ToTable("MenuItems", (string)null);
+                    b.ToTable("MenuItems");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Message", b =>
@@ -274,7 +279,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.MyLogger", b =>
@@ -304,7 +309,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MyLoggers", (string)null);
+                    b.ToTable("MyLoggers");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Post", b =>
@@ -331,7 +336,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.PostCategory", b =>
@@ -354,7 +359,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostCategories", (string)null);
+                    b.ToTable("PostCategories");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.PostComment", b =>
@@ -377,7 +382,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostComments", (string)null);
+                    b.ToTable("PostComments");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.PostContent", b =>
@@ -414,7 +419,7 @@ namespace Portal.DAL.Migrations
                     b.HasIndex("PostId")
                         .IsUnique();
 
-                    b.ToTable("PostContents", (string)null);
+                    b.ToTable("PostContents");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Role", b =>
@@ -430,7 +435,7 @@ namespace Portal.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -463,9 +468,6 @@ namespace Portal.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ChatUserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -479,11 +481,9 @@ namespace Portal.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatUserId");
-
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.UserProfile", b =>
@@ -520,7 +520,7 @@ namespace Portal.DAL.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserProfiles", (string)null);
+                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("CategoryPost", b =>
@@ -576,7 +576,15 @@ namespace Portal.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Portal.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Chat");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Comment", b =>
@@ -672,10 +680,6 @@ namespace Portal.DAL.Migrations
 
             modelBuilder.Entity("Portal.DAL.Entities.User", b =>
                 {
-                    b.HasOne("Portal.DAL.Entities.ChatUser", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ChatUserId");
-
                     b.HasOne("Portal.DAL.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
@@ -694,11 +698,6 @@ namespace Portal.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Portal.DAL.Entities.ChatUser", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Post", b =>

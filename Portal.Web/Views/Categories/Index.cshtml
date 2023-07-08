@@ -1,4 +1,6 @@
-﻿@using Portal.DAL.Entities;
+﻿ @*Страница  Категории (например: "/category/economics")*@
+
+@using Portal.DAL.Entities;
 @model List<Portal.DAL.Entities.PostCategory>
 @{
     ViewBag.Title = Model?.FirstOrDefault()?.Category?.Name;

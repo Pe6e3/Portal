@@ -32,6 +32,18 @@ namespace Portal.Web
             CreateMap<UserProfile, ProfileViewModel>();
 
 
+      
+            CreateMap<ChatUser, ChatProfileViewModel>()
+                .ForMember(dest => dest.Firstname, opt => opt.MapFrom(src => src.User.Profile.Firstname))
+                .ForMember(dest => dest.Lastname, opt => opt.MapFrom(src => src.User.Profile.Lastname))
+                .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => src.User.Profile.RegistrationDate))
+                .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.User.Profile.Birthday))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Profile.Email))
+                .ForMember(dest => dest.AvatarImg, opt => opt.MapFrom(src => src.User.Profile.AvatarImg))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.User.Role))
+
+
+;
         }
     }
 }

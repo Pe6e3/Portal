@@ -23,23 +23,6 @@ namespace Portal.Web.Controllers
         public IActionResult Register() => View();
 
 
-        public async Task LogUserAction()
-        {
-            User? user = await uow.UserRep.GetUserByLogin(User.Identity.Name); // TODO: Брать данные из куки/из кеша, а не каждый раз из БД
-
-            var logger = new MyLogger();
-            logger.UserIP = HttpContext.Connection.RemoteIpAddress?.ToString();
-            logger.UserClick = HttpContext.Request.Path;
-            logger.UserId = user != null ? user.Id : await uow.UserRep.GetDefaultUserId();
-
-            logger.Date = DateTime.UtcNow;
-            await uow.MyLoggerRep.InsertAsync(logger);
-        }
-
-
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginViewModel lvm)

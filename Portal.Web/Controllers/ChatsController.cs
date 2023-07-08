@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
+using Portal.Web.ViewModels;
 
 namespace Portal.Web.Controllers;
 
@@ -24,6 +26,8 @@ public class ChatsController : BaseController<Chat, IChatRepository>
     public override async Task<IActionResult> Index()
     {
         IEnumerable<Chat> chats = await uow.ChatRep.GetAllChats();
+        IEnumerable<User> allUsers = await uow.UserRep.GetAllUsers();
+        ViewBag.AllUsers = allUsers;
         return View(chats);
     }
 
@@ -51,6 +55,20 @@ public class ChatsController : BaseController<Chat, IChatRepository>
 
     }
 
+    public async Task<IActionResult> ShowChatInfo(int chatId)
+    {
+        List<ChatUser> chatUser = await uow.ChatUserRep.GetChatInfo(chatId);
+        List<ChatProfileViewModel> chatProfileVM = new List<ChatProfileViewModel>();
+        mapper.Map(chatUser, chatProfileVM);
+
+
+
+        ViewBag.ChatName = chatUser.FirstOrDefault().Chat.ChatName;
+        ViewBag.ChatIMG = chatUser.FirstOrDefault().Chat.ChatIMG;
+        ViewBag.CreatedAt = chatUser.FirstOrDefault().Chat.CreatedAt;
+        ViewBag.UserCount = chatUser.FirstOrDefault().Chat.UserCount;
+        return View("ChatInfo",chatProfileVM);
+    }
 
 
 }

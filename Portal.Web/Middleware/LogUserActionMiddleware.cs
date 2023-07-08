@@ -14,7 +14,7 @@ public class LogUserActionMiddleware : IMiddleware
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
 
-        if (!context.Request.Path.Value.Contains("/img/") && !context.Request.Path.Value.Contains("/lib"))
+        if (!context.Request.Path.Value.Contains("/img/") && !context.Request.Path.Value.Contains("/lib") && !context.Request.Path.Value.Contains("favicon"))
         {
             User? user = await uow.UserRep.GetUserByLogin(context.User.Identity.Name);
             var logger = new MyLogger();
