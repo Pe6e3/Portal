@@ -1,45 +1,88 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.DAL.Data;
+using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
 
 namespace Portal.BLL.Repositories;
-public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : class
+public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : BaseEntity
 {
-    private readonly AppDbContext _db;
+    private readonly AppDbContext db;
     public GenericRepositoryAsync(AppDbContext db)
     {
-        _db = db;
+        this.db = db;
     }
-    public async Task<T> GetByIdAsync(int id) => await _db.Set<T>().FindAsync(id);
+    public async Task<T?> GetByIdAsync(int id) => await
+        db.Set<T>().FindAsync(id);
+    public async Task<T?> GetByIdAsync(int id, string include1) => await
+        db.Set<T>()
+        .Include(include1)
+        .FirstOrDefaultAsync(x => x.Id == id);
+    public async Task<T?> GetByIdAsync(int id, string include1, string include2) => await
+        db.Set<T>()
+        .Include(include1)
+        .Include(include2)
+        .FirstOrDefaultAsync(x => x.Id == id);
+    public async Task<T?> GetByIdAsync(int id, string include1, string include2, string include3) => await
+        db.Set<T>()
+        .Include(include1)
+        .Include(include2)
+        .Include(include3)
+        .FirstOrDefaultAsync(x => x.Id == id);
 
 
 
     public async Task<T> InsertAsync(T entity)
     {
-        await _db.Set<T>().AddAsync(entity);
-        await _db.SaveChangesAsync();
+        await db.Set<T>().AddAsync(entity);
+        await db.SaveChangesAsync();
         return entity;
     }
 
     public async Task UpdateAsync(T entity)
     {
-        _db.Entry(entity).State = EntityState.Modified;
-        await _db.SaveChangesAsync();
+        db.Entry(entity).State = EntityState.Modified;
+        await db.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(T entity)
     {
-        _db.Set<T>().Remove(entity);
-        await _db.SaveChangesAsync();
+        db.Set<T>().Remove(entity);
+        await db.SaveChangesAsync();
     }
 
 
-    public async Task<IReadOnlyList<T>> GetPagedAsync(int page, int size) => await _db.Set<T>()
+    public async Task<IReadOnlyList<T>> GetPagedAsync(int page, int size) => await db.Set<T>()
                         .Skip((page - 1) * size)
                         .Take(size)
                         .ToListAsync();
 
-    public async Task<IReadOnlyList<T>> ListAllAsync() => await _db.Set<T>().ToListAsync();
-    public async Task<IReadOnlyList<T>> ListAllWithIncludeAsync() => await _db.Set<T>().ToListAsync();
+    public async Task<IReadOnlyList<T>> ListAllAsync() => await
+        db.Set<T>()
+        .ToListAsync();
+    public async Task<IReadOnlyList<T>> ListAllAsync(int count, string include) => await
+        db.Set<T>()
+        .Include(include)
+        .Take(count)
+        .ToListAsync();
+
+    public async Task<IReadOnlyList<T>> ListAllAsync(int count, string include, string include2) => await
+        db.Set<T>()
+        .Include(include)
+        .Include(include2)
+        .Take(count)
+        .ToListAsync();
+
+    public async Task<IReadOnlyList<T>> ListAllAsync(string include) => await
+    db.Set<T>()
+    .Include(include)
+    .ToListAsync();
+
+    public async Task<IReadOnlyList<T>> ListAllAsync(string include, string include2) => await
+    db.Set<T>()
+    .Include(include)
+    .Include(include2)
+    .ToListAsync();
+
+    public async Task<IReadOnlyList<T>> ListAllWithIncludeAsync() => await db.Set<T>().ToListAsync();
 
 }

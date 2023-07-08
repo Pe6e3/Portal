@@ -12,9 +12,9 @@
                     <ul>
                         @foreach (MenuItem item in Model)
                         {
-                            if (item.Slug == ViewBag.CatSlug)
+                            if ("/" + item.Slug == ViewBag.CurrentSlug)
                             {
-                                <li style="background-color:#2d2d25; border-radius:3px;">   <a href="/categories/@item.Slug">@item.Name</a> </li>
+                                <li style="background-color:#2d2d25; border-radius:3px;">   <a href="@item.Slug">@item.Name</a> </li>
                             }
                             else
                             {
@@ -29,7 +29,7 @@
                 <div class="header__search">
 
                     <div class="header__search-icon">
-                        <div class="fa fa-search"></div>
+                        <div class="fa-solid fa-search"></div>
                     </div>
 
                     <div class="header__search-form">

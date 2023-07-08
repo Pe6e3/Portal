@@ -1,0 +1,52 @@
+﻿@using Portal.DAL.Entities;
+@model List<Portal.DAL.Entities.Post>
+
+@*5 последних постов внизу*@
+<body>
+
+    <section class="hero">
+        <div class="container">
+            <div class="row no-gutters">
+
+                @{
+                    int count = 1;
+                    @foreach (Post lastPost in Model)
+                    {
+                        {
+                            <div class="@(count++ < 3 ? "col-6" : "col-4")">
+                                <div class="pattern">
+                                    <div class="overlay" style="background-image: url('/img/uploads/Posts/@lastPost.Content.PostImage')">
+                                        <div class="item-title-content">
+                                            <h3><a href="/posts/@lastPost.Slug">@lastPost.Content.Title</a></h3>
+
+                                            <div class="item-social">
+
+                                                <a href="/posts/@lastPost.Slug#comments" class="item-comments">
+                                                    <i class="fa-solid fa-comments"></i>
+                                                    <span class="item-comments-count"> @lastPost.Comments.Count()</span>
+                                                </a>
+
+
+                                                <div class="likely likely-custom">
+
+                                                    <div class="fa-solid fa-share-alt" title="Поделиться в соц. сетях"></div>
+                                                    <div class="vkontakte" title="Поделиться в Контакте">Вконтакте</div>
+                                                    <div class="facebook" title="Поделиться в Facebook">Facebook</div>
+                                                    <div class="twitter" title="Поделиться в Twitter">Twitter</div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                    }
+                }
+
+            </div>
+        </div>
+    </section>
+</body>

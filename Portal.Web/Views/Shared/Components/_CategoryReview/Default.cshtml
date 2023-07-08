@@ -1,0 +1,49 @@
+﻿@using Portal.DAL.Entities;
+@model IEnumerable<PostCategory>
+
+<section class="@(ViewBag.Section)-section">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2><a href="/category/@Model?.FirstOrDefault()?.Category?.Slug">@Model?.FirstOrDefault()?.Category?.Name</a></h2>
+            </div>
+        </div>
+
+        <div class="row">
+            @foreach (PostCategory pc in @Model)
+            {
+
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="col-dark">
+                        <a href="posts/@pc.Post.Slug">
+                            <img src="img/uploads/Posts/@pc.Post.Content.PostImage"
+                                 alt="@pc.Post.Content.Title"
+                                 class="img-responsive img-width overlay"
+                                 title="@pc.Post.Content.Title"
+                                 style="height:180px; object-fit:cover;" />
+                        </a>
+                        <div class="col-item-meta">
+                            <div class="item-comments" title="Количество комментариев">
+                                <span class="date">@pc.Post.CreatedAt</span>
+                                <a href="posts/@pc.Post.Slug#comments">
+                                    <i class="fa-solid fa-comments"></i><p class="item-comments-count">@pc.Post.Comments.Count()</p>
+                                </a>
+                            </div>
+                        </div>
+                        <h4>
+                            <a href="#">
+                                @pc.Post.Content.Title
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+            }
+
+
+
+        </div>
+
+    </div>
+</section>

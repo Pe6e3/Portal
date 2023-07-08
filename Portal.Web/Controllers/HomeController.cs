@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
-using Portal.Web.Areas.Admin.Controllers;
 using Portal.Web.Models;
 using Portal.Web.ViewModels;
 using System.Diagnostics;
@@ -13,11 +13,13 @@ namespace Portal.Web.Controllers
     {
         protected new readonly ILogger<BaseController<Post, IPostRepository>> logger;
         private readonly UnitOfWork uow;
+        private readonly IMapper mapper;
 
-        public HomeController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository)
+        public HomeController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository, IMapper mapper)
             : base(uow, logger, repository)
         {
             this.logger = logger;
+            this.mapper = mapper;
             this.uow = uow;
         }
 
@@ -27,45 +29,22 @@ namespace Portal.Web.Controllers
             List<PostContent> allContent = (List<PostContent>)await uow.PostContentRep.ListAllAsync();
             List<PostViewModel> posts = new List<PostViewModel>();
 
-            foreach (Post post in allPosts)
-            {
-                PostContent? content = allContent.FirstOrDefault(x => x.PostId == post.Id);
-                posts.Add(new PostViewModel()
-                {
-                    Slug = post.Slug,
-                    CreatedAt = post.CreatedAt,
-                    Id = post.Id,
-                    Title = content.Title,
-                    PostBody = content.PostBody,
-                    PostImage = content.PostImage,
-                    PostVideo = content.PostVideo,
-                    CommentsClosed = content.CommentsClosed
-                });
-            }
+            mapper.Map(allPosts, posts);
+            mapper.Map(allContent, posts);
+
             return View(posts);
         }
 
-        public override async Task<IActionResult> Details(int id)
-        {
-            Post post = await uow.PostRep.GetByIdAsync(id);
-            PostContent content = await uow.PostContentRep.GetContentByPostIdAsync(id);
-            PostViewModel postViewModel = new PostViewModel();
 
-            postViewModel.Slug = post.Slug;
-            postViewModel.CreatedAt = post.CreatedAt;
-            postViewModel.Id = post.Id;
-            postViewModel.Title = content.Title;
-            postViewModel.PostBody = content.PostBody;
-            postViewModel.PostImage = content.PostImage;
-            postViewModel.PostVideo = content.PostVideo;
-            postViewModel.CommentsClosed = content.CommentsClosed;
-
-            return View(postViewModel);
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 
-
+        public async Task<IActionResult> AccessDenied()
+        {
+            string? login = User.Identity.Name;
+            User? user = await uow.UserRep.GetUserByLogin(login);
+            return View(user);
+        }
     }
 }

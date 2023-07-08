@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Portal.DAL.Entities.User>
+﻿@model IEnumerable<ProfileViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -11,32 +11,32 @@
 </p>
 <table class="table">
     <thead>
-        <tr>
+        <tr class="text-center">
             <th>@Html.DisplayNameFor(model => model.Login)</th>
-            <th>@Html.DisplayNameFor(model => model.Profile.Email)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
             <th>@Html.DisplayNameFor(model => model.Role)</th>
-            <th>@Html.DisplayNameFor(model => model.Profile.Firstname)</th>
-            <th>@Html.DisplayNameFor(model => model.Profile.Lastname)</th>
-            <th>@Html.DisplayNameFor(model => model.Profile.Birthday)</th>
-            <th>@Html.DisplayNameFor(model => model.Profile.RegistrationDate)</th>
-            <th>@Html.DisplayNameFor(model => model.Profile.AvatarImg)</th>
+            <th>@Html.DisplayNameFor(model => model.Firstname)</th>
+            <th>@Html.DisplayNameFor(model => model.Lastname)</th>
+            <th>@Html.DisplayNameFor(model => model.Birthday)</th>
+            <th>@Html.DisplayNameFor(model => model.RegistrationDate)</th>
+            <th>@Html.DisplayNameFor(model => model.AvatarImg)</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="centered">
+            <tr class="centered text-center">
                 <td>@Html.DisplayFor(modelItem => item.Login)</td>
-                <td>@Html.DisplayFor(modelItem => item.Profile.Email)</td>
-                <td>@Html.DisplayFor(modelItem => item.RoleId)</td>
-                <td>@Html.DisplayFor(modelItem => item.Profile.Firstname)</td>
-                <td>@Html.DisplayFor(modelItem => item.Profile.Lastname)</td>
-                <td>@Html.DisplayFor(modelItem => item.Profile.Birthday)</td>
-                <td>@Html.DisplayFor(modelItem => item.Profile.RegistrationDate)</td>
-                <td><img src="~/img/uploads/Profiles/@item.Profile.AvatarImg" style="max-height:150px; max-width:200px;" /></td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.Role.RoleName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Firstname)</td>
+                <td>@Html.DisplayFor(modelItem => item.Lastname)</td>
+                <td>@Html.DisplayFor(modelItem => item.Birthday)</td>
+                <td>@Html.DisplayFor(modelItem => item.RegistrationDate)</td>
+                <td><img src="~/img/uploads/Profiles/@item.AvatarImg" style="max-height:150px; max-width:200px; border-radius:5px;" /></td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="EditUser" asp-route-login="@item.Login">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>

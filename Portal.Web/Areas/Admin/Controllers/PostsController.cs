@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
+using Portal.Web.Controllers;
 using Portal.Web.ViewModels;
+using System.Data;
+using System.Text.Json;
 
 namespace Portal.Web.Areas.Admin.Controllers;
 
@@ -10,46 +15,36 @@ namespace Portal.Web.Areas.Admin.Controllers;
 public class PostsController : BaseController<Post, IPostRepository>
 {
 
-    protected new readonly ILogger<BaseController<Post, IPostRepository>> _logger;
-    private readonly UnitOfWork _uow;
-    private readonly IWebHostEnvironment _webHostEnvironment;
+    protected new readonly ILogger<BaseController<Post, IPostRepository>> logger;
+    private readonly UnitOfWork uow;
+    private readonly IWebHostEnvironment webHostEnvironment;
+    private readonly IMapper mapper;
 
-    public PostsController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository, IWebHostEnvironment webHostEnvironment)
+    public PostsController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository, IWebHostEnvironment webHostEnvironment, IMapper mapper)
         : base(uow, logger, repository)
     {
-        _logger = logger;
-        _uow = uow;
-        _webHostEnvironment = webHostEnvironment;
+        this.logger = logger;
+        this.uow = uow;
+        this.webHostEnvironment = webHostEnvironment;
+        this.mapper = mapper;
     }
 
     public override async Task<IActionResult> Index()
     {
-        List<Post> allPosts = (List<Post>)await _uow.PostRep.ListAllAsync();
-        List<PostContent> allContent = (List<PostContent>)await _uow.PostContentRep.ListAllAsync();
+        List<Post> allPosts = (List<Post>)await uow.PostRep.ListAllAsync();
+        List<PostContent> allContent = (List<PostContent>)await uow.PostContentRep.ListAllAsync();
         List<PostViewModel> posts = new List<PostViewModel>();
 
-        foreach (Post post in allPosts)
-        {
-            PostContent? content = allContent.FirstOrDefault(x => x.PostId == post.Id);
-            posts.Add(new PostViewModel()
-            {
-                Slug = post.Slug,
-                CreatedAt = post.CreatedAt,
-                Id = post.Id,
-                Title = content.Title,
-                PostBody = content.PostBody,
-                PostImage = content.PostImage,
-                PostVideo = content.PostVideo,
-                CommentsClosed = content.CommentsClosed
-            });
-        }
+        mapper.Map(allPosts, posts);
+        mapper.Map(allContent, posts);
+
         return View(posts);
     }
 
     [HttpGet]
     public override async Task<IActionResult> Create()
     {
-        ViewBag.AllCategories = await _uow.CategoryRep.ListAllAsync();
+        ViewBag.AllCategories = await uow.CategoryRep.ListAllAsync();
         return View();
     }
 
@@ -60,24 +55,24 @@ public class PostsController : BaseController<Post, IPostRepository>
         if (ModelState.IsValid)
         {
             Post post = new Post();
-            post.Slug = postViewModel.Slug;
-            post.CreatedAt = postViewModel.CreatedAt;
+            mapper.Map(postViewModel, post);
+            post.CreatedBy = await uow.UserRep.GetUserByLogin(User.Identity.Name);
+            post.CategoryId = postViewModel.CategoriesId[0];
 
-            await _uow.PostRep.InsertAsync(post);
+            await uow.PostRep.InsertAsync(post);
 
             PostContent content = new PostContent();
             content.PostId = post.Id;
-            content.Title = postViewModel.Title;
-            content.PostBody = postViewModel.PostBody;
+            mapper.Map(postViewModel, content);
             content.PostImage = await ProcessUploadImage(postViewModel, "img/uploads/Posts");
-            content.CommentsClosed = postViewModel.CommentsClosed;
 
             // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
             string postVideo = postViewModel.PostVideo ?? "";  // Исходная ссылка
             int lastSlashIndex = postVideo.LastIndexOf("/");   // позиция последнего слеша
             content.PostVideo = lastSlashIndex != -1 ? postVideo.Substring(lastSlashIndex + 1) : postVideo; //Удаляем все до последнего слеша
 
-            await _uow.PostContentRep.InsertAsync(content);
+            await uow.PostContentRep.InsertAsync(content);
+
 
             if (postViewModel.CategoriesId != null)
                 foreach (int catId in postViewModel.CategoriesId)
@@ -87,7 +82,7 @@ public class PostsController : BaseController<Post, IPostRepository>
                         PostId = post.Id,
                         CategoryId = catId
                     };
-                    await _uow.PostCategoryRep.InsertAsync(pc);
+                    await uow.PostCategoryRep.InsertAsync(pc);
                 }
 
 
@@ -101,8 +96,8 @@ public class PostsController : BaseController<Post, IPostRepository>
     [Area("Admin")]
     public async Task<IActionResult> UpdateGet(int id) /*postId*/
     {
-        Post post = await _uow.PostRep.GetByIdAsync(id);
-        PostContent content = await _uow.PostContentRep.GetContentByPostIdAsync(id);
+        Post post = await uow.PostRep.GetByIdAsync(id);
+        PostContent content = await uow.PostContentRep.GetContentByPostIdAsync(id);
         PostViewModel editPost = new PostViewModel();
 
         editPost.Slug = post.Slug;
@@ -115,8 +110,8 @@ public class PostsController : BaseController<Post, IPostRepository>
         editPost.CommentsClosed = content.CommentsClosed;
         /*if(content.PostImage!=null) */
         ViewBag.oldImage = content.PostImage;
-        ViewBag.AllCategories = await _uow.CategoryRep.ListAllAsync();
-        ViewBag.PostCategories = await _uow.PostCategoryRep.GetCategoryPosts(id);/*postId*/
+        ViewBag.AllCategories = await uow.CategoryRep.ListAllAsync();
+        ViewBag.PostCategories = await uow.PostCategoryRep.GetCategoryPosts(postId: id);
         return View("Update", editPost);
     }
 
@@ -127,14 +122,14 @@ public class PostsController : BaseController<Post, IPostRepository>
     {
         if (ModelState.IsValid)
         {
-            Post post = await _uow.PostRep.GetByIdAsync(postViewModel.Id);
+            Post post = await uow.PostRep.GetByIdAsync(postViewModel.Id);
 
             post.Slug = postViewModel.Slug;
 
-            await _uow.PostRep.UpdateAsync(post);
+            await uow.PostRep.UpdateAsync(post);
 
             // Получим Пост контент
-            PostContent postContent = await _uow.PostContentRep.GetContentByPostIdAsync(postViewModel.Id);
+            PostContent postContent = await uow.PostContentRep.GetContentByPostIdAsync(postViewModel.Id);
 
             // Заполняем Пост контент из формы
             postContent.Title = postViewModel.Title;
@@ -153,9 +148,9 @@ public class PostsController : BaseController<Post, IPostRepository>
 
                 if (oldImage != null) ProcessDeleteImage(oldImage, "\\img\\uploads\\Posts");
             }
-            await _uow.PostContentRep.UpdateAsync(postContent);
+            await uow.PostContentRep.UpdateAsync(postContent);
 
-            await _uow.PostCategoryRep.DeletePCbyPostIdAsync(post.Id);
+            await uow.PostCategoryRep.DeletePCbyPostIdAsync(post.Id);
             if (postViewModel.CategoriesId != null)
                 foreach (int catId in postViewModel.CategoriesId)
                 {
@@ -164,7 +159,7 @@ public class PostsController : BaseController<Post, IPostRepository>
                         PostId = post.Id,
                         CategoryId = catId
                     };
-                    await _uow.PostCategoryRep.InsertAsync(pc);
+                    await uow.PostCategoryRep.InsertAsync(pc);
                 }
 
             return RedirectToAction(nameof(Index));
@@ -176,20 +171,16 @@ public class PostsController : BaseController<Post, IPostRepository>
 
     public override async Task<IActionResult> Details(int id)
     {
-        Post post = await _uow.PostRep.GetByIdAsync(id);
-        PostContent content = await _uow.PostContentRep.GetContentByPostIdAsync(id);
-        PostViewModel postViewModel = new PostViewModel();
+        Post? post = await uow.PostRep.GetByIdAsync(id, "Content", "CreatedBy");
+        PostContent? postContent = post.Content;
+        PostViewModel postVM = new PostViewModel();
 
-        postViewModel.Slug = post.Slug;
-        postViewModel.CreatedAt = post.CreatedAt;
-        postViewModel.Id = post.Id;
-        postViewModel.Title = content.Title;
-        postViewModel.PostBody = content.PostBody;
-        postViewModel.PostImage = content.PostImage;
-        postViewModel.PostVideo = content.PostVideo;
-        postViewModel.CommentsClosed = content.CommentsClosed;
+        mapper.Map(post, postVM);        // Добавление в PostViewModel данных из класса Post 
+        mapper.Map(postContent, postVM); // Добавление в PostViewModel данных из класса PostContent 
 
-        return View(postViewModel);
+
+        postVM.CreatedBy = await uow.UserRep.GetUserByLogin(post.CreatedBy.Login);
+        return View(postVM);
     }
 
     private async Task<string?> ProcessUploadImage(PostViewModel postViewModel, string folder)
@@ -198,7 +189,7 @@ public class PostsController : BaseController<Post, IPostRepository>
 
         if (postViewModel.ImageFile != null)
         {
-            string wwwRootPath = _webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
+            string wwwRootPath = webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
             string fileName = Path.GetFileNameWithoutExtension(postViewModel.ImageFile.FileName); //  Имя файла без расширения
             string fileExtansion = Path.GetExtension(postViewModel.ImageFile.FileName);// Расширение с точкой (.jpg)
             uniqueImageName = fileName + ". " + DateTime.Now.ToString("dd.MM.yyyy HH-mm-ss.ff") + fileExtansion;// задаем уникальное имя чтобы случайно не совпало с чьим-то другим            
@@ -213,13 +204,78 @@ public class PostsController : BaseController<Post, IPostRepository>
 
     private void ProcessDeleteImage(string oldImage, string folder)
     {
-        string wwwRootPath = _webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
-        string path = Path.Combine(wwwRootPath+ folder+ oldImage);
+        string wwwRootPath = webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
+        string path = Path.Combine(wwwRootPath + folder + oldImage);
         if (System.IO.File.Exists(path))
             System.IO.File.Delete(path);
     }
 
+    public async Task<IActionResult> GenerateRandomPosts(int count = 1)
+    {
+        for (int i = 0; i < count; i++)
+        {
 
+            Post post = new Post();
+            PostContent content = new PostContent();
+            PostCategory postCat = new PostCategory();
+            Category randomCat = await uow.CategoryRep.RandomCatId();
+            Random random = new Random();
+
+            post.Slug = await GetRandomWords(1);
+            post.CreatedAt = DateTime.Now;
+            post.CreatedBy = await uow.UserRep.GetUserByLogin(User.Identity.Name);
+            post.CategoryId = randomCat.Id;
+            await uow.PostRep.InsertAsync(post);
+
+            postCat.PostId = post.Id;
+            postCat.CategoryId = randomCat.Id;
+
+            content.Title = post.Id + ". (" + randomCat.Name + ") " + await GetRandomWords(random.Next(2, 6));
+            content.PostBody = await GetRandomWords(random.Next(150, 350));
+            content.PostImage = random.Next(1, 32).ToString() + ".jpg"; // надо добавить в папку uploads изображения с названием 1.jpg, 2.jpg  и так далее попорядку. Количество поставить в random.Next (у меня 32)
+            content.PostId = post.Id;
+
+            await uow.PostCategoryRep.InsertAsync(postCat);
+            await uow.PostContentRep.InsertAsync(content);
+
+        }
+        return RedirectToAction("Index");
+    }
+
+    static async Task<string> GetRandomWords(int count)
+    {
+        string[] words = new string[count];
+        string space = count > 1 ? " " : "";
+        using (HttpClient client = new HttpClient())
+        {
+            string apiUrl = $"https://random-word-api.herokuapp.com/word?number={count}"; // получаем по API случайное английское слово
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                words = JsonSerializer.Deserialize<string[]>(jsonResponse); // добавляем слово из Json ответа в строку
+            }
+            else
+                throw new Exception("Failed to retrieve random words.");
+        }
+
+        Random random = new Random();
+        for (int i = 1; i < words.Length; i++)
+        {
+            if (random.NextDouble() <= 0.05 && i > 6) // с вероятностью 5% и не раньше 7го слова делаем новый абзац и заглавную букву
+            {
+                words[i - 1] += ".<br />";
+                words[i] = char.ToUpper(words[i][0]) + words[i].Substring(1);
+            }
+            else if (random.NextDouble() <= 0.1) // с вероятностью 10% ставим запятую, если перед этим не было нового абзаца
+                words[i - 1] += ",";
+            else if (random.NextDouble() <= 0.03) // с вероятностью 3% ставим тире, если перед этим не было нового абзаца
+                words[i - 1] += " - ";
+        }
+
+        words[0] = char.ToUpper(words[0][0]) + words[0].Substring(1); // Первая буква - всегда заглавная
+        return string.Join(space, words);
+    }
 
 }
 

@@ -1,16 +1,15 @@
 ﻿@model MenuCatPostViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Новый пункт меню №" + @Model.MenuId;
 }
 
-<h1>Create</h1>
+<h1>Новый пункт меню №@Model.MenuId</h1>
 
-<h4>MenuItem</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreatePost">
+        <form asp-action="CreateHttpPost">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -40,7 +39,9 @@
             <hr />
 
             <div id="postBlock" style="display: none;">
-                @Html.DropDownListFor(model => model.Posts, new SelectList(Model.Posts, "Slug", "Content.Title"), "Выберите пост", new { @class = "form-control dropdown-content", id = "postsDropdown" })
+                @Html.DropDownListFor(model => model.Posts,
+                new SelectList(Model?.Posts?.Select(p => new { Slug = p.Slug, Title = p.Content?.Title }), "Slug", "Title"),
+                "Выберите пост", new { @class = "form-control dropdown-content", id = "postsDropdown" })
             </div>
 
             <div id="categoryBlock" style="display: none;">
@@ -97,7 +98,7 @@
 
             <hr />
 
-            
+
 
 
 

@@ -2,6 +2,7 @@
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
+using Portal.Web.Controllers;
 using Portal.Web.ViewModels;
 
 namespace Portal.Web.Areas.Admin.Controllers;
@@ -15,10 +16,20 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
         this.uow = uow;
     }
 
+
     public async Task<IActionResult> IndexMenuItem(int id)
     {
         ViewBag.MenuID = id;
         return View("Index", await uow.MenuItemRep.GetByMenuIdAsync(id));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DeleteMenuItem(int id, int menuId)
+    {
+        MenuItem mItem = await uow.MenuItemRep.GetByIdAsync(id);
+        if (mItem != null)
+            await uow.MenuItemRep.DeleteAsync(mItem);
+        return RedirectToAction(nameof(IndexMenuItem), new { id = menuId });
     }
 
     [HttpGet]
@@ -33,7 +44,7 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreatePost(MenuCatPostViewModel mcpwv)
+    public async Task<IActionResult> CreateHttpPost(MenuCatPostViewModel mcpwv)
     {
         if (ModelState.IsValid)
         {

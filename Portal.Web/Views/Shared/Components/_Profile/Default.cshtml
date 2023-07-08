@@ -8,7 +8,7 @@
     <div class="container" style="max-width: 250px;">
         <div class="row">
             <div class="col d-flex align-items-center">
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="height:65px; border-radius:5px;">
+                <nav class="navbar navbar-expand-lg @(ViewBag.Light == "light" ? "" : "navbar-dark bg-dark")" style="height:65px; border-radius:5px;">
                     <div class="container-fluid">
 
                         <button class="navbar-toggler"
@@ -27,15 +27,16 @@
 
                                     <a class="nav-link" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <div class="d-flex align-items-center">
-                                            <img src="/img/uploads/Profiles/@Model?.Profile?.AvatarImg" alt="@Model?.Profile?.Firstname @Model?.Profile?.Lastname" style="height: 55px; border-radius: 5px;" />
+                                            <img src="/img/uploads/Profiles/@Model?.Profile?.AvatarImg" alt="@Model?.Login" style="height: 55px; border-radius: 5px;" />
                                             <span class="navbar-toggler-icon"></span>
                                         </div>
                                     </a>
 
                                     <ul class="dropdown-menu dropdown-menu-dark text-center" aria-labelledby="navbarDarkDropdownMenuLink" style="border-radius: 4px;">
-                                        <li><p class="m-0 ml-2">@Model.Profile.Firstname @Model.Profile.Lastname</p></li>
-                                        <li><a asp-action="Profile" asp-controller="Account" class="btn btn-outline-primary">Перейти в профиль</a></li>
-                                        <li><a asp-action="Logout" asp-controller="Account" class="btn btn-outline-secondary">Выйти</a></li>
+                                        <li><p class="m-0 ml-2"><strong>@Model.Profile.Firstname @Model.Profile.Lastname </strong> </p></li>
+                                        <li><p class="m-0 ml-2">Уровень прав: @Model.Role.RoleName </p></li>
+                                        <li><a asp-area="" asp-action="Profile" asp-controller="Account" class="btn btn-outline-primary">Перейти в профиль</a></li>
+                                        <li><a asp-area="" asp-action="Logout" asp-controller="Account" class="btn btn-outline-secondary">Выйти</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -51,7 +52,7 @@
 }
 else
 {
-    <a asp-action="Login" asp-controller="Account" class="btn btn-outline-warning m-2">Войти</a>
-    <a asp-action="Register" asp-controller="Account" class="btn btn-outline-success m-2">Зарегистрироваться</a>
+    <a asp-area=""  asp-action="Login" asp-controller="Account" class="btn btn-outline-warning m-2">Войти</a>
+    <a asp-area="" asp-action="Register" asp-controller="Account" class="btn btn-outline-success m-2">Зарегистрироваться</a>
 }
 

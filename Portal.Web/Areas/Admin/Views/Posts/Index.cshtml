@@ -2,15 +2,23 @@
 
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Посты";
 }
-<h1>Index</h1>
+<h1>Посты</h1>
 
-<p>
-    <a asp-action="Create">Создать новый</a>
-</p>
+@if (User.Identity.IsAuthenticated)
+{
+
+    <div class="col-2 text-left mb-2">
+        <a asp-action="Create" class="btn btn-success mb-2">Новый пост</a>
+        <a asp-area="Admin" asp-controller="Posts" asp-action="GenerateRandomPosts" asp-route-count="1" class="btn btn-danger mt-2">+1 случайный пост</a>
+        <a asp-area="Admin" asp-controller="Posts" asp-action="GenerateRandomPosts" asp-route-count="5" class="btn btn-danger mt-2">+5 случайных постов</a>
+        <a asp-area="Admin" asp-controller="Posts" asp-action="GenerateRandomPosts" asp-route-count="20" class="btn btn-danger mt-2">+20 случайных постов</a>
+    </div>
+}
+
 <table class="table">
-    <thead>
+    <thead class="text-center">
         <tr>
             <th>@Html.DisplayNameFor(model => model.Id)</th>
             <th>@Html.DisplayNameFor(model => model.Slug)</th>
@@ -20,25 +28,25 @@
             <th>@Html.DisplayNameFor(model => model.CommentsNum)</th>
             <th>@Html.DisplayNameFor(model => model.PostImage)</th>
             <th style="width:300px;">@Html.DisplayNameFor(model => model.PostVideo)</th>
-            <th>Изменить</th>
-            <th>Удалить</th>
+            <th> </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="text-center">
                 <td>@item.Id</td>
                 <td>@item.Slug</td>
-                <td>@item.CreatedAt</td>
+                <td>@item.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss")</td>
                 <td>@item.Title</td>
-                <td>@item.PostBody</td>
+                <td class="limited-lines line_6">@item.PostBody</td>
+
                 <td>@item.CommentsNum</td>
-                 <td>
-                 <a asp-action="Details" asp-route-id="@item.Id">
-                <img src="/img/uploads/Posts/@item.PostImage" style="max-height:150px; width:auto; border-radius:5px;" alt="" />
-                   </a>
-                 </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <img src="/img/uploads/Posts/@item.PostImage" style="max-height:150px; width:auto; border-radius:5px;" alt="" />
+                    </a>
+                </td>
 
                 <td>
                     <div style="position: relative; padding-bottom: 56.25%; height: 0;">
@@ -46,8 +54,11 @@
                     </div>
                 </td>
 
-                <td><a asp-action="UpdateGet" asp-route-id="@item.Id"><i class="fa-solid fa-pencil fa-fade" style="font-size:48px; color: #917cf8;"></i></a></td>
-                <td><a asp-action="Delete" asp-route-id="@item.Id"> <i class="fa fa-remove" style="font-size:48px;color:red"></i></a></td>
+                <td>
+                    <a asp-action="UpdateGet" asp-route-id="@item.Id"><i class="fa-solid fa-pencil" style="font-size: 38px; color: #917cf8;"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-solid fa-trash" style="font-size: 38px; color: red;"></i></a>
+                </td>
+
 
             </tr>
         }
@@ -55,3 +66,4 @@
 </table>
 
 
+ 

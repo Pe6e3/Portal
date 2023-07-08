@@ -22,13 +22,31 @@ namespace Portal.Web.Controllers
 
         public IActionResult Register() => View();
 
+
+        public async Task LogUserAction()
+        {
+            User? user = await uow.UserRep.GetUserByLogin(User.Identity.Name); // TODO: Брать данные из куки/из кеша, а не каждый раз из БД
+
+            var logger = new MyLogger();
+            logger.UserIP = HttpContext.Connection.RemoteIpAddress?.ToString();
+            logger.UserClick = HttpContext.Request.Path;
+            logger.UserId = user != null ? user.Id : await uow.UserRep.GetDefaultUserId();
+
+            logger.Date = DateTime.UtcNow;
+            await uow.MyLoggerRep.InsertAsync(logger);
+        }
+
+
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginViewModel lvm)
         {
             if (ModelState.IsValid)
             {
-                if (!await uow.UserRep.UserCheck(lvm.Login, lvm.Email)) // TODO: проверяем, нет ли в базе пользователя с таким же логином или почтой.  (Как пользователь узнает, если уже есть?)
+                if (!await uow.UserRep.UserCheck(lvm.Login)) // TODO: проверяем, нет ли в базе пользователя с таким же логином.  (Как пользователь узнает, если уже есть?)
                 {
                     if (lvm.Password == lvm.PasswordConfirm) // TODO: нужно вернуться обратно в форму регистрации и сообщить, что пароли не совпадают
                     {
@@ -153,11 +171,12 @@ namespace Portal.Web.Controllers
             profileVM.Login = login;
             profileVM.RegistrationDate = user.Profile.RegistrationDate;
             profileVM.AvatarImg = user.Profile.AvatarImg;
+            profileVM.Role = user.Role;
 
             return View(profileVM);
         }
 
-        public async Task<IActionResult> SaveProfile(ProfileViewModel profileVM)
+        public async Task<IActionResult> SaveProfile(ProfileViewModel profileVM, bool fromAdmin = false)
         {
             User user = await uow.UserRep.GetUserByLogin(profileVM.Login);
             UserProfile profile = await uow.UserProfileRep.GetByIdAsync(user.Profile.Id);
@@ -167,6 +186,16 @@ namespace Portal.Web.Controllers
             if (profile.Lastname != profileVM.Lastname) profile.Lastname = profileVM.Lastname;
             if (profile.Birthday != profileVM.Birthday) profile.Birthday = profileVM.Birthday;
             if (profile.Email != profileVM.Email) profile.Email = profileVM.Email;
+
+
+
+            if (fromAdmin /* && User.IsInRole("1") */)
+            {
+                if (user.Role.Id != profileVM.RoleId) user.RoleId = profileVM.RoleId;
+                await uow.UserProfileRep.UpdateAsync(profile);
+                return RedirectToAction("Index", "Users", new { area = "Admin", login = user.Login });
+            }
+
             await uow.UserProfileRep.UpdateAsync(profile);
             return RedirectToAction("Profile", "Account", new { login = user.Login });
         }

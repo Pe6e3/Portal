@@ -1,93 +1,82 @@
-﻿ <!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+﻿<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">Portal Admin</div>
+    <a class="sidebar-brand d-flex align-items-center justify-content-center flex-column my-1" asp-area="Admin" asp-controller="" asp-action="">
+        <span style="color: cyan; font-size: 16px;">Админка</span>
+        <span class="sidebar-brand-text" style="font-size: 10px;">Главная</span>
     </a>
 
-    <!-- Divider -->
+
     <hr class="sidebar-divider my-0">
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Главная</span>
-        </a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Контент
-    </div>
+    <a class="sidebar-brand d-flex align-items-center justify-content-center flex-column my-1" asp-area="" asp-controller="Home" asp-action="Index">
+        <span style="color:cyan; font-size:16px;">Сайт</span>
+        <span class="sidebar-brand-text" style="font-size:10px;">Главная </span>
+    </a>
 
 
+
+    <hr class="sidebar-divider my-2">
+
+    <div class="sidebar-heading text-center" style="font-size: 12px;"> Контент </div>
 
 
 
     <li class="nav-item">
         <a class="nav-link" asp-controller="Categories" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fa-solid fa-gear"></i>
             <span>Категории</span>
         </a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" asp-controller="Comments" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Комментарии</span>
-        </a>
-    </li>
 
-    <li class="nav-item">
-        <a class="nav-link" asp-controller="MenuItems" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Пункты Меню</span>
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" asp-controller="Menus" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Меню</span>
-        </a>
-    </li>
 
     <li class="nav-item">
         <a class="nav-link" asp-controller="Posts" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fa-solid fa-gear"></i>
             <span>Посты</span>
         </a>
     </li>
 
 
     <li class="nav-item">
-        <a class="nav-link" asp-controller="PostContents" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>ПостКонтент</span>
+        <a class="nav-link" asp-controller="Comments" asp-action="Index">
+            <i class="fa-solid fa-gear"></i>
+            <span>Комментарии</span>
         </a>
     </li>
 
+
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Menus" asp-action="Index">
+            <i class="fa-solid fa-gear"></i>
+            <span>Меню</span>
+        </a>
+    </li>
+
+
+
+
+    <hr class="sidebar-divider my-2">
+    <div class="sidebar-heading text-center" style="font-size: 12px;"> Доступ </div>
+
     <li class="nav-item">
         <a class="nav-link" asp-controller="Roles" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fa-solid fa-gear"></i>
             <span>Роли</span>
         </a>
     </li>
 
-
-
     <li class="nav-item">
         <a class="nav-link" asp-controller="Users" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fa-solid fa-gear"></i>
             <span>Пользователи</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="MyLogger" asp-action="ShowUserLog">
+            <i class="fa-solid fa-gear"></i>
+            <span>Логи пользователей</span>
         </a>
     </li>
 
@@ -95,7 +84,6 @@
 
 
 
-    <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Sidebar Toggler (Sidebar) -->

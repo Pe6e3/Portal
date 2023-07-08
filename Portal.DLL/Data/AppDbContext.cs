@@ -21,6 +21,7 @@ public class AppDbContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserProfile> UserProfiles { get; set; }
+    public DbSet<MyLogger> MyLoggers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
