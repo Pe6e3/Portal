@@ -23,6 +23,7 @@ public class AppDbContext : DbContext
     public DbSet<UserProfile> UserProfiles { get; set; }
     public DbSet<MyLogger> MyLoggers { get; set; }
     public DbSet<Chat> Chats { get; set; }
+    public DbSet<ChatUser> ChatUsers { get; set; }
     public DbSet<Message> Messages { get; set; }
         
 

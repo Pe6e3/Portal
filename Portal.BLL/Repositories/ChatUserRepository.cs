@@ -5,11 +5,11 @@ using Portal.DAL.Interfaces;
 
 namespace Portal.BLL.Repositories;
 
-public class ChatRepository : GenericRepositoryAsync<Chat>, IChatRepository
+public class ChatUserRepository : GenericRepositoryAsync<ChatUser>, IChatUserRepository
 {
     private readonly AppDbContext db;
 
-    public ChatRepository(AppDbContext db) : base(db)
+    public ChatUserRepository(AppDbContext db) : base(db)
     {
         this.db = db;
     }
