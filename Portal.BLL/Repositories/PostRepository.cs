@@ -43,11 +43,23 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
         .Include(p => p.Content)
         .ToListAsync();
 
+    public async Task<IEnumerable<Post>> ListLastPostsForColumn(int count)
+    {
+        List<Post> posts = await
+            db.Posts
+            .Include(p => p.Content)
+            .OrderByDescending(x => x.Id)
+            .Take(count)
+            .ToListAsync();
+        return posts;
+    }
+
     public async Task<List<Post>> ListPostsWithComments(int count)
     {
         List<Post> posts = await db.Posts
             .Include(x => x.Content)
             .Take(count)
+            .OrderByDescending(x => x.Id)
             .ToListAsync();
         List<Comment> comments = new List<Comment>();
         foreach (Post post in posts)
