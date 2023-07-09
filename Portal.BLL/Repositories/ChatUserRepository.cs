@@ -14,6 +14,11 @@ public class ChatUserRepository : GenericRepositoryAsync<ChatUser>, IChatUserRep
         this.db = db;
     }
 
+    public async Task<ChatUser> FindChatUserByUserId(int userId)
+    {
+        return await db.ChatUsers.FirstOrDefaultAsync(x => x.UserId == userId);
+    }
+
     public async Task<List<ChatUser>> GetChatInfo(int chatId)
     {
         List<ChatUser>? chatUsers = await
@@ -35,7 +40,7 @@ public class ChatUserRepository : GenericRepositoryAsync<ChatUser>, IChatUserRep
 
     public async Task<List<ChatUser>> ListChatUsersofChat(int chatId)
     {
-        List<ChatUser> chatUsers = await db.ChatUsers.Where(x=>x.ChatId == chatId).ToListAsync();
+        List<ChatUser> chatUsers = await db.ChatUsers.Where(x => x.ChatId == chatId).ToListAsync();
         return chatUsers;
     }
 }

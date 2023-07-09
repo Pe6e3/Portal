@@ -25,6 +25,7 @@
                     <th>Почта</th>
                     <th>Зарегистрирован</th>
                     <th>Аватар</th>
+                    <th>Удалить</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,6 +38,7 @@
                         <td>@chatProfileVM.Email</td>
                         <td>@chatProfileVM.RegistrationDate</td>
                         <td><img src="/img/uploads/Profiles/@chatProfileVM.AvatarImg" style="height: 100px; border-radius:5px;" /></td>
+                        <td> <a asp-action="DeleteUserFromChat" asp-route-chatId="@ViewBag.ChatId" asp-route-userId="@chatProfileVM.UserId"><i class="fa-solid fa-trash"></i> </a> </td>
                     </tr>
                 }
             </tbody>

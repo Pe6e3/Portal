@@ -56,6 +56,17 @@ public class ChatsController : BaseController<Chat, IChatRepository>
             await uow.ChatRep.UpdateAsync(chat);
         }
         return RedirectToAction("ShowChatInfo", new { chatId = chatId });
+    }
+
+    public async Task<IActionResult> DeleteUserFromChat(int chatId, int userId)
+    {
+        bool isUserExistInChat = await uow.ChatUserRep.IsExist(chatId, userId);
+        if (isUserExistInChat)
+        {
+            ChatUser chatUser = await uow.ChatUserRep.FindChatUserByUserId(userId);
+            await uow.ChatUserRep.DeleteAsync(chatUser);
+        }
+        return RedirectToAction("ShowChatInfo", new { chatId = chatId });
 
     }
 

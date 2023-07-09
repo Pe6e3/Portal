@@ -34,6 +34,7 @@ namespace Portal.Web
 
       
             CreateMap<ChatUser, ChatProfileViewModel>()
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
                 .ForMember(dest => dest.Firstname, opt => opt.MapFrom(src => src.User.Profile.Firstname))
                 .ForMember(dest => dest.Lastname, opt => opt.MapFrom(src => src.User.Profile.Lastname))
                 .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => src.User.Profile.RegistrationDate))

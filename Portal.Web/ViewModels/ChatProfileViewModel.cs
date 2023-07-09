@@ -5,6 +5,7 @@ namespace Portal.Web.ViewModels;
 
 public class ChatProfileViewModel : BaseEntity
 {
+    public int UserId { get; set; }
     [Display(Name = "Имя")] public string? Firstname { get; set; }
     [Display(Name = "Фамилия")] public string? Lastname { get; set; }
     [Display(Name = "Дата регистрации")] public DateTime? RegistrationDate { get; set; }
