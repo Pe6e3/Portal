@@ -55,24 +55,42 @@ public class ChatsController : BaseController<Chat, IChatRepository>
             chat.UserCount++;
             await uow.ChatRep.UpdateAsync(chat);
         }
-        return RedirectToAction("Index");
+        return RedirectToAction("ShowChatInfo", new { chatId = chatId });
 
     }
 
     public async Task<IActionResult> ShowChatInfo(int chatId)
     {
-        List<ChatUser> chatUser = await uow.ChatUserRep.GetChatInfo(chatId);
+        List<ChatUser> chatUsers = await uow.ChatUserRep.GetChatInfo(chatId);
         List<ChatProfileViewModel> chatProfileVM = new List<ChatProfileViewModel>();
-        mapper.Map(chatUser, chatProfileVM);
+        mapper.Map(chatUsers, chatProfileVM);
 
 
 
-        ViewBag.ChatName = chatUser.FirstOrDefault().Chat.ChatName;
-        ViewBag.ChatIMG = chatUser.FirstOrDefault().Chat.ChatIMG;
-        ViewBag.CreatedAt = chatUser.FirstOrDefault().Chat.CreatedAt;
-        ViewBag.UserCount = chatUser.FirstOrDefault().Chat.UserCount;
+        ViewBag.ChatId = chatUsers.FirstOrDefault().ChatId;
+        ViewBag.ChatName = chatUsers.FirstOrDefault().Chat.ChatName;
+        ViewBag.ChatIMG = chatUsers.FirstOrDefault().Chat.ChatIMG;
+        ViewBag.CreatedAt = chatUsers.FirstOrDefault().Chat.CreatedAt;
+        ViewBag.UserCount = chatUsers.FirstOrDefault().Chat.UserCount;
+        ViewBag.UserDroplist = (await uow.UserRep.ListAllAsync("Profile")).Where(user => !chatUsers.Any(chatUser => chatUser.User.Id == user.Id)).ToList(); /*Список пользователей, которых нет в данном чате*/
         return View("ChatInfo", chatProfileVM);
     }
+
+    public async Task<IActionResult> DeleteChat(int chatId)
+    {
+        Chat chat = await uow.ChatRep.GetByIdAsync(chatId);
+        List<ChatUser> chatUsers = await uow.ChatUserRep.ListChatUsersofChat(chatId);
+        foreach (var chatUser in chatUsers)
+            await uow.ChatUserRep.DeleteAsync(chatUser);
+        await uow.ChatRep.DeleteAsync(chat);
+        return RedirectToAction("Index");
+    }
+
+    public async Task<IActionResult> ShowAllChatUser() /*метод для тестирования, потом удалить*/
+    {
+        return View("ChatUsers", await uow.ChatUserRep.ListAllAsync());
+    }
+
 
 
 }

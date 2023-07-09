@@ -3,11 +3,9 @@
 @using Portal.DAL.Entities;
 @model IEnumerable<Chat>
 
+<a asp-action="ShowAllChatUser">Все связи чат-пользователь</a>   @* /* для тестирования, потом удалить*/*@
 
 <div class="container flex-column my-4 text-center" style="width: 450px;">
-
-
-
 
     <div class="row mb-5">
 
@@ -59,6 +57,7 @@
                     <th>Дата создания</th>
                     <th>Количество участников</th>
                     <th>Изображение</th>
+                    <th>Удалить</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,6 +68,7 @@
                         <td>@chat.CreatedAt</td>
                         <td>@chat.UserCount</td>
                         <td><img src="/img/uploads/Chats/@chat.ChatIMG" style="height: 100px; border-radius:5px;" /></td>
+                        <td> <a asp-action="DeleteChat" asp-route-chatId="@chat.Id"><i class="fa-solid fa-trash"></i> </a> </td>
                     </tr>
                 }
             </tbody>

@@ -33,4 +33,9 @@ public class ChatUserRepository : GenericRepositoryAsync<ChatUser>, IChatUserRep
         return chatUser != null;
     }
 
+    public async Task<List<ChatUser>> ListChatUsersofChat(int chatId)
+    {
+        List<ChatUser> chatUsers = await db.ChatUsers.Where(x=>x.ChatId == chatId).ToListAsync();
+        return chatUsers;
+    }
 }

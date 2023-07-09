@@ -3,7 +3,7 @@
 
 <div class="container text-center my-5">
 
-<h1>Имя чата: @ViewBag.ChatName</h1>
+    <h1>Имя чата: @ViewBag.ChatName</h1>
     <p> Количество участников: @ViewBag.UserCount</p>
     <p> Создан: @ViewBag.CreatedAt</p>
     <img src="/img/uploads/Chats/@ViewBag.ChatIMG" style="height: 200px; border-radius:5px;" />
@@ -42,5 +42,44 @@
             </tbody>
         </table>
 
+
+
     </div>
 </div>
+
+
+<div class="container flex-column my-4 text-center" style="width: 450px;">
+
+    <div class="row mb-5">
+
+        <form method="post" asp-action="AddUserToChat" asp-controller="Chats" class="d-flex justify-content-center">
+            <div class="col-7">
+                <input id="chatId" name="chatId" type="hidden" value="@ViewBag.ChatId" />
+
+
+                <select id="userId" name="userId" required style="display: block; margin-bottom: 10px;font-size: 16px" class="form-select">
+                    <option value="">Выберите пользователя</option>
+                    @foreach (User user in @ViewBag.UserDroplist)
+                    {
+                        <option value="@user.Id">@user.Profile.Firstname @user.Profile.Lastname</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-5" style="">
+                <button class="btn btn-outline-danger" type="submit" style="font-size: 16px;height:90%">Добавить пользователя</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <form method="post" asp-action="AddNewChat" asp-controller="Chats" class="d-flex justify-content-between">
+            <div class="col-12">
+                <button class="btn btn-outline-danger" type="submit" style="font-size: 16px;">Добавить новый чат</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
