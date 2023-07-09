@@ -1,6 +1,6 @@
 ﻿namespace Portal.DAL.Entities;
 
-public class Comment :BaseEntity
+public class Comment : BaseEntity
 {
     public string? TextComment { get; set; }
     public int UserId { get; set; }
@@ -8,6 +8,6 @@ public class Comment :BaseEntity
     public int LikeCount { get; set; }
     public int PostId { get; set; }
     public User? User { get; set; }
-    public List<Post>? Posts { get; set; }
+    public virtual Post? Post { get; set; }
 
 }

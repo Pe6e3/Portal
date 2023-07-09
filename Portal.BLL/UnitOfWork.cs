@@ -18,7 +18,6 @@ public class UnitOfWork
     private MenuItemRepository _menuItemRep;
     private PostRepository _postRep;
     private PostCategoryRepository _postCategoryRep;
-    private PostCommentRepository _postCommentRep;
     private PostContentRepository _postContentRep;
     private RoleRepository _roleRep;
     private UserRepository _userRep;
@@ -34,7 +33,6 @@ public class UnitOfWork
     public MenuItemRepository MenuItemRep => _menuItemRep ??= new MenuItemRepository(_db);
     public PostRepository PostRep => _postRep ??= new PostRepository(_db);
     public PostCategoryRepository PostCategoryRep => _postCategoryRep ??= new PostCategoryRepository(_db);
-    public PostCommentRepository PostCommentRep => _postCommentRep ??= new PostCommentRepository(_db);
     public PostContentRepository PostContentRep => _postContentRep ??= new PostContentRepository(_db);
     public RoleRepository RoleRep => _roleRep ??= new RoleRepository(_db);
     public UserRepository UserRep => _userRep ??= new UserRepository(_db);

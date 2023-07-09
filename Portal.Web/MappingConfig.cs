@@ -18,10 +18,6 @@ namespace Portal.Web
 
             CreateMap<PostViewModel, PostContent>();
 
-
-            CreateMap<PostComment, PostViewModel>();
-            CreateMap<PostViewModel, PostComment>();
-
             CreateMap<User, PostViewModel>();
             CreateMap<PostViewModel, User>();
 

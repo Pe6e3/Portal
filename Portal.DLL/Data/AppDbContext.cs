@@ -16,7 +16,6 @@ public class AppDbContext : DbContext
     public DbSet<MenuItem> MenuItems { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<PostCategory> PostCategories { get; set; }
-    public DbSet<PostComment> PostComments { get; set; }
     public DbSet<PostContent> PostContents { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<User> Users { get; set; }
@@ -40,9 +39,10 @@ public class AppDbContext : DbContext
             .WithMany(e => e.Posts);
 
 
-        modelBuilder.Entity<Post>()
-            .HasMany(e => e.Comments)
-            .WithMany(e => e.Posts);
+        //modelBuilder.Entity<Post>()
+        //            .HasMany(p => p.Comments)              // Один пост имеет много комментариев
+        //            .WithOne(c => c.Post)                  // Каждый комментарий принадлежит одному посту
+        //            .HasForeignKey(c => c.PostId);         // Внешний ключ в таблице комментариев - PostId
 
         modelBuilder.Entity<Menu>()
             .HasData(new Menu
