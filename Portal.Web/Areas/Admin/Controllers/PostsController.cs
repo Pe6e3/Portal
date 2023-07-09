@@ -34,11 +34,11 @@ public class PostsController : BaseController<Post, IPostRepository>
         List<Post> allPosts = (List<Post>)await uow.PostRep.ListAllAsync();
         List<PostContent> allContent = (List<PostContent>)await uow.PostContentRep.ListAllAsync();
         List<PostViewModel> posts = new List<PostViewModel>();
-
+        
         mapper.Map(allPosts, posts);
         mapper.Map(allContent, posts);
 
-        return View(posts);
+        return View(posts.OrderByDescending(x=>x.Id));
     }
 
     [HttpGet]
@@ -64,7 +64,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             PostContent content = new PostContent();
             content.PostId = post.Id;
             mapper.Map(postViewModel, content);
-            content.PostImage = await ProcessUploadImage(postViewModel, "img/uploads/Posts");
+            content.PostImage = await ProcessUploadIMG(postViewModel.ImageFile, "img/uploads/Posts");
 
             // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
             string postVideo = postViewModel.PostVideo ?? "";  // Исходная ссылка
@@ -143,10 +143,10 @@ public class PostsController : BaseController<Post, IPostRepository>
 
             if (postViewModel.ImageFile != null)
             {
-                string? newImage = await ProcessUploadImage(postViewModel, "img/uploads/Posts");
+                string? newImage = await ProcessUploadIMG(postViewModel.ImageFile, "img/uploads/Posts");
                 postContent.PostImage = newImage;
 
-                if (oldImage != null) ProcessDeleteImage(oldImage, "\\img\\uploads\\Posts");
+                if (oldImage != null) ProcessDeleteIMG(oldImage, "\\img\\uploads\\Posts");
             }
             await uow.PostContentRep.UpdateAsync(postContent);
 
@@ -183,32 +183,32 @@ public class PostsController : BaseController<Post, IPostRepository>
         return View(postVM);
     }
 
-    private async Task<string?> ProcessUploadImage(PostViewModel postViewModel, string folder)
-    {
-        string uniqueImageName = "";
+    //private async Task<string?> ProcessUploadImage(PostViewModel postViewModel,  string folder)
+    //{
+    //    string uniqueImageName = "";
 
-        if (postViewModel.ImageFile != null)
-        {
-            string wwwRootPath = webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
-            string fileName = Path.GetFileNameWithoutExtension(postViewModel.ImageFile.FileName); //  Имя файла без расширения
-            string fileExtansion = Path.GetExtension(postViewModel.ImageFile.FileName);// Расширение с точкой (.jpg)
-            uniqueImageName = fileName + ". " + DateTime.Now.ToString("dd.MM.yyyy HH-mm-ss.ff") + fileExtansion;// задаем уникальное имя чтобы случайно не совпало с чьим-то другим            
-            string path = Path.Combine(wwwRootPath, folder, uniqueImageName); // задаем путь к файлу
-            using (var fileStream = new FileStream(path, FileMode.Create)) // создаем файл по указанному пути
-            {
-                await postViewModel.ImageFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы
-            }
-        }
-        return uniqueImageName;
-    }
+    //    if (postViewModel.ImageFile != null)
+    //    {
+    //        string wwwRootPath = webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
+    //        string fileName = Path.GetFileNameWithoutExtension(postViewModel.ImageFile.FileName); //  Имя файла без расширения
+    //        string fileExtansion = Path.GetExtension(postViewModel.ImageFile.FileName);// Расширение с точкой (.jpg)
+    //        uniqueImageName = fileName + ". " + DateTime.Now.ToString("dd.MM.yyyy HH-mm-ss.ff") + fileExtansion;// задаем уникальное имя чтобы случайно не совпало с чьим-то другим            
+    //        string path = Path.Combine(wwwRootPath, folder, uniqueImageName); // задаем путь к файлу
+    //        using (var fileStream = new FileStream(path, FileMode.Create)) // создаем файл по указанному пути
+    //        {
+    //            await postViewModel.ImageFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы
+    //        }
+    //    }
+    //    return uniqueImageName;
+    //}
 
-    private void ProcessDeleteImage(string oldImage, string folder)
-    {
-        string wwwRootPath = webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
-        string path = Path.Combine(wwwRootPath + folder + oldImage);
-        if (System.IO.File.Exists(path))
-            System.IO.File.Delete(path);
-    }
+    //private void ProcessDeleteImage(string oldImage, string folder)
+    //{
+    //    string wwwRootPath = webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
+    //    string path = Path.Combine(wwwRootPath + folder + oldImage);
+    //    if (System.IO.File.Exists(path))
+    //        System.IO.File.Delete(path);
+    //}
 
     public async Task<IActionResult> GenerateRandomPosts(int count = 1)
     {

@@ -31,10 +31,10 @@ public class ChatsController : BaseController<Chat, IChatRepository>
         return View(chats);
     }
 
-    public async Task<IActionResult> AddNewChat()
+    public async Task<IActionResult> AddNewChat(string chatName)
     {
         Chat chat = new Chat();
-        chat.ChatName = "Чат №";
+        chat.ChatName = chatName;
         chat.CreatedAt = DateTime.Now;
         chat.ChatIMG = "1.jpg";
 
