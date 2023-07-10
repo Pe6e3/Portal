@@ -12,6 +12,7 @@ using System.Diagnostics;
 namespace Portal.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+    [Authorize(Roles = "1,2")]
 public class CategoriesController : BaseController<Category, ICategoryRepository>
 {
     public CategoriesController(UnitOfWork uow, ILogger<BaseController<Category, ICategoryRepository>> logger, ICategoryRepository repository): base(uow, logger, repository)

@@ -11,6 +11,7 @@ using System.Diagnostics;
 namespace Portal.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+    [Authorize(Roles = "1,2")]
 public class CommentsController : BaseController<Comment, ICommentRepository>
 {
     private readonly UnitOfWork uow;

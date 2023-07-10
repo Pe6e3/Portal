@@ -12,6 +12,7 @@ using System.Text.Json;
 namespace Portal.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+    [Authorize(Roles = "1,2")]
 public class PostsController : BaseController<Post, IPostRepository>
 {
 
