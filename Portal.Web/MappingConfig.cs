@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Portal.DAL.Entities;
+using Portal.Web.Areas.Admin.Controllers.ViewModels;
 using Portal.Web.ViewModels;
 
 namespace Portal.Web
@@ -28,7 +29,7 @@ namespace Portal.Web
             CreateMap<UserProfile, ProfileViewModel>();
 
 
-      
+
             CreateMap<ChatUser, ChatProfileViewModel>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
                 .ForMember(dest => dest.Firstname, opt => opt.MapFrom(src => src.User.Profile.Firstname))
@@ -37,10 +38,10 @@ namespace Portal.Web
                 .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.User.Profile.Birthday))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Profile.Email))
                 .ForMember(dest => dest.AvatarImg, opt => opt.MapFrom(src => src.User.Profile.AvatarImg))
-                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.User.Role))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.User.Role));
 
+            CreateMap<CategoryViewModel, Category>().ReverseMap();
 
-;
         }
     }
 }

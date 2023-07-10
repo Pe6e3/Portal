@@ -1,4 +1,5 @@
-﻿@model Portal.DAL.Entities.Category
+﻿@using Portal.Web.Areas.Admin.Controllers.ViewModels;
+@model CategoryViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="UpdateCategory" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -27,11 +28,16 @@
                 <input asp-for="Slug" class="form-control" />
                 <span asp-validation-for="Slug" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CategoryImage" class="control-label"></label>
-                <input asp-for="CategoryImage" class="form-control" />
-                <span asp-validation-for="CategoryImage" class="text-danger"></span>
-            </div>
+
+
+
+            <label for="file-upload">
+                <img src="/img/uploads/Categories/@Model?.CategoryImage" alt="@Model?.Name" class="img_cat" />
+            </label>
+            <input id="file-upload" asp-for="CategoryImageFile" type="file" accept="image/*" style="display: none;" />
+
+
+
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -45,5 +51,56 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<script>
+    const fileUpload = document.getElementById('file-upload');
+    const imagePreview = document.querySelector('.img_cat');
+
+    fileUpload.addEventListener('change', function () {
+        const file = this.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+<style>
+    .img_cat {
+        cursor: pointer;
+        transition: .2s;
+        width:300px;
+        border-radius:6px;
+    }
+
+        .img_cat:hover {
+            transition: .2s;
+            transform: scale(1.05);
+            position: relative;
+        }
+
+            .img_cat:hover::after {
+                content: "Изменить фото";
+                position: absolute;
+                top: calc(100% + 5px); /* Расстояние от надписи до изображения */
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: bisque;
+                color: rgb(10,20,155);
+                padding: 5px;
+                width: 80%;
+                text-align: center;
+                border-radius: 4px;
+                font-size: 22px;
+                font-weight: bold;
+            }
+</style>
