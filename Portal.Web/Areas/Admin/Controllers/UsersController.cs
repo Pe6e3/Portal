@@ -56,7 +56,7 @@ public class UsersController : BaseController<User, IUserRepository>
         mapper.Map(user.Profile, profileVM);
         profileVM.Role = user.Role;
 
-        ViewBag.Roles = await uow.RoleRep.ListAllAsync();
+        ViewBag.Roles = await uow.RoleRep.ListAll();
         return View("Edit", profileVM);
     }
 

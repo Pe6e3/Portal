@@ -37,7 +37,7 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
     {
         MenuCatPostViewModel mcpwm = new MenuCatPostViewModel();
         mcpwm.Posts = await uow.PostRep.ListAllPostsWithContentsAsync();
-        mcpwm.Categories = await uow.CategoryRep.ListAllAsync();
+        mcpwm.Categories = await uow.CategoryRep.ListAll();
         mcpwm.MenuId = id;
 
         return View("Create", mcpwm);
@@ -71,7 +71,7 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
 
         MenuCatPostViewModel mcpwm = new MenuCatPostViewModel();
         mcpwm.Posts = await uow.PostRep.ListAllPostsWithContentsAsync();
-        mcpwm.Categories = await uow.CategoryRep.ListAllAsync();
+        mcpwm.Categories = await uow.CategoryRep.ListAll();
         mcpwm.MenuId = menuItem.MenuId;
         mcpwm.Position = menuItem.Position;
         mcpwm.Name = menuItem.Name;

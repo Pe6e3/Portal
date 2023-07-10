@@ -99,7 +99,7 @@ public class ChatsController : BaseController<Chat, IChatRepository>
 
     public async Task<IActionResult> ShowAllChatUser() /*метод для тестирования, потом удалить*/
     {
-        return View("ChatUsers", await uow.ChatUserRep.ListAllAsync());
+        return View("ChatUsers", await uow.ChatUserRep.ListAll());
     }
 
 
