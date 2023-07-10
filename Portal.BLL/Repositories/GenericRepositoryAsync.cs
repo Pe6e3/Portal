@@ -65,6 +65,12 @@ public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : Ba
     .OrderByDescending(x => x.Id)
     .ToListAsync();
 
+    public async Task<IReadOnlyList<T>> ListAllDesc(string include) => await
+    db.Set<T>()
+    .Include(include)
+    .OrderByDescending(x => x.Id)
+    .ToListAsync();
+
 
     public async Task<IReadOnlyList<T>> ListAllAsync(int count, string include) => await
         db.Set<T>()

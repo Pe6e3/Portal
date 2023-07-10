@@ -30,12 +30,17 @@ public class UserRepository : GenericRepositoryAsync<User>, IUserRepository
         return user.Id;
     }
 
-    public async Task<User> GetUserByLogin(string login) => await
+    public async Task<User>? GetUserByLogin(string login)
+    {
+        User? user = await
         db.Users
         .Include(u => u.Profile)
         .Include(u => u.Role)
         .FirstOrDefaultAsync(u => u.Login == login);
- 
+
+        return user;
+    }
+
 
     public string? HashPass(string? password) => BCrypt.Net.BCrypt.HashPassword(password);
 

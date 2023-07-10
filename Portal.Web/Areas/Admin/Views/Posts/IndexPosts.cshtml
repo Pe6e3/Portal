@@ -10,7 +10,8 @@
 <table class="table">
     <thead class="text-center">
         <tr>
-            <th>Id</th>
+            <th>Post.Id</th>
+            <th>Content.Id</th>
             <th>Slug</th>
             <th>CreatedAt</th>
             <th> </th>
@@ -21,9 +22,10 @@
         {
             <tr class="text-center">
                 <td>@item.Id</td>
+                <td>@item.Content?.Id</td>
                 <td>@item.Slug</td>
                 <td>@item.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss")</td>
-                <td><a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-solid fa-trash" style="font-size: 30px; color: red;"></i></a></td>
+                <td><a asp-action="DeletePost" asp-route-postId="@item.Id"><i class="fa-solid fa-trash" style="font-size: 30px; color: red;"></i></a></td>
             </tr>
         }
     </tbody>

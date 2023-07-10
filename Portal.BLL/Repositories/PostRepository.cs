@@ -14,6 +14,14 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
         this.db = db;
     }
 
+    public async Task DeletePostById(int postId)
+    {
+        List<Post> posttest = await db.Posts.ToListAsync();
+        Post post = await db.Posts.FirstOrDefaultAsync(x => x.Id == postId);
+        db.Posts.Remove(post);
+        await db.SaveChangesAsync();
+    }
+
     public async Task<Post?> GetPostByIdAsync(int id) => await
         db.Posts
         .FirstOrDefaultAsync(x => x.Id == id);

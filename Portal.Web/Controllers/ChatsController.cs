@@ -90,7 +90,7 @@ public class ChatsController : BaseController<Chat, IChatRepository>
     public async Task<IActionResult> DeleteChat(int chatId)
     {
         Chat chat = await uow.ChatRep.GetByIdAsync(chatId);
-        List<ChatUser> chatUsers = await uow.ChatUserRep.ListChatUsersofChat(chatId);
+        List<ChatUser> chatUsers = await uow.ChatUserRep.ListChatUsersOfChat(chatId);
         foreach (var chatUser in chatUsers)
             await uow.ChatUserRep.DeleteAsync(chatUser);
         await uow.ChatRep.DeleteAsync(chat);

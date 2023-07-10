@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Portal.DAL.Entities.Category>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Категории";
 }
 
-<h1>Index</h1>
+<h1>Категории</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать новую</a>
 </p>
 <table class="table">
     <thead>
@@ -43,9 +43,8 @@
                 @Html.DisplayFor(modelItem => item.CategoryImage)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pencil" style="font-size: 30px; color: #917cf8;"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-solid fa-trash" style="font-size: 30px; color: red;"></i></a>
             </td>
         </tr>
 }

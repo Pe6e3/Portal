@@ -32,7 +32,7 @@ public class CategoriesController : BaseController<Category, ICategoryRepository
 
         postViewModel.Slug = post.Slug;
         postViewModel.CreatedAt = post.CreatedAt;
-        postViewModel.Id = post.Id;
+        postViewModel.PostId = post.Id;
         postViewModel.Title = post.Content.Title;
         postViewModel.PostBody = post.Content.PostBody;
         postViewModel.PostImage = post.Content.PostImage;

@@ -13,7 +13,7 @@
         <form asp-action="UpdatePVM" asp-route-oldImage="@ViewBag.oldImage" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <input asp-for="Id" type="hidden" value="@Model.Id" />
+            <input asp-for="PostId" type="hidden" value="@Model.PostId" />
             <input asp-for="CreatedAt" type="hidden" value="@Model.CreatedAt" />
 
             <div class="form-group">
