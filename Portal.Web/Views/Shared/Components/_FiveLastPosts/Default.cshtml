@@ -15,15 +15,15 @@
                         {
                             <div class="@(count++ < 3 ? "col-6" : "col-4")">
                                 <div class="pattern">
-                                    <div class="overlay" style="background-image: url('/img/uploads/Posts/@lastPost.Content.PostImage')">
+                                    <div class="overlay" style="background-image: url('/img/uploads/Posts/@lastPost?.Content?.PostImage')">
                                         <div class="item-title-content">
-                                            <h3><a href="/posts/@lastPost.Slug">@lastPost.Content.Title</a></h3>
+                                            <h3><a href="/posts/@lastPost.Slug">@lastPost?.Content?.Title</a></h3>
 
                                             <div class="item-social">
 
                                                 <a href="/posts/@lastPost.Slug#comments" class="item-comments">
                                                     <i class="fa-solid fa-comments"></i>
-                                                    <span class="item-comments-count"> @lastPost.Comments.Count()</span>
+                                                    <span class="item-comments-count"> @lastPost?.Comments?.Count()</span>
                                                 </a>
 
 

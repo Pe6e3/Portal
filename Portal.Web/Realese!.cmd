@@ -1,0 +1,1 @@
+dotnet publish -c Release -o "C:\Users\User\Desktop\publish"
