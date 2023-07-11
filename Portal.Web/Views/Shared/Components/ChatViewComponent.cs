@@ -19,6 +19,7 @@ namespace Portal.Web.Views.Shared.Components
             List<Message> messages = await uow.MessageRep.ListChatMessages(chatId);
             User user = await uow.UserRep.GetUserByLogin(User.Identity.Name);
             ViewBag.Avatar = user.Profile.AvatarImg;
+            ViewBag.ChatId = chatId;
             return View(messages);
         }
     }

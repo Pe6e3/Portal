@@ -79,4 +79,4 @@
 
 
 
-@await Component.InvokeAsync("_Chat")
+@await Component.InvokeAsync("_Chat", new {chatId = @ViewBag.ChatId})

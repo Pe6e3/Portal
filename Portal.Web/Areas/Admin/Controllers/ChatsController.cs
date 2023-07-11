@@ -79,9 +79,10 @@ public class ChatsController : BaseController<Chat, IChatRepository>
         List<ChatUser> chatUsers = await uow.ChatUserRep.GetChatInfo(chatId);
         List<ChatProfileViewModel> chatProfileVM = new List<ChatProfileViewModel>();
         mapper.Map(chatUsers, chatProfileVM);
+        User user = await uow.UserRep.GetUserByLogin(User.Identity.Name);
 
 
-
+        ViewBag.UserId = user.Id;
         ViewBag.ChatId = chatUsers.FirstOrDefault().ChatId;
         ViewBag.ChatName = chatUsers.FirstOrDefault().Chat.ChatName;
         ViewBag.ChatIMG = chatUsers.FirstOrDefault().Chat.ChatIMG;
@@ -106,6 +107,13 @@ public class ChatsController : BaseController<Chat, IChatRepository>
         return View("ChatUsers", await uow.ChatUserRep.ListAll());
     }
 
+    [HttpPost]
+    public async Task<IActionResult> AddMessage(Message message)
+    {
+        message.SentAt = DateTime.Now;
+        await uow.MessageRep.InsertAsync(message);
+        return RedirectToAction("Index");
+    }
 
 
 }
