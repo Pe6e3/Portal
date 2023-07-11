@@ -11,14 +11,14 @@
 
         <form method="post" asp-action="AddUserToChat" asp-controller="Chats" class="d-flex justify-content-center">
             <div class="col-7">
-                <select id="chatId" name="chatId" required style="display: block; margin-bottom: 10px; font-size: 16px;" class="form-select">
+                <select id="chatId" name="chatId" required style="display: block; margin-bottom: 10px; font-size: 16px; width: 200px;" class="form-select">
                     <option value="">Выберите чат</option>
                     @foreach (Chat chat in Model)
                     {
                         <option value="@chat.Id">@chat.ChatName@chat.Id</option>
                     }
                 </select>
-                <select id="userId" name="userId" required style="display: block; margin-bottom: 10px;font-size: 16px" class="form-select">
+                <select id="userId" name="userId" required style="display: block; margin-bottom: 10px;font-size: 16px; width: 200px;" class="form-select">
                     <option value="">Выберите пользователя</option>
                     @foreach (User user in @ViewBag.AllUsers)
                     {

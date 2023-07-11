@@ -14,5 +14,15 @@ public class MessageRepository : GenericRepositoryAsync<Message>, IMessageReposi
         this.db = db;
     }
 
- 
+    public async Task<List<Message>> ListChatMessages(int chatId)
+    {
+        List<Message> messages = await
+            db.Messages
+            .Include(x => x.User)
+            .ThenInclude(x => x.Profile)
+            .Where(x => x.ChatId == chatId)
+            .ToListAsync();
+        return messages;
+    }
+
 }

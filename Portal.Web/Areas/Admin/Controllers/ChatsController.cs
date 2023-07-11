@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
+using Portal.Web.Controllers;
 using Portal.Web.ViewModels;
+using System.Data;
 
-namespace Portal.Web.Controllers;
+namespace Portal.Web.Areas.Admin.Controllers;
 
+[Area("Admin")]
+[Authorize(Roles = "1,2")]
 public class ChatsController : BaseController<Chat, IChatRepository>
 {
     protected new readonly ILogger<BaseController<Chat, IChatRepository>> logger;
@@ -55,7 +59,7 @@ public class ChatsController : BaseController<Chat, IChatRepository>
             chat.UserCount++;
             await uow.ChatRep.UpdateAsync(chat);
         }
-        return RedirectToAction("ShowChatInfo", new { chatId = chatId });
+        return RedirectToAction("ShowChatInfo", new { chatId });
     }
 
     public async Task<IActionResult> DeleteUserFromChat(int chatId, int userId)
@@ -66,7 +70,7 @@ public class ChatsController : BaseController<Chat, IChatRepository>
             ChatUser chatUser = await uow.ChatUserRep.FindChatUserByUserId(userId);
             await uow.ChatUserRep.DeleteAsync(chatUser);
         }
-        return RedirectToAction("ShowChatInfo", new { chatId = chatId });
+        return RedirectToAction("ShowChatInfo", new { chatId });
 
     }
 
