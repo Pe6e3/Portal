@@ -3,20 +3,39 @@
 @{
     ViewData["Title"] = "Чат";
 }
+<div class="chat">
 
+    <h3>Чат:</h3>    <br />
 
-@foreach (Message message in Model)
-{
-    <div class="col-12">
-        <img src="~/img/uploads/Profiles/@message?.User?.Profile.AvatarImg" alt="@message.User.Login" style="height: 80px; border-radius: 5px;" />
-        @message.TextMessage <br />
+    <div class="history">
+        <div class="chat-last" id="chat">
+            @if (Model.Count == 0)
+            {
+                <p>Пока нет сообщений</p>
+            }
+            else
+            {
+                <div class="row textchat">
+                    @foreach (Message message in Model)
+                    {
+                        <div class="col-12">
+                            <div class="textmessage @(ViewBag.UserId == message.UserId ? "textuser float-end text-end" : "textsomebody float-start")">
+                                <img src="~/img/uploads/Profiles/@message?.User?.Profile.AvatarImg" alt="@message.User.Login" style="height: 80px; border-radius: 5px;" />
+                                @message.TextMessage <br />
 
-        <b>@message.User.Profile.Firstname @message.User.Profile.Lastname</b>   <br />
-        @message.SentAt
+                                <span class="text-muted " style="font-size:10px;">
+                                    <b>@message.User.Profile.Firstname @message.User.Profile.Lastname</b>   <br />
+                                    @message.SentAt
+                                </span>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            }
+        </div>
     </div>
-
-}
-
+</div>
 
 <div class="chat-form">
     <form asp-controller="Chats" asp-action="AddMessage">
@@ -28,21 +47,82 @@
                 <img src="~/img/uploads/Profiles/@ViewBag.Avatar" style="height:80px; border-radius:5px;" />
             </div>
 
-            <div class="col-10">
+            <div class="col-11">
                 <div class="messagebox">
                     <textarea name="TextMessage" placeholder="Ваше сообщение..."></textarea>
                 </div>
             </div>
+        </div>
 
-            <div class="col-1 d-flex align-items-end mb-3">
-                <button class="addmessage-btn" type="submit"><i class="fa-solid fa-arrow-right"></i></button>
-            </div>
+
+        <div class="form-group d-flex justify-content-end mx-4">
+            <button class="addmessage-btn" type="submit">Отправить</button>
         </div>
     </form>
 </div>
 
+
+
+
 <style>
-    <style >
+
+    .textmessage {
+        border: solid 1px lightgray;
+        border-radius: 10px;
+        margin: 5px 0 5px 0;
+        padding: 5px 10px 5px 10px;
+        box-shadow: 3px 3px 3px gray;
+        max-width: 80%;
+    }
+
+    .textsomebody {
+        padding-bottom: 20px;
+        background: rgb(225,224,231);
+        background: radial-gradient(circle, rgba(225,224,231,0.693069306930693) 0%, rgba(216,212,240,0.8127626050420168) 100%);
+    }
+
+    .textuser {
+        padding-bottom: 20px;
+        background: rgb(231,231,224);
+        background: radial-gradient(circle, rgba(231,231,224,0.693069306930693) 0%, rgba(240,240,212,0.8127626050420168) 100%);
+    }
+</style>
+
+
+
+
+
+
+<style>
+    .history {
+        height: 70vh;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        padding: 10px;
+        background-color: #fbfff5;
+        display: flex;
+        flex-direction: column-reverse;
+        border-radius: 10px;
+        box-shadow: 3px 3px 10px gray;
+    }
+
+        /* Скрыть полосу прокрутки в Chrome и Safari */
+        .history::-webkit-scrollbar {
+            width: 0.4em;
+        }
+
+        .history::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        .history::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 0.5em;
+        }
+</style>
+
+
+<style>
     .message {
         margin: 5px 0 10px 0;
         padding: 8px 3px 8px 3px;
@@ -117,4 +197,3 @@
         }
 
 </style>
-                </style>
