@@ -1,22 +1,42 @@
 ﻿@using Portal.DAL.Entities;
 @model List<Message>
-@{
-    ViewData["Title"] = "Чат";
-}
+
 
 
 @foreach (Message message in Model)
 {
-    <div class="col-12">
-        <img src="~/img/uploads/Profiles/@message?.User?.Profile.AvatarImg" alt="@message.User.Login" style="height: 80px; border-radius: 5px;" />
-        @message.TextMessage <br />
 
-        <b>@message.User.Profile.Firstname @message.User.Profile.Lastname</b>   <br />
-        @message.SentAt
-    </div>
+    @if (ViewBag.UserId == message.UserId)
+    {
+
+        <div class="col-12 messageline_fromuser">
+
+            <div class="message">
+                <div class="tablet">
+                    <div class="msg_text">@message.TextMessage</div>
+                    <div class="msg_info">@message.SentAt</div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+
+        <div class="col-12">
+
+            <div class="message">
+                <div class="msg_avatar">
+                    <img src="/img/uploads/Profiles/@message.User.Profile.AvatarImg" class="avatarimg" />
+                </div>
+                <div class="tablet">
+                    <div class="msg_text">@message.TextMessage</div>
+                    <div class="msg_info">@message.SentAt</div>
+                </div>
+            </div>
+        </div>
+    }
 
 }
-
 
 <div class="chat-form">
     <form asp-controller="Chats" asp-action="AddMessage">
@@ -33,88 +53,13 @@
                     <textarea name="TextMessage" placeholder="Ваше сообщение..."></textarea>
                 </div>
             </div>
-
-            <div class="col-1 d-flex align-items-end mb-3">
+            <div class="col-1">
                 <button class="addmessage-btn" type="submit"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
+
+
     </form>
 </div>
 
-<style>
-    <style >
-    .message {
-        margin: 5px 0 10px 0;
-        padding: 8px 3px 8px 3px;
-        background-image: linear-gradient(to bottom, #FAFAFA, #F0F0F0);
-        border-radius: 8px;
-        border: 2px solid rgba(241, 242, 217, 0.1);
-        -webkit-box-shadow: 3px 3px 7px 0px rgba(34, 60, 80, 0.14);
-        -moz-box-shadow: 3px 3px 7px 0px rgba(34, 60, 80, 0.14);
-        box-shadow: 3px 3px 7px 0px rgba(34, 60, 80, 0.14);
-    }
-
-
-
-    .messagebox {
-        margin: 20px;
-        background-color: #fafafa;
-    }
-
-    textarea {
-        width: 100%;
-        resize: vertical;
-        padding: 15px;
-        border-radius: 15px;
-        border: 2px solid rgba(241, 242, 217, 0.2);
-        box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
-        height: 150px;
-    }
-
-    .addmessage-btn {
-        display: inline-flex;
-        margin: 10px;
-        text-decoration: none;
-        border: 2px solid #706c6c;
-        border-radius: 5px;
-        position: relative;
-        overflow: hidden;
-        font-size: 20px;
-        line-height: 20px;
-        padding: 12px 30px;
-        color: #FFF;
-        font-weight: bold;
-        text-transform: uppercase;
-        font-family: 'Roboto', Тahoma, sans-serif;
-        background: #a3a2a2;
-        transition: box-shadow 0.3s, transform 0.3s;
-        cursor: pointer;
-    }
-
-        .addmessage-btn:hover,
-        .addmessage-btn:active,
-        .addmessage-btn:focus {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 16px 20px rgba(0,0,0,0.2);
-            color: #FFF;
-        }
-
-        .addmessage-btn:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(-45deg, transparent, rgba(191, 226, 255, 0.3), transparent);
-            transition: left 0.7s;
-        }
-
-        .addmessage-btn:hover:before,
-        .addmessage-btn:active:before,
-        .addmessage-btn:focus:before {
-            left: 100%;
-        }
-
-</style>
-                </style>
+<link rel="stylesheet" href="~/user/css/chat.css" asp-append-version="true" />
