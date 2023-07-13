@@ -1,7 +1,9 @@
 ﻿@using Portal.DAL.Entities;
 @model List<MyLogger>
 
-
+<a asp-action="ShowUserLog"> Показать все логи</a>
+<br />
+<a asp-action="ShowUserLogWithoutMe"> Показать все логи кроме моих</a>
 
 <table class="cinereousTable">
     <thead>
@@ -30,4 +32,3 @@
     </tbody>
 </table>
 
- 

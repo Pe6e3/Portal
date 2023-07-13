@@ -5,8 +5,10 @@
         '    .    text .  '
         '    .    text .  '
         ' avatar  info .  ';
-    grid-template-columns: 60px minmax(200px, 500px) minmax(80px, auto);
-    grid-template-rows: 40px 1fr 23px;
+    grid-template-columns: 60px      minmax(200px, 600px)      minmax(80px, auto);
+    grid-template-rows: 40px 
+                        1fr 
+                        23px;
 }
 
 .messageline_fromuser *.message {
@@ -14,7 +16,7 @@
         '  . text   '
         '  . text   '
         '  . info   ';
-    grid-template-columns: minmax(80px, auto) minmax(200px, 400px);
+    grid-template-columns: minmax(80px, auto)      minmax(200px, 600px);
 }
 
 .messageline_fromuser *.tablet {
@@ -27,7 +29,7 @@
     grid-area: text;
     border: 2px solid rgba(170, 170, 170, 0.565);
     border-radius: 10px 10px 10px 0;
-    background-color: #f8ffd7;
+    background-color: #f4fbcd79;
 }
 
 .messageline_fromuser {

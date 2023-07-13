@@ -14,15 +14,27 @@ public class MyLoggerRepository : GenericRepositoryAsync<MyLogger>, IMyLoggerRep
         this.db = db;
     }
 
-    public async Task<List<MyLogger>> ListLogs()
+    public async Task<List<MyLogger>> ListLogsWithoutMe()
     {
         List<MyLogger> logs = await
             db.MyLoggers
             .Include(x => x.User)
             .ThenInclude(x=>x.Profile)
             .OrderByDescending(x=>x.Id)
+            .Where(x=>x.UserIP != "::1" && x.UserIP != "127.0.0.1" && x.UserIP != "::ffff:2.132.157.121")
             .ToListAsync();
             return logs;
+    }
+
+    public async Task<List<MyLogger>> ListLogs()
+    {
+        List<MyLogger> logs = await
+            db.MyLoggers
+            .Include(x => x.User)
+            .ThenInclude(x => x.Profile)
+            .OrderByDescending(x => x.Id)
+            .ToListAsync();
+        return logs;
     }
 
     public async Task<List<MyLogger>> ListLogs(string login)

@@ -112,7 +112,7 @@ public class ChatsController : BaseController<Chat, IChatRepository>
     {
         message.SentAt = DateTime.Now;
         await uow.MessageRep.InsertAsync(message);
-        return RedirectToAction("Index");
+        return RedirectToAction("ShowChatInfo");
     }
 
 
