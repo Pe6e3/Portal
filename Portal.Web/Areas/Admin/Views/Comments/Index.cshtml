@@ -1,40 +1,43 @@
-﻿@model IEnumerable<Portal.DAL.Entities.Comment>
+﻿@*Админка - список всех комментариев /Admin/Comments  *@
+@model IEnumerable<Portal.DAL.Entities.Comment>
 
 @{
     ViewData["Title"] = "Index";
 }
-
 <h1>Index</h1>
-
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="cinereousTable">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.Id)</th>
-            <th>@Html.DisplayNameFor(model => model.PostId)</th>
-            <th>@Html.DisplayNameFor(model => model.TextComment)</th>
-            <th>@Html.DisplayNameFor(model => model.UserId)</th>
-            <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
-            <th>@Html.DisplayNameFor(model => model.LikeCount)</th>
+            <th>ID комментария</th>
+            <th>ID Поста</th>
+            <th>Название поста</th>
+            <th>Текст комментария</th>
+            <th>Имя и Фамилия Пользователя</th>
+            <th>Дата написания</th>
+            <th>Количество лайков</th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (Comment comment in Model)
         {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                <td>@Html.DisplayFor(modelItem => item.PostId)</td>
-                <td>@Html.DisplayFor(modelItem => item.TextComment)</td>
-                <td>@Html.DisplayFor(modelItem => item.UserId)</td>
-                <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
-                <td>@Html.DisplayFor(modelItem => item.LikeCount)</td>
+            <tr style="height: 30px; overflow: hidden;">
+                <td>@comment.Id</td>
+                <td>@comment.PostId</td>
+                <td><a href="/posts/@comment.Post.Slug#comments" target="_blank">@comment.Post.Content.Title</a></td>
+                <td>@comment.TextComment</td>
+                <td>@comment.User.Profile.Firstname @comment.User.Profile.Lastname</td>
+                <td>@comment.CreatedAt</td>
+                <td>@comment.LikeCount</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@comment.Id"><i class="fa-solid fa-wrench" style="font-size: 30px; color: red;"></i></a>
+                </td>
+                <td>
+                    <a asp-action="DeleteComment" asp-route-commentId="@comment.Id"><i class="fa-solid fa-trash" style="font-size: 30px; color: red;"></i></a>
                 </td>
             </tr>
         }

@@ -14,18 +14,37 @@ public class CommentRepository : GenericRepositoryAsync<Comment>, ICommentReposi
         this.db = db;
     }
 
-
+    public async Task<Comment> GetCommentById(int commentId)
+    {
+        Comment comment = await
+            db.Comments
+            .Include(x => x.User)
+            .ThenInclude(x => x.Profile)
+            .Include(x => x.Post)
+            .ThenInclude(x => x.Content)
+            .FirstOrDefaultAsync(x => x.Id == commentId);
+        return comment;
+    }
 
     public async Task<List<Comment>?> GetCommentsByPostId(int postId) => await
         db.Comments
-        .Include(x=>x.User)
-        .ThenInclude(x=>x.Profile)
+        .Include(x => x.User)
+        .ThenInclude(x => x.Profile)
         .Where(c => c.PostId == postId)
         .ToListAsync();
 
     public async Task<int> GetPostCommentsCount(int postId)
     {
-        List<Comment> comments  = await db.Comments.Where(x=>x.PostId == postId).ToListAsync();
+        List<Comment> comments = await db.Comments.Where(x => x.PostId == postId).ToListAsync();
         return comments.Count;
     }
+
+    public async Task<IEnumerable<Comment>> ListAllComments() => await
+        db.Comments
+        .Include(x => x.Post)
+        .ThenInclude(x => x.Content)
+        .Include(x => x.User)
+        .ThenInclude(x => x.Profile)
+        .OrderByDescending(x => x.Id)
+        .ToListAsync();
 }

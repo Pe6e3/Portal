@@ -25,12 +25,12 @@ namespace Portal.Web.Controllers
 
         public override async Task<IActionResult> Index()
         {
-            List<Post> allPosts = (List<Post>)await uow.PostRep.ListAllAsync();
-            List<PostContent> allContent = (List<PostContent>)await uow.PostContentRep.ListAllAsync();
+            List<Post> allPosts = (List<Post>)await uow.PostRep.ListAll();
+            //List<PostContent> allContent = (List<PostContent>)await uow.PostContentRep.ListAll();
             List<PostViewModel> posts = new List<PostViewModel>();
 
             mapper.Map(allPosts, posts);
-            mapper.Map(allContent, posts);
+            //mapper.Map(allContent, posts);
 
             return View(posts);
         }

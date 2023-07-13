@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
@@ -8,6 +9,7 @@ using Portal.Web.ViewModels;
 namespace Portal.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+    [Authorize(Roles = "1,2")]
 public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
 {
     private readonly UnitOfWork uow;
@@ -37,7 +39,7 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
     {
         MenuCatPostViewModel mcpwm = new MenuCatPostViewModel();
         mcpwm.Posts = await uow.PostRep.ListAllPostsWithContentsAsync();
-        mcpwm.Categories = await uow.CategoryRep.ListAllAsync();
+        mcpwm.Categories = await uow.CategoryRep.ListAll();
         mcpwm.MenuId = id;
 
         return View("Create", mcpwm);
@@ -71,7 +73,7 @@ public class MenuItemsController : BaseController<MenuItem, IMenuItemRepository>
 
         MenuCatPostViewModel mcpwm = new MenuCatPostViewModel();
         mcpwm.Posts = await uow.PostRep.ListAllPostsWithContentsAsync();
-        mcpwm.Categories = await uow.CategoryRep.ListAllAsync();
+        mcpwm.Categories = await uow.CategoryRep.ListAll();
         mcpwm.MenuId = menuItem.MenuId;
         mcpwm.Position = menuItem.Position;
         mcpwm.Name = menuItem.Name;

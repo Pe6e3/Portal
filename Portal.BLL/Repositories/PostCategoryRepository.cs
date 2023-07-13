@@ -14,7 +14,7 @@ public class PostCategoryRepository : GenericRepositoryAsync<PostCategory>, IPos
         this.db = db;
     }
 
-    public async Task DeletePCbyPostIdAsync(int postId)
+    public async Task DeletePCbyPostId(int postId)
     {
         List<PostCategory> pc = await db.PostCategories.Where(x => x.PostId == postId).ToListAsync();
 
@@ -43,6 +43,7 @@ public class PostCategoryRepository : GenericRepositoryAsync<PostCategory>, IPos
         .Include(p => p.Post.Content)
         .Include(p => p.Category)
         .Where(x => x.Category.Slug == categorySlug)
+        .OrderByDescending(x => x.Id)
         .Take(count)
         .ToListAsync();
 
@@ -50,7 +51,8 @@ public class PostCategoryRepository : GenericRepositoryAsync<PostCategory>, IPos
     db.PostCategories
     .Include(p => p.Post)
     .ThenInclude(c => c.Content)
-     .Where(x => x.Category.Slug == categorySlug)
+    .Where(x => x.Category.Slug == categorySlug)
+    .OrderByDescending(x => x.Id)
     .Skip(skip)
     .Take(count)
     .ToListAsync();

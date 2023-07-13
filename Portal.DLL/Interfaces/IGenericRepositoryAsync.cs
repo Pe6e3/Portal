@@ -2,7 +2,7 @@
 
 public interface IGenericRepositoryAsync<T> where T : class
 {
-    Task<IReadOnlyList<T>> ListAllAsync();
+    Task<IReadOnlyList<T>> ListAll();
     Task<IReadOnlyList<T>> GetPagedAsync(int page, int size);
     Task<T> GetByIdAsync(int id);
     Task<T> InsertAsync(T entity);

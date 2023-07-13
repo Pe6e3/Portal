@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Portal.BLL;
-using Portal.BLL.Repositories;
-using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
 using Portal.Web.Models;
-using Portal.Web.ViewModels;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace Portal.Web.Controllers
 {
@@ -28,7 +24,7 @@ namespace Portal.Web.Controllers
         }
 
         public virtual async Task<IActionResult> Index() =>
-            View(await _repository.ListAllAsync());
+            View(await _repository.ListAll());
 
         public virtual async Task<IActionResult> Details(int id) =>
             View(await _repository.GetByIdAsync(id));
@@ -83,6 +79,36 @@ namespace Portal.Web.Controllers
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public virtual IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+
+
+        //public async Task<string?> ProcessUploadIMG(IFormFile imageFile, string folder)
+        //{
+        //    string uniqueIMGName = "";
+
+        //    if (imageFile != null)
+        //    {
+        //        string wwwRootPath = webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
+        //        string fileName = Path.GetFileNameWithoutExtension(imageFile.FileName); //  Имя файла без расширения
+        //        string fileExtansion = Path.GetExtension(imageFile.FileName);// Расширение с точкой (.jpg)
+        //        uniqueIMGName = fileName + ". " + DateTime.Now.ToString("dd.MM.yyyy HH-mm-ss") + fileExtansion;// задаем уникальное имя чтобы случайно не совпало с чьим-то другим            
+        //        string path = Path.Combine(wwwRootPath, folder, uniqueIMGName); // задаем путь к файлу
+        //        using (var fileStream = new FileStream(path, FileMode.Create)) // создаем файл по указанному пути
+        //        {
+        //            await imageFile.CopyToAsync(fileStream); // копируем в него файл, который загрузили из формы
+        //        }
+        //    }
+        //    return uniqueIMGName; // возвращаем имя файла с расширением ("myImage.01.01.2020 10:15:59.jpg")
+        //}
+
+        //public void ProcessDeleteIMG(string oldImage, string folder)
+        //{
+        //    string wwwRootPath = webHostEnvironment.WebRootPath; // путь к корневой папке wwwroot
+        //    string path = Path.Combine(wwwRootPath + folder + oldImage);
+        //    if (System.IO.File.Exists(path))
+        //        System.IO.File.Delete(path);
+        //}
+
     }
 
 }

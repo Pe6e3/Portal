@@ -1,0 +1,81 @@
+﻿@using Portal.DAL.Entities;
+@model List<ChatProfileViewModel>
+
+<div class="container text-center my-5">
+
+    <h1>Имя чата: @ViewBag.ChatName</h1>
+    <p> Количество участников: @ViewBag.UserCount</p>
+    <p> Создан: @ViewBag.CreatedAt</p>
+    <img src="/img/uploads/Chats/@ViewBag.ChatIMG" style="height: 200px; border-radius:5px;" />
+
+</div>
+
+
+
+<div class="container">
+    <div class="row">
+
+        <table class="cinereousTable">
+
+            <thead>
+                <tr>
+                    <th>Имя Фамилия</th>
+                    <th>Роль</th>
+                    <th>День рождения</th>
+                    <th>Почта</th>
+                    <th>Зарегистрирован</th>
+                    <th>Аватар</th>
+                    <th>Удалить</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ChatProfileViewModel chatProfileVM in Model)
+                {
+                    <tr>
+                        <td>@chatProfileVM.Firstname @chatProfileVM.Lastname</td>
+                        <td>@chatProfileVM.Role.RoleName</td>
+                        <td>@chatProfileVM.Birthday</td>
+                        <td>@chatProfileVM.Email</td>
+                        <td>@chatProfileVM.RegistrationDate</td>
+                        <td><img src="/img/uploads/Profiles/@chatProfileVM.AvatarImg" style="height: 100px; border-radius:5px;" /></td>
+                        <td> <a asp-action="DeleteUserFromChat" asp-route-chatId="@ViewBag.ChatId" asp-route-userId="@chatProfileVM.UserId"><i class="fa-solid fa-trash"></i> </a> </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+
+    </div>
+</div>
+
+
+<div class="container flex-column my-4 text-center" style="width: 450px;">
+
+    <div class="row mb-5">
+
+        <form method="post" asp-action="AddUserToChat" asp-controller="Chats" class="d-flex justify-content-center">
+            <div class="col-7">
+                <input id="chatId" name="chatId" type="hidden" value="@ViewBag.ChatId" />
+
+
+                <select id="userId" name="userId" required style="display: block; margin-bottom: 10px;font-size: 16px; width: 200px;" class="form-select">
+                    <option value="">Выберите пользователя</option>
+                    @foreach (User user in @ViewBag.UserDroplist)
+                    {
+                        <option value="@user.Id">@user.Profile.Firstname @user.Profile.Lastname</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-5" style="">
+                <button class="btn btn-outline-danger" type="submit" style="font-size: 16px;height:90%">Добавить пользователя</button>
+            </div>
+        </form>
+    </div>
+
+    
+</div>
+
+
+@await Component.InvokeAsync("_Chat", new {chatId = @ViewBag.ChatId})

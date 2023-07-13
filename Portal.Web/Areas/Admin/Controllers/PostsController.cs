@@ -12,39 +12,46 @@ using System.Text.Json;
 namespace Portal.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+    [Authorize(Roles = "1,2")]
 public class PostsController : BaseController<Post, IPostRepository>
 {
 
     protected new readonly ILogger<BaseController<Post, IPostRepository>> logger;
     private readonly UnitOfWork uow;
-    private readonly IWebHostEnvironment webHostEnvironment;
     private readonly IMapper mapper;
+    private readonly IWebHostEnvironment webHostEnvironment;
 
-    public PostsController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository, IWebHostEnvironment webHostEnvironment, IMapper mapper)
+
+    public PostsController(UnitOfWork uow, ILogger<BaseController<Post, IPostRepository>> logger, IPostRepository repository, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         : base(uow, logger, repository)
     {
         this.logger = logger;
         this.uow = uow;
-        this.webHostEnvironment = webHostEnvironment;
         this.mapper = mapper;
+        this.webHostEnvironment = webHostEnvironment;
+
     }
 
     public override async Task<IActionResult> Index()
     {
-        List<Post> allPosts = (List<Post>)await uow.PostRep.ListAllAsync();
-        List<PostContent> allContent = (List<PostContent>)await uow.PostContentRep.ListAllAsync();
-        List<PostViewModel> posts = new List<PostViewModel>();
+        List<Post> allPosts = (List<Post>)await uow.PostRep.ListAllDesc("Content");
+        List<PostViewModel> postsVM = new List<PostViewModel>();
+        mapper.Map(allPosts, postsVM);
+        
+        return View(postsVM.OrderByDescending(x => x.PostId));
+    }
 
-        mapper.Map(allPosts, posts);
-        mapper.Map(allContent, posts);
-
+    public async Task<IActionResult> IndexPosts()
+    {
+        var posts = await uow.PostRep.ListAllDesc("Content");
         return View(posts);
     }
+
 
     [HttpGet]
     public override async Task<IActionResult> Create()
     {
-        ViewBag.AllCategories = await uow.CategoryRep.ListAllAsync();
+        ViewBag.AllCategories = await uow.CategoryRep.ListAll();
         return View();
     }
 
@@ -62,8 +69,8 @@ public class PostsController : BaseController<Post, IPostRepository>
             await uow.PostRep.InsertAsync(post);
 
             PostContent content = new PostContent();
-            content.PostId = post.Id;
             mapper.Map(postViewModel, content);
+            content.PostId = post.Id;
             content.PostImage = await ProcessUploadImage(postViewModel, "img/uploads/Posts");
 
             // Если поле со ссылкой на ютуб не пустое, то удалить все симовлы с первого по последний "/"
@@ -84,11 +91,19 @@ public class PostsController : BaseController<Post, IPostRepository>
                     };
                     await uow.PostCategoryRep.InsertAsync(pc);
                 }
-
-
         }
 
         return RedirectToAction(nameof(Index));
+    }
+
+
+
+    public async Task <IActionResult> DeletePost(int postId)
+    {
+        await uow.PostCategoryRep.DeletePCbyPostId(postId);
+        await uow.PostContentRep.DeleteContentByPostId(postId);
+        await uow.PostRep.DeletePostById(postId);
+        return RedirectToAction("Index");
     }
 
 
@@ -102,7 +117,7 @@ public class PostsController : BaseController<Post, IPostRepository>
 
         editPost.Slug = post.Slug;
         editPost.CreatedAt = post.CreatedAt;
-        editPost.Id = post.Id;
+        editPost.PostId = post.Id;
         editPost.Title = content.Title;
         editPost.PostBody = content.PostBody;
         editPost.PostImage = content.PostImage;
@@ -110,7 +125,7 @@ public class PostsController : BaseController<Post, IPostRepository>
         editPost.CommentsClosed = content.CommentsClosed;
         /*if(content.PostImage!=null) */
         ViewBag.oldImage = content.PostImage;
-        ViewBag.AllCategories = await uow.CategoryRep.ListAllAsync();
+        ViewBag.AllCategories = await uow.CategoryRep.ListAll();
         ViewBag.PostCategories = await uow.PostCategoryRep.GetCategoryPosts(postId: id);
         return View("Update", editPost);
     }
@@ -122,14 +137,14 @@ public class PostsController : BaseController<Post, IPostRepository>
     {
         if (ModelState.IsValid)
         {
-            Post post = await uow.PostRep.GetByIdAsync(postViewModel.Id);
+            Post post = await uow.PostRep.GetByIdAsync(postViewModel.PostId);
 
             post.Slug = postViewModel.Slug;
 
             await uow.PostRep.UpdateAsync(post);
 
             // Получим Пост контент
-            PostContent postContent = await uow.PostContentRep.GetContentByPostIdAsync(postViewModel.Id);
+            PostContent postContent = await uow.PostContentRep.GetContentByPostIdAsync(postViewModel.PostId);
 
             // Заполняем Пост контент из формы
             postContent.Title = postViewModel.Title;
@@ -150,7 +165,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             }
             await uow.PostContentRep.UpdateAsync(postContent);
 
-            await uow.PostCategoryRep.DeletePCbyPostIdAsync(post.Id);
+            await uow.PostCategoryRep.DeletePCbyPostId(post.Id);
             if (postViewModel.CategoriesId != null)
                 foreach (int catId in postViewModel.CategoriesId)
                 {
@@ -172,11 +187,9 @@ public class PostsController : BaseController<Post, IPostRepository>
     public override async Task<IActionResult> Details(int id)
     {
         Post? post = await uow.PostRep.GetByIdAsync(id, "Content", "CreatedBy");
-        PostContent? postContent = post.Content;
         PostViewModel postVM = new PostViewModel();
 
         mapper.Map(post, postVM);        // Добавление в PostViewModel данных из класса Post 
-        mapper.Map(postContent, postVM); // Добавление в PostViewModel данных из класса PostContent 
 
 
         postVM.CreatedBy = await uow.UserRep.GetUserByLogin(post.CreatedBy.Login);

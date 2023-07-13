@@ -1,0 +1,87 @@
+﻿@*Страница cо списком чатов (/chats/) *@
+
+@using Portal.DAL.Entities;
+@model IEnumerable<Chat>
+
+<a asp-action="ShowAllChatUser">Все связи чат-пользователь</a>   @* /* для тестирования, потом удалить*/*@
+
+<div class="container flex-column my-4 text-center" style="width: 450px;">
+
+    <div class="row mb-5">
+
+        <form method="post" asp-action="AddUserToChat" asp-controller="Chats" class="d-flex justify-content-center">
+            <div class="col-7">
+                <select id="chatId" name="chatId" required style="display: block; margin-bottom: 10px; font-size: 16px; width: 200px;" class="form-select">
+                    <option value="">Выберите чат</option>
+                    @foreach (Chat chat in Model)
+                    {
+                        <option value="@chat.Id">@chat.ChatName@chat.Id</option>
+                    }
+                </select>
+                <select id="userId" name="userId" required style="display: block; margin-bottom: 10px;font-size: 16px; width: 200px;" class="form-select">
+                    <option value="">Выберите пользователя</option>
+                    @foreach (User user in @ViewBag.AllUsers)
+                    {
+                        <option value="@user.Id">@user.Profile.Firstname @user.Profile.Lastname</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-5" style="">
+                <button class="btn btn-outline-danger" type="submit" style="font-size: 16px;height:90%">Добавить пользователя</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <form method="post" asp-action="AddNewChat" asp-controller="Chats" class="d-flex justify-content-between">
+            <div class="col-12">
+                <button class="btn btn-outline-danger" type="submit" style="font-size: 16px;">Добавить новый чат</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="container">
+    <h1 class=" text-center">Список чатов</h1>
+    <div class="row">
+
+
+        <table class="cinereousTable">
+
+            <thead>
+                <tr>
+                    <th>Название чата</th>
+                    <th>Дата создания</th>
+                    <th>Количество участников</th>
+                    <th>Изображение</th>
+                    <th>Удалить</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Chat chat in Model)
+                {
+                    <tr>
+                        <td><a asp-action="ShowChatInfo" asp-route-chatId="@chat.Id"> @chat.ChatName@chat.Id</a> </td>
+                        <td>@chat.CreatedAt</td>
+                        <td>@chat.UserCount</td>
+                        <td><img src="/img/uploads/Chats/@chat.ChatIMG" style="height: 100px; border-radius:5px;" /></td>
+                        <td> <a asp-action="DeleteChat" asp-route-chatId="@chat.Id"><i class="fa-solid fa-trash"></i> </a> </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+

@@ -26,37 +26,35 @@ public class CommentsController : BaseController<Comment, ICommentRepository>
     {
         Post commentedPost = await uow.PostRep.GetPostBySlug(postSlug);
 
-        Comment comment = new Comment()
+        Comment comment = new Comment() // Создаем коммент с текущей датой, передаем в него текст из представления и привязываем к ID поста
         {
             CreatedAt = DateTime.Now,
             TextComment = Message,
             PostId = commentedPost.Id,
         };
 
-        if (commentatorName != null)
+        if (commentatorName != null) // Если пользователь не авторизован - добавляем указанное в представлении Имя в текст сообщения, а в ID пользователя ставим пользователя по умолчанию
         {
             comment.UserId = await uow.UserRep.GetDefaultUserId();
             comment.TextComment = $"({commentatorName}): {comment.TextComment}";
         }
         else
         {
-            User user = await uow.UserRep.GetUserByLogin(User.Identity.Name);
+            User user = await uow.UserRep.GetUserByLogin(User.Identity.Name); // если пользователь авторизован - записываем его ID 
             comment.UserId = user.Id;
         }
 
         await uow.CommentRep.InsertAsync(comment);
 
-        PostComment postComment = new PostComment()
-        {
-            PostId = commentedPost.Id,
-            CommentId = comment.Id
-        };
+        commentedPost.Content.CommentsNum++; // Увеличиваем счетчик комментариев у поста
+        await uow.PostContentRep.UpdateAsync(commentedPost.Content);
 
-        await uow.PostCommentRep.InsertAsync(postComment);
 
-        return RedirectToAction("Post", "Categories", new { postSlug = postSlug});
+        return RedirectToAction("Post", "Categories", new { postSlug = postSlug });
 
 
     }
+
+
 
 }

@@ -37,19 +37,19 @@ namespace Portal.DAL.Migrations
                     b.ToTable("CategoryPost");
                 });
 
-            modelBuilder.Entity("CommentPost", b =>
+            modelBuilder.Entity("ChatUser", b =>
                 {
-                    b.Property<int>("CommentsId")
+                    b.Property<int>("ChatsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PostsId")
+                    b.Property<int>("UsersId")
                         .HasColumnType("int");
 
-                    b.HasKey("CommentsId", "PostsId");
+                    b.HasKey("ChatsId", "UsersId");
 
-                    b.HasIndex("PostsId");
+                    b.HasIndex("UsersId");
 
-                    b.ToTable("CommentPost");
+                    b.ToTable("ChatUser");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Category", b =>
@@ -100,6 +100,54 @@ namespace Portal.DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Portal.DAL.Entities.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ChatIMG")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChatName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("Portal.DAL.Entities.ChatUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChatUsers");
+                });
+
             modelBuilder.Entity("Portal.DAL.Entities.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -124,6 +172,8 @@ namespace Portal.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
@@ -183,6 +233,42 @@ namespace Portal.DAL.Migrations
                     b.HasIndex("MenuId");
 
                     b.ToTable("MenuItems");
+                });
+
+            modelBuilder.Entity("Portal.DAL.Entities.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LikesCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RepliedToId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TextMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("WasEdited")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.MyLogger", b =>
@@ -263,29 +349,6 @@ namespace Portal.DAL.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("PostCategories");
-                });
-
-            modelBuilder.Entity("Portal.DAL.Entities.PostComment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CommentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommentId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("PostComments");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.PostContent", b =>
@@ -441,28 +504,55 @@ namespace Portal.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CommentPost", b =>
+            modelBuilder.Entity("ChatUser", b =>
                 {
-                    b.HasOne("Portal.DAL.Entities.Comment", null)
+                    b.HasOne("Portal.DAL.Entities.Chat", null)
                         .WithMany()
-                        .HasForeignKey("CommentsId")
+                        .HasForeignKey("ChatsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Portal.DAL.Entities.Post", null)
+                    b.HasOne("Portal.DAL.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("PostsId")
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Portal.DAL.Entities.Comment", b =>
+            modelBuilder.Entity("Portal.DAL.Entities.ChatUser", b =>
                 {
+                    b.HasOne("Portal.DAL.Entities.Chat", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Portal.DAL.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Portal.DAL.Entities.Comment", b =>
+                {
+                    b.HasOne("Portal.DAL.Entities.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Portal.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });
@@ -476,6 +566,17 @@ namespace Portal.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Menu");
+                });
+
+            modelBuilder.Entity("Portal.DAL.Entities.Message", b =>
+                {
+                    b.HasOne("Portal.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.MyLogger", b =>
@@ -517,25 +618,6 @@ namespace Portal.DAL.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("Portal.DAL.Entities.PostComment", b =>
-                {
-                    b.HasOne("Portal.DAL.Entities.Comment", "Comment")
-                        .WithMany()
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Portal.DAL.Entities.Post", "Post")
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("Portal.DAL.Entities.PostContent", b =>
                 {
                     b.HasOne("Portal.DAL.Entities.Post", "Post")
@@ -571,6 +653,8 @@ namespace Portal.DAL.Migrations
 
             modelBuilder.Entity("Portal.DAL.Entities.Post", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Content");
                 });
 

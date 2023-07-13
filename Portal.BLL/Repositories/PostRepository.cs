@@ -14,6 +14,14 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
         this.db = db;
     }
 
+    public async Task DeletePostById(int postId)
+    {
+        List<Post> posttest = await db.Posts.ToListAsync();
+        Post post = await db.Posts.FirstOrDefaultAsync(x => x.Id == postId);
+        db.Posts.Remove(post);
+        await db.SaveChangesAsync();
+    }
+
     public async Task<Post?> GetPostByIdAsync(int id) => await
         db.Posts
         .FirstOrDefaultAsync(x => x.Id == id);
@@ -43,11 +51,23 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
         .Include(p => p.Content)
         .ToListAsync();
 
+    public async Task<IEnumerable<Post>> ListLastPostsForColumn(int count)
+    {
+        List<Post> posts = await
+            db.Posts
+            .Include(p => p.Content)
+            .OrderByDescending(x => x.Id)
+            .Take(count)
+            .ToListAsync();
+        return posts;
+    }
+
     public async Task<List<Post>> ListPostsWithComments(int count)
     {
         List<Post> posts = await db.Posts
             .Include(x => x.Content)
             .Take(count)
+            .OrderByDescending(x => x.Id)
             .ToListAsync();
         List<Comment> comments = new List<Comment>();
         foreach (Post post in posts)

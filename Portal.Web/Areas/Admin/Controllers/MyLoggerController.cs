@@ -26,4 +26,10 @@ public class MyLoggerController : BaseController<Role, IRoleRepository>
         var allLogs = await uow.MyLoggerRep.ListLogs();
         return View("LoggerPage", allLogs);
     }
+
+    public async Task<IActionResult> ShowUserLogWithoutMe()
+    {
+        var allLogs = await uow.MyLoggerRep.ListLogsWithoutMe();
+        return View("LoggerPage", allLogs);
+    }
 }
