@@ -88,7 +88,7 @@ public class ChatsController : BaseController<Chat, IChatRepository>
         ViewBag.ChatIMG = chatUsers.FirstOrDefault().Chat.ChatIMG;
         ViewBag.CreatedAt = chatUsers.FirstOrDefault().Chat.CreatedAt;
         ViewBag.UserCount = chatUsers.FirstOrDefault().Chat.UserCount;
-        ViewBag.UserDroplist = (await uow.UserRep.ListAllAsync("Profile")).Where(user => !chatUsers.Any(chatUser => chatUser.User.Id == user.Id)).ToList(); /*Список пользователей, которых нет в данном чате*/
+        ViewBag.UserDroplist = (await uow.UserRep.ListAll("Profile")).Where(user => !chatUsers.Any(chatUser => chatUser.User.Id == user.Id)).ToList(); /*Список пользователей, которых нет в данном чате*/
         return View("ChatInfo", chatProfileVM);
     }
 

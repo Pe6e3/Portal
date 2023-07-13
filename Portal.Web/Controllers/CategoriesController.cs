@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Portal.BLL;
 using Portal.DAL.Entities;
 using Portal.DAL.Interfaces;
-using Portal.Web.Models;
 using Portal.Web.ViewModels;
-using System.Diagnostics;
+
 namespace Portal.Web.Controllers;
 public class CategoriesController : BaseController<Category, ICategoryRepository>
 {
