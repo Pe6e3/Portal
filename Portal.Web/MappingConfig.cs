@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Portal.API.Entities;
 using Portal.DAL.Entities;
 using Portal.Web.Areas.Admin.Controllers.ViewModels;
 using Portal.Web.ViewModels;
