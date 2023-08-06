@@ -220,8 +220,8 @@ namespace Portal.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedById = table.Column<int>(type: "int", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    CreatedById = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -230,7 +230,8 @@ namespace Portal.DAL.Migrations
                         name: "FK_Posts_Users_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -307,8 +308,7 @@ namespace Portal.DAL.Migrations
                         name: "FK_Comments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -413,13 +413,28 @@ namespace Portal.DAL.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Posts",
+                columns: new[] { "Id", "CategoryId", "CreatedAt", "CreatedById", "Slug" },
+                values: new object[] { 1, 0, new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(98), 2, "start" });
+
+            migrationBuilder.InsertData(
                 table: "UserProfiles",
                 columns: new[] { "Id", "AvatarImg", "Birthday", "Email", "Firstname", "Lastname", "RegistrationDate", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "default-avatar.png", null, null, "Стандартный", "Пользователь", new DateTime(2023, 8, 6, 14, 22, 4, 187, DateTimeKind.Local).AddTicks(3540), 1 },
-                    { 2, "admin-default.png", null, null, "Админ", null, new DateTime(2023, 8, 6, 14, 22, 4, 187, DateTimeKind.Local).AddTicks(3553), 2 }
+                    { 1, "default-avatar.png", null, null, "Стандартный", "Пользователь", new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(64), 1 },
+                    { 2, "admin-default.png", null, null, "Админ", null, new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(81), 2 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "PostCategories",
+                columns: new[] { "Id", "CategoryId", "PostId" },
+                values: new object[] { 1, 2, 1 });
+
+            migrationBuilder.InsertData(
+                table: "PostContents",
+                columns: new[] { "Id", "CommentsClosed", "CommentsNum", "PostBody", "PostId", "PostImage", "PostVideo", "Title" },
+                values: new object[] { 1, false, 0, "Авторизуйтесь, логин <b> Admin</b>, пароль <b>111</b>. Перейдите по ссылке ниже, чтобы сгенерировать 20 случайных постов (занимает около 20 секунд после нажатия, жди)\r\n<br />  <b><a href=\"https://localhost:7164/Admin/Posts/GenerateRandomPosts?count=20\"> Генератор постов</a> </b>", 1, "10.jpg", null, "Стартовый пост (прочитай)" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryPost_PostsId",

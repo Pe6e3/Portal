@@ -12,7 +12,7 @@ using Portal.DAL.Data;
 namespace Portal.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230806082204_local")]
+    [Migration("20230806084636_local")]
     partial class local
     {
         /// <inheritdoc />
@@ -349,13 +349,13 @@ namespace Portal.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatedById")
+                    b.Property<int>("CreatedById")
                         .HasColumnType("int");
 
                     b.Property<string>("Slug")
@@ -366,6 +366,16 @@ namespace Portal.DAL.Migrations
                     b.HasIndex("CreatedById");
 
                     b.ToTable("Posts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 0,
+                            CreatedAt = new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(98),
+                            CreatedById = 2,
+                            Slug = "start"
+                        });
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.PostCategory", b =>
@@ -389,6 +399,14 @@ namespace Portal.DAL.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("PostCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 2,
+                            PostId = 1
+                        });
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.PostContent", b =>
@@ -426,6 +444,18 @@ namespace Portal.DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("PostContents");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CommentsClosed = false,
+                            CommentsNum = 0,
+                            PostBody = "Авторизуйтесь, логин <b> Admin</b>, пароль <b>111</b>. Перейдите по ссылке ниже, чтобы сгенерировать 20 случайных постов (занимает около 20 секунд после нажатия, жди)\r\n<br />  <b><a href=\"https://localhost:7164/Admin/Posts/GenerateRandomPosts?count=20\"> Генератор постов</a> </b>",
+                            PostId = 1,
+                            PostImage = "10.jpg",
+                            Title = "Стартовый пост (прочитай)"
+                        });
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Role", b =>
@@ -551,7 +581,7 @@ namespace Portal.DAL.Migrations
                             AvatarImg = "default-avatar.png",
                             Firstname = "Стандартный",
                             Lastname = "Пользователь",
-                            RegistrationDate = new DateTime(2023, 8, 6, 14, 22, 4, 187, DateTimeKind.Local).AddTicks(3540),
+                            RegistrationDate = new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(64),
                             UserId = 1
                         },
                         new
@@ -559,7 +589,7 @@ namespace Portal.DAL.Migrations
                             Id = 2,
                             AvatarImg = "admin-default.png",
                             Firstname = "Админ",
-                            RegistrationDate = new DateTime(2023, 8, 6, 14, 22, 4, 187, DateTimeKind.Local).AddTicks(3553),
+                            RegistrationDate = new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(81),
                             UserId = 2
                         });
                 });
@@ -622,9 +652,9 @@ namespace Portal.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("Portal.DAL.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Post");
@@ -669,7 +699,9 @@ namespace Portal.DAL.Migrations
                 {
                     b.HasOne("Portal.DAL.Entities.User", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CreatedBy");
                 });
@@ -735,6 +767,8 @@ namespace Portal.DAL.Migrations
 
             modelBuilder.Entity("Portal.DAL.Entities.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Profile");
                 });
 #pragma warning restore 612, 618

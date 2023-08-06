@@ -10,4 +10,5 @@ public class User : BaseEntity
     public Role? Role { get; set; }
     public UserProfile? Profile { get; set; }
     public virtual List<Chat>? Chats { get; set; }
+    public virtual List<Comment>? Comments { get; set; }
 }

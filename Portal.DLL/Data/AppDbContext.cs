@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.DAL.Entities;
 using Portal.DAL.Enum;
+using System.Xml.Linq;
 
 namespace Portal.DAL.Data;
 
@@ -38,12 +39,24 @@ public class AppDbContext : DbContext
             .HasMany(e => e.Categories)
             .WithMany(e => e.Posts);
 
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.User)
+            .WithMany(u => u.Comments)
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.Post)
+            .WithMany(p => p.Comments)
+            .HasForeignKey(c => c.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
+
 
         modelBuilder.Entity<Menu>().HasData(new Menu
         {
             Id = 1,
             Name = "Меню в шапке"
-        },new Menu
+        }, new Menu
         {
             Id = 2,
             Name = "Меню в подвале"
@@ -149,6 +162,30 @@ public class AppDbContext : DbContext
             Firstname = "Админ",
             RegistrationDate = DateTime.Now,
             AvatarImg = "admin-default.png"
+        });
+
+        modelBuilder.Entity<Post>().HasData(new Post
+        {
+            Id = 1,
+            Slug = "start",
+            CreatedAt = DateTime.Now,
+            CreatedById = 2,
+        });
+
+
+        modelBuilder.Entity<PostContent>().HasData(new PostContent
+        {
+            Id = 1,
+            PostId = 1,
+            Title = "Стартовый пост (прочитайте)",
+            PostBody = "Авторизуйтесь. \r\n<br />  Логин <b> Admin</b>, Пароль <b>111</b>.\r\n<br /> Перейдите по ссылке ниже, чтобы сгенерировать 20 случайных постов (занимает около 20 секунд после нажатия, ждите)\r\n<br />  <b><a href=\"https://localhost:7164/Admin/Posts/GenerateRandomPosts?count=20\"> Генератор постов</a> </b>",
+            PostImage = "10.jpg"
+        });
+        modelBuilder.Entity<PostCategory>().HasData(new PostCategory
+        {
+            Id = 1,
+            PostId = 1,
+            CategoryId = 2
         });
     }
 }
