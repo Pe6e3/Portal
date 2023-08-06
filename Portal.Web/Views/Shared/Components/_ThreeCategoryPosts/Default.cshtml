@@ -13,8 +13,8 @@
                         // 1. Пост посередине
                         Post? firstPost = Model?.FirstOrDefault()?.Post;
                         string Ago = "";
-                        int timeAgo = Convert.ToInt32((DateTime.Now - firstPost.CreatedAt).TotalHours.ToString("F0"));
-                        int daysAgo = Convert.ToInt32((DateTime.Now - firstPost.CreatedAt).TotalDays.ToString("F0"));
+                        int timeAgo = Convert.ToInt32((DateTime.Now - firstPost?.CreatedAt)?.TotalHours.ToString("F0"));
+                        int daysAgo = Convert.ToInt32((DateTime.Now - firstPost?.CreatedAt)?.TotalDays.ToString("F0"));
                         Ago = timeAgo < 36 ? timeAgo.ToString() + " ч назад" : daysAgo.ToString() + " д назад";
 
 

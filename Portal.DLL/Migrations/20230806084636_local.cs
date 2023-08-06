@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Portal.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class Comments : Migration
+    public partial class local : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,6 +27,22 @@ namespace Portal.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Chats",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ChatName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChatIMG = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chats", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,22 +115,97 @@ namespace Portal.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comments",
+                name: "ChatUser",
+                columns: table => new
+                {
+                    ChatsId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatUser", x => new { x.ChatsId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_ChatUser_Chats_ChatsId",
+                        column: x => x.ChatsId,
+                        principalTable: "Chats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChatUser_Users_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChatUsers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TextComment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LikeCount = table.Column<int>(type: "int", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false)
+                    ChatId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.PrimaryKey("PK_ChatUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_Users_UserId",
+                        name: "FK_ChatUsers_Chats_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "Chats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChatUsers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChatId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    TextMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SentAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    WasEdited = table.Column<bool>(type: "bit", nullable: false),
+                    LikesCount = table.Column<int>(type: "int", nullable: false),
+                    RepliedToId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MyLoggers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserClick = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MyLoggers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MyLoggers_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -129,8 +220,8 @@ namespace Portal.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedById = table.Column<int>(type: "int", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    CreatedById = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -139,7 +230,8 @@ namespace Portal.DAL.Migrations
                         name: "FK_Posts_Users_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,27 +284,31 @@ namespace Portal.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CommentPost",
+                name: "Comments",
                 columns: table => new
                 {
-                    CommentsId = table.Column<int>(type: "int", nullable: false),
-                    PostsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TextComment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LikeCount = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CommentPost", x => new { x.CommentsId, x.PostsId });
+                    table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CommentPost_Comments_CommentsId",
-                        column: x => x.CommentsId,
-                        principalTable: "Comments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CommentPost_Posts_PostsId",
-                        column: x => x.PostsId,
+                        name: "FK_Comments_Posts_PostId",
+                        column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -235,32 +331,6 @@ namespace Portal.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PostCategories_Posts_PostId",
-                        column: x => x.PostId,
-                        principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PostComments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CommentId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PostComments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PostComments_Comments_CommentId",
-                        column: x => x.CommentId,
-                        principalTable: "Comments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PostComments_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
@@ -297,9 +367,9 @@ namespace Portal.DAL.Migrations
                 columns: new[] { "Id", "CategoryImage", "Description", "Name", "Slug" },
                 values: new object[,]
                 {
-                    { 1, null, "Описание Категории Экономика", "Экономика", "economics" },
-                    { 2, null, "Описание Категории Технологии", "Технологии", "technology" },
-                    { 3, null, "Описание Категории Спорт", "Спорт", "sport" }
+                    { 1, "5.jpg", "Новости из мира Экономики", "Экономика", "economics" },
+                    { 2, "2.jpg", "Новейшие технологии, открытия", "Технологии", "technology" },
+                    { 3, "7.jpg", "Все, что связано со спортом", "Спорт", "sport" }
                 });
 
             migrationBuilder.InsertData(
@@ -322,15 +392,74 @@ namespace Portal.DAL.Migrations
                     { 4, 4 }
                 });
 
+            migrationBuilder.InsertData(
+                table: "MenuItems",
+                columns: new[] { "Id", "MenuId", "Name", "Position", "Slug" },
+                values: new object[,]
+                {
+                    { 1, 1, "Экономика", 1, "category/economics" },
+                    { 2, 1, "Технологии", 2, "category/technology" },
+                    { 3, 1, "Спорт", 3, "category/sport" },
+                    { 4, 1, "Админка", 4, "admin" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Login", "Password", "RoleId" },
+                values: new object[,]
+                {
+                    { 1, "DefaultUser", "$2a$11$uw8Pqz0Iap7IY530hPeZ8u.ebtvnxfFeXAECB65DI1JS3wLaTipda", 3 },
+                    { 2, "Admin", "$2a$11$uw8Pqz0Iap7IY530hPeZ8u.ebtvnxfFeXAECB65DI1JS3wLaTipda", 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Posts",
+                columns: new[] { "Id", "CategoryId", "CreatedAt", "CreatedById", "Slug" },
+                values: new object[] { 1, 0, new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(98), 2, "start" });
+
+            migrationBuilder.InsertData(
+                table: "UserProfiles",
+                columns: new[] { "Id", "AvatarImg", "Birthday", "Email", "Firstname", "Lastname", "RegistrationDate", "UserId" },
+                values: new object[,]
+                {
+                    { 1, "default-avatar.png", null, null, "Стандартный", "Пользователь", new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(64), 1 },
+                    { 2, "admin-default.png", null, null, "Админ", null, new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(81), 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PostCategories",
+                columns: new[] { "Id", "CategoryId", "PostId" },
+                values: new object[] { 1, 2, 1 });
+
+            migrationBuilder.InsertData(
+                table: "PostContents",
+                columns: new[] { "Id", "CommentsClosed", "CommentsNum", "PostBody", "PostId", "PostImage", "PostVideo", "Title" },
+                values: new object[] { 1, false, 0, "Авторизуйтесь, логин <b> Admin</b>, пароль <b>111</b>. Перейдите по ссылке ниже, чтобы сгенерировать 20 случайных постов (занимает около 20 секунд после нажатия, жди)\r\n<br />  <b><a href=\"https://localhost:7164/Admin/Posts/GenerateRandomPosts?count=20\"> Генератор постов</a> </b>", 1, "10.jpg", null, "Стартовый пост (прочитай)" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryPost_PostsId",
                 table: "CategoryPost",
                 column: "PostsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommentPost_PostsId",
-                table: "CommentPost",
-                column: "PostsId");
+                name: "IX_ChatUser_UsersId",
+                table: "ChatUser",
+                column: "UsersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatUsers_ChatId",
+                table: "ChatUsers",
+                column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatUsers_UserId",
+                table: "ChatUsers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_PostId",
+                table: "Comments",
+                column: "PostId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",
@@ -343,6 +472,16 @@ namespace Portal.DAL.Migrations
                 column: "MenuId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Messages_UserId",
+                table: "Messages",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MyLoggers_UserId",
+                table: "MyLoggers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PostCategories_CategoryId",
                 table: "PostCategories",
                 column: "CategoryId");
@@ -350,16 +489,6 @@ namespace Portal.DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PostCategories_PostId",
                 table: "PostCategories",
-                column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PostComments_CommentId",
-                table: "PostComments",
-                column: "CommentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PostComments_PostId",
-                table: "PostComments",
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
@@ -392,16 +521,25 @@ namespace Portal.DAL.Migrations
                 name: "CategoryPost");
 
             migrationBuilder.DropTable(
-                name: "CommentPost");
+                name: "ChatUser");
+
+            migrationBuilder.DropTable(
+                name: "ChatUsers");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "MenuItems");
 
             migrationBuilder.DropTable(
-                name: "PostCategories");
+                name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "PostComments");
+                name: "MyLoggers");
+
+            migrationBuilder.DropTable(
+                name: "PostCategories");
 
             migrationBuilder.DropTable(
                 name: "PostContents");
@@ -410,13 +548,13 @@ namespace Portal.DAL.Migrations
                 name: "UserProfiles");
 
             migrationBuilder.DropTable(
+                name: "Chats");
+
+            migrationBuilder.DropTable(
                 name: "Menus");
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Posts");
