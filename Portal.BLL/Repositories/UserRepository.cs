@@ -27,6 +27,7 @@ public class UserRepository : GenericRepositoryAsync<User>, IUserRepository
     public async Task<int> GetDefaultUserId()
     {
         User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == "Default");
+        if (user == null) return 1;
         return user.Id;
     }
 

@@ -80,21 +80,24 @@ namespace Portal.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Описание Категории Экономика",
+                            CategoryImage = "5.jpg",
+                            Description = "Новости из мира Экономики",
                             Name = "Экономика",
                             Slug = "economics"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Описание Категории Технологии",
+                            CategoryImage = "2.jpg",
+                            Description = "Новейшие технологии, открытия",
                             Name = "Технологии",
                             Slug = "technology"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "Описание Категории Спорт",
+                            CategoryImage = "7.jpg",
+                            Description = "Все, что связано со спортом",
                             Name = "Спорт",
                             Slug = "sport"
                         });
@@ -233,6 +236,40 @@ namespace Portal.DAL.Migrations
                     b.HasIndex("MenuId");
 
                     b.ToTable("MenuItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            MenuId = 1,
+                            Name = "Экономика",
+                            Position = 1,
+                            Slug = "category/economics"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            MenuId = 1,
+                            Name = "Технологии",
+                            Position = 2,
+                            Slug = "category/technology"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            MenuId = 1,
+                            Name = "Спорт",
+                            Position = 3,
+                            Slug = "category/sport"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            MenuId = 1,
+                            Name = "Админка",
+                            Position = 4,
+                            Slug = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.Message", b =>
@@ -450,6 +487,22 @@ namespace Portal.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Login = "DefaultUser",
+                            Password = "$2a$11$uw8Pqz0Iap7IY530hPeZ8u.ebtvnxfFeXAECB65DI1JS3wLaTipda",
+                            RoleId = 3
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Login = "Admin",
+                            Password = "$2a$11$uw8Pqz0Iap7IY530hPeZ8u.ebtvnxfFeXAECB65DI1JS3wLaTipda",
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("Portal.DAL.Entities.UserProfile", b =>
@@ -487,6 +540,25 @@ namespace Portal.DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("UserProfiles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AvatarImg = "default-avatar.png",
+                            Firstname = "Стандартный",
+                            Lastname = "Пользователь",
+                            RegistrationDate = new DateTime(2023, 8, 6, 14, 22, 4, 187, DateTimeKind.Local).AddTicks(3540),
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AvatarImg = "admin-default.png",
+                            Firstname = "Админ",
+                            RegistrationDate = new DateTime(2023, 8, 6, 14, 22, 4, 187, DateTimeKind.Local).AddTicks(3553),
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("CategoryPost", b =>

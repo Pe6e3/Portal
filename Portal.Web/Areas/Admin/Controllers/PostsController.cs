@@ -12,7 +12,7 @@ using System.Text.Json;
 namespace Portal.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-    [Authorize(Roles = "1,2")]
+[Authorize(Roles = "1,2")]
 public class PostsController : BaseController<Post, IPostRepository>
 {
 
@@ -37,7 +37,7 @@ public class PostsController : BaseController<Post, IPostRepository>
         List<Post> allPosts = (List<Post>)await uow.PostRep.ListAllDesc("Content");
         List<PostViewModel> postsVM = new List<PostViewModel>();
         mapper.Map(allPosts, postsVM);
-        
+
         return View(postsVM.OrderByDescending(x => x.PostId));
     }
 
@@ -98,7 +98,7 @@ public class PostsController : BaseController<Post, IPostRepository>
 
 
 
-    public async Task <IActionResult> DeletePost(int postId)
+    public async Task<IActionResult> DeletePost(int postId)
     {
         await uow.PostCategoryRep.DeletePCbyPostId(postId);
         await uow.PostContentRep.DeleteContentByPostId(postId);
@@ -223,7 +223,7 @@ public class PostsController : BaseController<Post, IPostRepository>
             System.IO.File.Delete(path);
     }
 
-    public async Task<IActionResult> GenerateRandomPosts(int count = 1)
+    public async Task<IActionResult> GenerateRandomPosts(int count = 1, int catId = 0)
     {
         for (int i = 0; i < count; i++)
         {
@@ -231,19 +231,23 @@ public class PostsController : BaseController<Post, IPostRepository>
             Post post = new Post();
             PostContent content = new PostContent();
             PostCategory postCat = new PostCategory();
-            Category randomCat = await uow.CategoryRep.RandomCatId();
+
+            Category? category = new Category();
+            if (catId == 0)  category = await uow.CategoryRep.RandomCatId(); // Если категория не задана - выбираем случайную
+            else category = await uow.CategoryRep.GetByIdAsync(catId);       // Если задана - выбираем определенную
+
             Random random = new Random();
 
             post.Slug = await GetRandomWords(1);
             post.CreatedAt = DateTime.Now;
             post.CreatedBy = await uow.UserRep.GetUserByLogin(User.Identity.Name);
-            post.CategoryId = randomCat.Id;
+            post.CategoryId = category.Id;
             await uow.PostRep.InsertAsync(post);
 
             postCat.PostId = post.Id;
-            postCat.CategoryId = randomCat.Id;
+            postCat.CategoryId = category.Id;
 
-            content.Title = post.Id + ". (" + randomCat.Name + ") " + await GetRandomWords(random.Next(2, 6));
+            content.Title = post.Id + ". (" + category.Name + ") " + await GetRandomWords(random.Next(2, 6));
             content.PostBody = await GetRandomWords(random.Next(150, 350));
             content.PostImage = random.Next(1, 32).ToString() + ".jpg"; // надо добавить в папку uploads изображения с названием 1.jpg, 2.jpg  и так далее попорядку. Количество поставить в random.Next (у меня 32)
             content.PostId = post.Id;
