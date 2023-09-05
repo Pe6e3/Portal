@@ -16,40 +16,71 @@ public class LogUserActionMiddleware : IMiddleware
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-
-        if (!context.Request.Path.Value.Contains("/img/") && !context.Request.Path.Value.Contains("/lib") && !context.Request.Path.Value.Contains("favicon"))
+        if (ShouldLogRequest(context.Request.Path.Value))
         {
-            User? user = await uow.UserRep.GetUserByLogin(context.User.Identity.Name);
-            var logger = new MyLogger();
-            logger.UserIP = context.Connection.RemoteIpAddress?.ToString() ?? context.Connection.LocalIpAddress?.ToString();
-            logger.UserClick = context.Request.Path.Value;
-            logger.UserId = user != null ? user.Id : await uow.UserRep.GetDefaultUserId();
-            logger.Date = DateTime.Now;
+            User? user = await GetUserAsync(context.User.Identity.Name);
+            MyLogger logger = await CreateLogger(context, user);
 
-            string lineApiIp = "";
-            string lineApiLocation = "";
-            string regexIp = "\"ip\":\"(.*?)\"";
-            string regexCountry = "\"country\":\"(.*?)\"";
-            string regexCity = "\"city\":\"(.*?)\"";
-
-
-
-            using (WebClient wc = new WebClient())
+            try
             {
-                lineApiIp = wc.DownloadString("http://ipwho.is/");
-                Match matchIp = Regex.Match(lineApiIp, regexIp);
-                logger.UserIP = matchIp.Groups[1].Value;
+                string userIp = await GetUserIpAddressAsync();
+                string userLocation = await GetUserLocationAsync(userIp);
 
-                lineApiLocation = wc.DownloadString("http://ipwho.is/" + logger.UserIP);
+                logger.UserIP = userIp;
+                logger.UserLocation = userLocation;
+
+                await InsertLogAsync(logger);
             }
-
-            Match matchCountry = Regex.Match(lineApiLocation, regexCountry);
-            Match matchCity = Regex.Match(lineApiLocation, regexCity);
-            logger.UserLocation = matchCountry.Groups[1].Value + " - " + matchCity.Groups[1].Value;
-            await uow.MyLoggerRep.InsertAsync(logger);
+            catch (Exception ex)
+            {
+                // Обработка ошибок при получении IP и местоположения
+                // Здесь можно добавить логирование ошибок
+            }
         }
 
-        // Вызов следующего middleware в конвейере запросов
         await next(context);
     }
+
+    private bool ShouldLogRequest(string path)
+    {
+        return !path.Contains("/img/") && !path.Contains("/lib") && !path.Contains("favicon");
+    }
+
+    private async Task<User?> GetUserAsync(string userName)
+    {
+        return await uow.UserRep.GetUserByLogin(userName);
+    }
+
+    private async Task<MyLogger> CreateLogger(HttpContext context, User? user)
+    {
+        MyLogger logger = new MyLogger();
+        logger.UserIP = context.Connection.RemoteIpAddress?.ToString() ?? context.Connection.LocalIpAddress?.ToString();
+        logger.UserClick = context.Request.Path.Value;
+        logger.UserId = user?.Id ?? await uow.UserRep.GetDefaultUserId();
+        logger.Date = DateTime.Now;
+        return logger;
+    }
+
+    private async Task<string> GetUserIpAddressAsync()
+    {
+        using HttpClient httpClient = new HttpClient();
+        string ipAddressResponse = await httpClient.GetStringAsync("http://ipwho.is/");
+        Match matchIp = Regex.Match(ipAddressResponse, "\"ip\":\"(.*?)\"");
+        return matchIp.Groups[1].Value;
+    }
+
+    private async Task<string> GetUserLocationAsync(string ipAddress)
+    {
+        using HttpClient httpClient = new HttpClient();
+        string locationResponse = await httpClient.GetStringAsync("http://ipwho.is/" + ipAddress);
+        Match matchCountry = Regex.Match(locationResponse, "\"country\":\"(.*?)\"");
+        Match matchCity = Regex.Match(locationResponse, "\"city\":\"(.*?)\"");
+        return matchCountry.Groups[1].Value + " - " + matchCity.Groups[1].Value;
+    }
+
+    private async Task InsertLogAsync(MyLogger logger)
+    {
+        await uow.MyLoggerRep.InsertAsync(logger);
+    }
+
 }
