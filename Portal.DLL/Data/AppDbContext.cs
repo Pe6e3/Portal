@@ -89,6 +89,13 @@ public class AppDbContext : DbContext
             Id = 4,
             MenuId = 1,
             Slug = "admin",
+            Position = 5,
+        }, new MenuItem
+        {
+            Name = "Лайфхаки",
+            Id = 5,
+            MenuId = 1,
+            Slug = "category/lifehacks",
             Position = 4,
         });
 
@@ -113,6 +120,13 @@ public class AppDbContext : DbContext
             Description = "Все, что связано со спортом",
             Slug = "sport",
             CategoryImage = "7.jpg",
+        }, new Category
+        {
+            Id = 4,
+            Name = "Лайфхаки",
+            Description = "Различные интересные способы",
+            Slug = "lifehacks",
+            CategoryImage = "6.jpg",
         });
 
         modelBuilder.Entity<Role>().HasData(new Role

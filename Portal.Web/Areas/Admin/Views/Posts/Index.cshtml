@@ -27,7 +27,7 @@
             <th>@Html.DisplayNameFor(model => model.PostBody)</th>
             <th>@Html.DisplayNameFor(model => model.CommentsNum)</th>
             <th>@Html.DisplayNameFor(model => model.PostImage)</th>
-            <th style="width:300px;">@Html.DisplayNameFor(model => model.PostVideo)</th>
+            @* <th style="width:300px;">@Html.DisplayNameFor(model => model.PostVideo)</th> *@
             <th> </th>
         </tr>
     </thead>
@@ -48,11 +48,11 @@
                     </a>
                 </td>
 
-                <td>
+@*                 <td>
                     <div style="position: relative; padding-bottom: 56.25%; height: 0;">
                         <iframe style="border: solid 5px black; border-radius: 5px; position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/@item.PostVideo" title="@item.Title" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
-                </td>
+                </td> *@
 
                 <td>
                     <a asp-action="UpdateGet" asp-route-id="@item.PostId"><i class="fa-solid fa-pencil" style="font-size: 38px; color: #917cf8;"></i></a>
