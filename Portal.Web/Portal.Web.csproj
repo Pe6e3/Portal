@@ -2160,6 +2160,7 @@
 
 	<ItemGroup>
 		<Folder Include="wwwroot\admin\img\" />
+		<Folder Include="wwwroot\img\uploads\Posts\" />
 	</ItemGroup>
 
 </Project>

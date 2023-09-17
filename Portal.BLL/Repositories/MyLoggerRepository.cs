@@ -21,7 +21,7 @@ public class MyLoggerRepository : GenericRepositoryAsync<MyLogger>, IMyLoggerRep
             .Include(x => x.User)
             .ThenInclude(x=>x.Profile)
             .OrderByDescending(x=>x.Id)
-            .Where(x=>x.UserIP != "::1" && x.UserIP != "127.0.0.1" && x.UserIP != "::ffff:2.132.157.121")
+            .Where(x=>x.UserIP != "2.133.12.48")
             .ToListAsync();
             return logs;
     }
