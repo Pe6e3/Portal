@@ -42,5 +42,13 @@ public class CategoryRepository : GenericRepositoryAsync<Category>, ICategoryRep
             .ToListAsync();
         return pc;
     }
-    public async Task<Category?> RandomCatId() => await db.Categories.OrderBy(x => Guid.NewGuid()).FirstOrDefaultAsync();
+
+    public async Task<Category?> RandomCatId()
+    {
+        Random random = new Random();
+        var categoryCount = db.Categories.ToList().Count();
+        var randomId = random.Next(1, categoryCount);
+        return await db.Categories.FirstOrDefaultAsync(x => x.Id == randomId);
+    }
+
 }

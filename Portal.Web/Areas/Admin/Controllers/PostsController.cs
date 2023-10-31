@@ -233,12 +233,14 @@ public class PostsController : BaseController<Post, IPostRepository>
             PostCategory postCat = new PostCategory();
 
             Category? category = new Category();
-            if (catId == 0)  category = await uow.CategoryRep.RandomCatId(); // Если категория не задана - выбираем случайную
+            if (catId == 0) category = await uow.CategoryRep.RandomCatId(); // Если категория не задана - выбираем случайную
             else category = await uow.CategoryRep.GetByIdAsync(catId);       // Если задана - выбираем определенную
 
             Random random = new Random();
 
             post.Slug = await GetRandomWords(1);
+            //post.Slug = random.Next(1, 1000).ToString();
+
             post.CreatedAt = DateTime.Now;
             post.CreatedBy = await uow.UserRep.GetUserByLogin(User.Identity.Name);
             post.CategoryId = category.Id;
@@ -247,7 +249,9 @@ public class PostsController : BaseController<Post, IPostRepository>
             postCat.PostId = post.Id;
             postCat.CategoryId = category.Id;
 
+            //content.Title = post.Id + ". (" + category.Name + ") Random Title";
             content.Title = post.Id + ". (" + category.Name + ") " + await GetRandomWords(random.Next(2, 6));
+            //content.PostBody = "Body text";
             content.PostBody = await GetRandomWords(random.Next(150, 350));
             content.PostImage = random.Next(1, 32).ToString() + ".jpg"; // надо добавить в папку uploads изображения с названием 1.jpg, 2.jpg  и так далее попорядку. Количество поставить в random.Next (у меня 32)
             content.PostId = post.Id;
