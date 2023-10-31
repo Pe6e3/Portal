@@ -37,4 +37,10 @@ jobs:
    - name: Перезапускаем службу на сервере - Portal
      run: |
       ssh -i $HOME/.ssh/key root@${{ secrets.SSH_HOST }} "sudo systemctl restart ${{ env.service }}"
+
+   - name: Отправить уведомление в Telegram
+     id: deploy_info
+     run: |
+       curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" -d "text=Проект ${{ env.project}}. Деплой №${{ github.run_number }}  завершен успешно!"
+     if: success()
    
