@@ -13,28 +13,28 @@ jobs:
 
   steps:
    - name: Клон проекта
-   uses: actions/checkout@v2
+     uses: actions/checkout@v2
    
    - name: Сборка проекта
-   run: dotnet publish --configuration Release -r linux-x64
+     run: dotnet publish --configuration Release -r linux-x64
    
    - name: Создаем SSH
-   run: mkdir -p "$HOME/.ssh"
+     run: mkdir -p "$HOME/.ssh"
    
    - name: Добавляем сервер в доверенный список
-   run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> "$HOME/.ssh/known_hosts"
+     run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> "$HOME/.ssh/known_hosts"
    
    - name: Сохраняем ключ SSH
-   run: echo "${{ secrets.SSH_KEY }}" > "$HOME/.ssh/key"
+     run: echo "${{ secrets.SSH_KEY }}" > "$HOME/.ssh/key"
    
    - name: Добавяем права для директории с ключом SSH
-   run: chmod 600 "$HOME/.ssh/key"
+     run: chmod 600 "$HOME/.ssh/key"
    
    - name: Заливаем собранный проект на сервер
-   run: |
-   rsync -avz -e "ssh -i $HOME/.ssh/key" $GITHUB_WORKSPACE/ root@${{ secrets.SSH_HOST }}:/var/www/${{ env.project }}/
+     run: | 
+      rsync -avz -e "ssh -i $HOME/.ssh/key" $GITHUB_WORKSPACE/ root@${{ secrets.SSH_HOST }}:/var/www/${{ env.project }}/
    
    - name: Перезапускаем службу на сервере - Portal
-   run: |
-   ssh -i $HOME/.ssh/key root@${{ secrets.SSH_HOST }} "sudo systemctl restart ${{ env.service }}"
+     run: |
+      ssh -i $HOME/.ssh/key root@${{ secrets.SSH_HOST }} "sudo systemctl restart ${{ env.service }}"
    
