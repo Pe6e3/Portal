@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Portal.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class local : Migration
+    public partial class InitSQLite : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,12 +17,12 @@ namespace Portal.DAL.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryImage = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Slug = table.Column<string>(type: "TEXT", nullable: true),
+                    CategoryImage = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -33,12 +33,12 @@ namespace Portal.DAL.Migrations
                 name: "Chats",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ChatName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ChatIMG = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserCount = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ChatName = table.Column<string>(type: "TEXT", nullable: true),
+                    ChatIMG = table.Column<string>(type: "TEXT", nullable: true),
+                    UserCount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,9 +49,9 @@ namespace Portal.DAL.Migrations
                 name: "Menus",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -62,9 +62,9 @@ namespace Portal.DAL.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleName = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RoleName = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,12 +75,12 @@ namespace Portal.DAL.Migrations
                 name: "MenuItems",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MenuId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Position = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MenuId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Slug = table.Column<string>(type: "TEXT", nullable: true),
+                    Position = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,11 +97,11 @@ namespace Portal.DAL.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Login = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    RoleId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -118,8 +118,8 @@ namespace Portal.DAL.Migrations
                 name: "ChatUser",
                 columns: table => new
                 {
-                    ChatsId = table.Column<int>(type: "int", nullable: false),
-                    UsersId = table.Column<int>(type: "int", nullable: false)
+                    ChatsId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UsersId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -142,10 +142,10 @@ namespace Portal.DAL.Migrations
                 name: "ChatUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ChatId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ChatId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -168,15 +168,15 @@ namespace Portal.DAL.Migrations
                 name: "Messages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ChatId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    TextMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SentAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    WasEdited = table.Column<bool>(type: "bit", nullable: false),
-                    LikesCount = table.Column<int>(type: "int", nullable: false),
-                    RepliedToId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ChatId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TextMessage = table.Column<string>(type: "TEXT", nullable: true),
+                    SentAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    WasEdited = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LikesCount = table.Column<int>(type: "INTEGER", nullable: false),
+                    RepliedToId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -193,13 +193,13 @@ namespace Portal.DAL.Migrations
                 name: "MyLoggers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserClick = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserIP = table.Column<string>(type: "TEXT", nullable: true),
+                    UserLocation = table.Column<string>(type: "TEXT", nullable: true),
+                    UserClick = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -216,12 +216,12 @@ namespace Portal.DAL.Migrations
                 name: "Posts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    CreatedById = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Slug = table.Column<string>(type: "TEXT", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedById = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -238,15 +238,15 @@ namespace Portal.DAL.Migrations
                 name: "UserProfiles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    Firstname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AvatarImg = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Firstname = table.Column<string>(type: "TEXT", nullable: true),
+                    Lastname = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    RegistrationDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Birthday = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    AvatarImg = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -263,8 +263,8 @@ namespace Portal.DAL.Migrations
                 name: "CategoryPost",
                 columns: table => new
                 {
-                    CategoriesId = table.Column<int>(type: "int", nullable: false),
-                    PostsId = table.Column<int>(type: "int", nullable: false)
+                    CategoriesId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PostsId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -287,13 +287,13 @@ namespace Portal.DAL.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TextComment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LikeCount = table.Column<int>(type: "int", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TextComment = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LikeCount = table.Column<int>(type: "INTEGER", nullable: false),
+                    PostId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -315,10 +315,10 @@ namespace Portal.DAL.Migrations
                 name: "PostCategories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    PostId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -341,15 +341,15 @@ namespace Portal.DAL.Migrations
                 name: "PostContents",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PostBody = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PostImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CommentsNum = table.Column<int>(type: "int", nullable: false),
-                    CommentsClosed = table.Column<bool>(type: "bit", nullable: false),
-                    PostVideo = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    PostId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: true),
+                    PostBody = table.Column<string>(type: "TEXT", nullable: true),
+                    PostImage = table.Column<string>(type: "TEXT", nullable: true),
+                    CommentsNum = table.Column<int>(type: "INTEGER", nullable: false),
+                    CommentsClosed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PostVideo = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -369,7 +369,8 @@ namespace Portal.DAL.Migrations
                 {
                     { 1, "5.jpg", "Новости из мира Экономики", "Экономика", "economics" },
                     { 2, "2.jpg", "Новейшие технологии, открытия", "Технологии", "technology" },
-                    { 3, "7.jpg", "Все, что связано со спортом", "Спорт", "sport" }
+                    { 3, "7.jpg", "Все, что связано со спортом", "Спорт", "sport" },
+                    { 4, "6.jpg", "Различные интересные способы", "Лайфхаки", "lifehacks" }
                 });
 
             migrationBuilder.InsertData(
@@ -400,7 +401,8 @@ namespace Portal.DAL.Migrations
                     { 1, 1, "Экономика", 1, "category/economics" },
                     { 2, 1, "Технологии", 2, "category/technology" },
                     { 3, 1, "Спорт", 3, "category/sport" },
-                    { 4, 1, "Админка", 4, "admin" }
+                    { 4, 1, "Админка", 5, "admin" },
+                    { 5, 1, "Лайфхаки", 4, "category/lifehacks" }
                 });
 
             migrationBuilder.InsertData(
@@ -415,15 +417,15 @@ namespace Portal.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "Posts",
                 columns: new[] { "Id", "CategoryId", "CreatedAt", "CreatedById", "Slug" },
-                values: new object[] { 1, 0, new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(98), 2, "start" });
+                values: new object[] { 1, 0, new DateTime(2023, 10, 31, 9, 52, 44, 845, DateTimeKind.Local).AddTicks(362), 2, "start" });
 
             migrationBuilder.InsertData(
                 table: "UserProfiles",
                 columns: new[] { "Id", "AvatarImg", "Birthday", "Email", "Firstname", "Lastname", "RegistrationDate", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "default-avatar.png", null, null, "Стандартный", "Пользователь", new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(64), 1 },
-                    { 2, "admin-default.png", null, null, "Админ", null, new DateTime(2023, 8, 6, 14, 46, 36, 561, DateTimeKind.Local).AddTicks(81), 2 }
+                    { 1, "default-avatar.png", null, null, "Стандартный", "Пользователь", new DateTime(2023, 10, 31, 9, 52, 44, 845, DateTimeKind.Local).AddTicks(315), 1 },
+                    { 2, "admin-default.png", null, null, "Админ", null, new DateTime(2023, 10, 31, 9, 52, 44, 845, DateTimeKind.Local).AddTicks(342), 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -434,7 +436,7 @@ namespace Portal.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "PostContents",
                 columns: new[] { "Id", "CommentsClosed", "CommentsNum", "PostBody", "PostId", "PostImage", "PostVideo", "Title" },
-                values: new object[] { 1, false, 0, "Авторизуйтесь, логин <b> Admin</b>, пароль <b>111</b>. Перейдите по ссылке ниже, чтобы сгенерировать 20 случайных постов (занимает около 20 секунд после нажатия, жди)\r\n<br />  <b><a href=\"https://localhost:7164/Admin/Posts/GenerateRandomPosts?count=20\"> Генератор постов</a> </b>", 1, "10.jpg", null, "Стартовый пост (прочитай)" });
+                values: new object[] { 1, false, 0, "Авторизуйтесь. \r\n<br />  Логин <b> Admin</b>, Пароль <b>111</b>.\r\n<br /> Перейдите по ссылке ниже, чтобы сгенерировать 20 случайных постов (занимает около 20 секунд после нажатия, ждите)\r\n<br />  <b><a href=\"https://localhost:7164/Admin/Posts/GenerateRandomPosts?count=20\"> Генератор постов</a> </b>", 1, "10.jpg", null, "Стартовый пост (прочитайте)" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryPost_PostsId",

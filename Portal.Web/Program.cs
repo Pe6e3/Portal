@@ -11,12 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//  options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext")));
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-  options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("AppDbContext")));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => { options.LoginPath = new PathString("/Account/Login");
-                            options.AccessDeniedPath = new PathString("/Home/AccessDenied");
+    .AddCookie(options =>
+    {
+        options.LoginPath = new PathString("/Account/Login");
+        options.AccessDeniedPath = new PathString("/Home/AccessDenied");
     });
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
